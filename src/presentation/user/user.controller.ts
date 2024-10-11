@@ -10,7 +10,7 @@ export class UserController {
     private readonly getUserUsecaseProxy: UseCaseProxy<GetAllUsersUseCase>,
   ) {}
 
-  @Get('/user/all')
+  @Get('/all')
   async getAllUsers() {
     const result = await this.getUserUsecaseProxy.getInstance().execute();
     return {
