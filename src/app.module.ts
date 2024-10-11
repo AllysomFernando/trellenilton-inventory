@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { UsecaseProxyModule } from './infrastructures/usecase-proxy/usecase-proxy.module';
+import { UsecaseProxyModule } from './infrastructures/usecaseproxy/usecase-proxy.module';
 import { UserModule } from './presentation/user/user.module';
 import { EnvironmentConfigModule } from './infrastructures/config/environment-config/environment-config.module';
 

@@ -1,7 +1,7 @@
 import { Controller, Get, Inject } from '@nestjs/common';
-import { GetUserUseCase } from 'src/applications/use-cases/user/getuser.usecase';
-import { UseCaseProxy } from 'src/infrastructures/usecase-proxy/usecase-proxy';
-import { UsecaseProxyModule } from 'src/infrastructures/usecase-proxy/usecase-proxy.module';
+import { GetUserUseCase } from 'src/applications/usecases/user/getuser.usecase';
+import { UseCaseProxy } from 'src/infrastructures/usecaseproxy/usecase-proxy';
+import { UsecaseProxyModule } from 'src/infrastructures/usecaseproxy/usecase-proxy.module';
 
 @Controller('user')
 export class UserController {
