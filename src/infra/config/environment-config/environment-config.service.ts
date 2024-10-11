@@ -6,25 +6,10 @@ import { DatabaseConfig } from 'src/domain/config/database.interface';
 export class EnvironmentConfigService implements DatabaseConfig {
   constructor(private configService: ConfigService) {}
 
-  getDataBaseHost(): string {
-    return this.configService.get<string>('DATABASE_HOST');
+  getDatabasePath(): string {
+    return this.configService.get<string>('DATABASE_PATH');
   }
-  getDatabaseName(): string {
-    return this.configService.get<string>('DATABASE_NAME');
-  }
-  getDatabasePort(): number {
-    return this.configService.get<number>('DATABASE_PORT');
-  }
-  getDatabaseUser(): string {
-    return this.configService.get<string>('DATABASE_USER');
-  }
-  getDatabasePassword(): string {
-    return this.configService.get<string>('DATABASE_PASSWORD');
-  }
-  getDatabaseSchema(): string {
-    return this.configService.get<string>('DATABASE_SCHEMA');
-  }
-  getDatabaseSync(): boolean {
-    return this.configService.get<boolean>('DATABASE_SYNCHRONIZE');
+  getDatabaseType(): string {
+    return this.configService.get<string>('DATABASE_TYPE');
   }
 }
