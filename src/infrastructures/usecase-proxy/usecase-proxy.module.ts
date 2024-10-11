@@ -3,6 +3,7 @@ import { EnvironmentConfigModule } from '../config/environment-config/environmen
 import { RepositoriesModule } from '../repositories/repository.modules';
 import { UserRepositoryOrm } from '../repositories/user.repository';
 import { GetAllUsersUseCase } from 'src/applications/use-cases/user.usecase';
+import { UseCaseProxy } from './usecase-proxy';
 
 @Module({
   imports: [EnvironmentConfigModule, RepositoriesModule],
