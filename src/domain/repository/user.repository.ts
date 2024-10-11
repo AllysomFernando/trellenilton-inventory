@@ -1,5 +1,5 @@
-import { User } from '../models/user';
+import { UserModel } from '../models/user';
 
 export interface UserRepository {
-  getAllUser(): Promise<User[]>;
+  getAllUser(): Promise<UserModel[]>;
 }
