@@ -2,7 +2,7 @@ import { DynamicModule, Module } from '@nestjs/common';
 import { EnvironmentConfigModule } from '../config/environment-config/environment-config.module';
 import { RepositoriesModule } from '../repositories/repository.modules';
 import { UserRepositoryOrm } from '../repositories/user.repository';
-import { GetAllUsersUseCase } from 'src/applications/use-cases/user.usecase';
+import { GetAllUsersUseCase } from 'src/applications/use-cases/user/user.usecase';
 import { UseCaseProxy } from './usecase-proxy';
 
 @Module({

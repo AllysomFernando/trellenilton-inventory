@@ -1,5 +1,5 @@
 import { Controller, Get, Inject } from '@nestjs/common';
-import { GetAllUsersUseCase } from 'src/applications/use-cases/user.usecase';
+import { GetAllUsersUseCase } from 'src/applications/use-cases/user/user.usecase';
 import { UseCaseProxy } from 'src/infrastructures/usecase-proxy/usecase-proxy';
 import { UsecaseProxyModule } from 'src/infrastructures/usecase-proxy/usecase-proxy.module';
 
