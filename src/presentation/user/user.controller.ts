@@ -1,23 +1,25 @@
-import { Controller, Get, Inject } from '@nestjs/common';
-import { GetUserUseCase } from 'src/applications/usecases/user/getuser.usecase';
-import { UseCaseProxy } from 'src/infrastructures/usecaseproxy/usecase-proxy';
-import { UsecaseProxyModule } from 'src/infrastructures/usecaseproxy/usecase-proxy.module';
+import { Controller, Get, Inject, Param } from '@nestjs/common'
+import { GetUserByIdUseCase } from '@/applications/usecases/user/getuserbyid.usecase'
+import { UseCaseProxy } from 'src/infrastructures/usecaseproxy/usecase-proxy'
+import { UsecaseProxyModule } from 'src/infrastructures/usecaseproxy/usecase-proxy.module'
 
 @Controller('user')
 export class UserController {
   constructor(
-    @Inject(UsecaseProxyModule.GET_ALL_USERS_USE_CASE)
-    private readonly getUserUsecaseProxy: UseCaseProxy<GetUserUseCase>,
+    @Inject(UsecaseProxyModule.GET_USER_BY_ID_USE_CASE)
+    private readonly getUserByIdUsecaseProxy: UseCaseProxy<GetUserByIdUseCase.UseCase>
   ) {}
 
-  @Get('/all')
-  async getAllUsers() {
-    const result = await this.getUserUsecaseProxy.getInstance().execute();
+  @Get('/:id')
+  async getUserById(@Param('id') id: number) {
+    const result = await this.getUserByIdUsecaseProxy
+      .getInstance()
+      .execute({ id })
     return {
       status: 'OK',
       code: 200,
-      message: 'Success',
-      data: result,
-    };
+      message: 'User found',
+      data: result
+    }
   }
 }
