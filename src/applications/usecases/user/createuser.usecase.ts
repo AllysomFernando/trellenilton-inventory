@@ -1,6 +1,8 @@
 import { UserModel } from 'src/domain/models/user'
 import { UseCase as DefaultUseCase } from '../use-case'
 import { UserRepository } from 'src/domain/repository/user.repository'
+import { BadRequestError } from '@/applications/errors/bad-request-erros'
+
 export namespace CreateUserUseCase {
   export type Input = {
     email: string
@@ -14,13 +16,19 @@ export namespace CreateUserUseCase {
     constructor(private userRepository: UserRepository) {}
 
     async execute(input: Input): Promise<Output> {
+      if (!input.email || !input.name || !input.password) {
+        throw new BadRequestError('Email, nome e senha são obrigatórios.')
+      }
       const user = new UserModel()
       user.email = input.email
       user.name = input.name
       user.password = input.password
-
-      const entity = await this.userRepository.save(user)
-      return entity
+      try {
+        const entity = await this.userRepository.save(user)
+        return entity
+      } catch (e) {
+        throw new BadRequestError('Falha ao salvar o usuário.')
+      }
     }
   }
 }
