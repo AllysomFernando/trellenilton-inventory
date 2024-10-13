@@ -22,6 +22,12 @@ export class UserRepositoryOrm implements UserRepository {
     return this.toUser(user)
   }
 
+  async save(user: UserModel): Promise<UserModel> {
+    const entity = this.userRepository.create(user)
+    await this.userRepository.save(entity)
+    return this.toUser(entity)
+  }
+
   private toUser(userEntity: User): UserModel {
     const user: UserModel = new UserModel()
 
