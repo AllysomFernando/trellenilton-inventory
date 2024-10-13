@@ -1,6 +1,8 @@
 import { UserModel } from '@/domain/models/user'
 import { UseCase as DefaultUseCase } from '../use-case'
 import { UserRepository } from '@/domain/repository/user.repository'
+import { BadRequestError } from '@/applications/errors/bad-request-erros'
+
 export namespace GetAllUserUseCase {
   export type Input = void
 
@@ -10,8 +12,12 @@ export namespace GetAllUserUseCase {
     constructor(private userRepository: UserRepository) {}
 
     async execute(input: Input): Promise<Output> {
-      const entity = await this.userRepository.findAll()
-      return entity
+      try {
+        const entity = await this.userRepository.findAll()
+        return entity
+      } catch (error) {
+        throw new BadRequestError('Falha ao buscar os usuários.')
+      }
     }
   }
 }
