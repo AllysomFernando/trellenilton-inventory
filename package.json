@@ -29,11 +29,13 @@
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/swagger": "^7.4.2",
     "@nestjs/typeorm": "^10.0.2",
+    "prettier-eslint": "^16.3.0",
     "prom-client": "^15.1.3",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "sqlite3": "^5.1.7",
     "swagger-ui-express": "^5.0.1",
+    "trellenilton-inventory": "file:",
     "typeorm": "^0.3.20"
   },
   "devDependencies": {

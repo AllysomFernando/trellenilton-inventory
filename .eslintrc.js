@@ -1,25 +1,42 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: 'tsconfig.json',
-    tsconfigRootDir: __dirname,
-    sourceType: 'module',
+    ecmaFeatures: {
+      jsx: true
+    },
+    ecmaVersion: 11,
+    sourceType: 'module'
   },
-  plugins: ['@typescript-eslint/eslint-plugin'],
+  plugins: ['react', 'react-hooks', '@typescript-eslint'],
   extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
+    'plugin:react-hooks/recommended'
   ],
   root: true,
   env: {
-    node: true,
+    browser: true,
+    es2020: true,
     jest: true,
+    node: true
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
-    '@typescript-eslint/interface-name-prefix': 'off',
-    '@typescript-eslint/explicit-function-return-type': 'off',
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
+    'react/prop-types': 'off',
+    'react/react-in-jsx-scope': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-explicit-any': 'off',
-  },
-};
+    '@typescript-eslint/no-non-null-assertion': 'off',
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto'
+      }
+    ],
+    '@typescript-eslint/no-explicit-any': 'off'
+  }
+}
