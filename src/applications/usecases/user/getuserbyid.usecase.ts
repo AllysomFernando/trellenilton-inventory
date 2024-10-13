@@ -1,6 +1,7 @@
 import { UserModel } from 'src/domain/models/user'
 import { UseCase as DefaultUseCase } from '../use-case'
 import { UserRepository } from 'src/domain/repository/user.repository'
+import { BadRequestError } from '@/applications/errors/bad-request-erros'
 
 export namespace GetUserByIdUseCase {
   export type Input = {
@@ -13,8 +14,15 @@ export namespace GetUserByIdUseCase {
     constructor(private userRepository: UserRepository) {}
 
     async execute(input: Input): Promise<Output> {
-      const entity = await this.userRepository.findById(input.id)
-      return entity
+      try {
+        if (!input.id) {
+          throw new BadRequestError('Id é obrigatório.')
+        }
+        const entity = await this.userRepository.findById(input.id)
+        return entity
+      } catch (e) {
+        throw new BadRequestError('Falha ao buscar o usuário com id informado.')
+      }
     }
   }
 }
