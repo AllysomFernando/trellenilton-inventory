@@ -1,38 +1,52 @@
-import { INestApplication } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
-import * as request from 'supertest';
-import { AppModule } from '@/app.module';
+import { Test, TestingModule } from '@nestjs/testing'
+import { INestApplication } from '@nestjs/common'
+import * as request from 'supertest'
+import { AppModule } from '@/app.module'
 
 describe('UserController (e2e)', () => {
-  let app: INestApplication;
+  let app: INestApplication
 
   beforeAll(async () => {
-    const moduleFixture = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule] 
+    }).compile()
 
-    app = moduleFixture.createNestApplication();
-    await app.init();
-  });
+    app = moduleFixture.createNestApplication()
+    await app.init()
+  })
 
   afterAll(async () => {
-    await app.close();
-  });
+    await app.close()
+  })
 
-  it('/user (POST) should create a new user', async () => {
-    const userDto = {
-      email: 'e2e@test.com',
-      name: 'E2E Test',
-      password: '123456',
-    };
+  it('/user (GET) - should return all users', () => {
+    return request(app.getHttpServer())
+      .get('/user')
+      .expect(200)
+      .expect((response) => {
+        expect(response.body.status).toBe('OK')
+        expect(response.body.data).toBeInstanceOf(Array) 
+      })
+  })
+
+  it('/user/:id (GET) - should return a user by ID', () => {
+    const userId = 1 
 
     return request(app.getHttpServer())
-      .post('/user')
-      .send(userDto)
-      .expect(201)
-      .expect((res) => {
-        expect(res.body.data.email).toBe(userDto.email);
-        expect(res.body.data.name).toBe(userDto.name);
-      });
-  });
-});
+      .get(`/user/${userId}`)
+      .expect(200)
+      .expect((response) => {
+        expect(response.body.status).toBe('OK')
+        expect(response.body.data.id).toBe(userId) 
+      })
+  })
+
+  it('/user/:id (GET) - should return 400 if ID is missing or invalid', () => {
+    return request(app.getHttpServer())
+      .get('/user/invalidId') 
+      .expect(400)
+      .expect((response) => {
+        expect(response.body.message).toBe('Bad Request')
+      })
+  })
+})
