@@ -14,10 +14,10 @@ export namespace GetUserByIdUseCase {
     constructor(private userRepository: UserRepository) {}
 
     async execute(input: Input): Promise<Output> {
+      if (!input.id) {
+        throw new BadRequestError('Id é obrigatório.')
+      }
       try {
-        if (!input.id) {
-          throw new BadRequestError('Id é obrigatório.')
-        }
         const entity = await this.userRepository.findById(input.id)
         return entity
       } catch (e) {
