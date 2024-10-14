@@ -4,6 +4,7 @@ import { GetAllUserUseCase } from '@/applications/usecases/user/getalluser.useca
 import { CreateUserUseCase } from '@/applications/usecases/user/createuser.usecase'
 import { UseCaseProxy } from 'src/infrastructures/usecaseproxy/usecase-proxy'
 import { UsecaseProxyModule } from 'src/infrastructures/usecaseproxy/usecase-proxy.module'
+import { CreateUserDto } from '@/applications/dto/user/createuser.dto'
 
 @Controller('user')
 export class UserController {
@@ -38,7 +39,7 @@ export class UserController {
     }
   }
   @Post('/')
-  async createUser(@Body() createUserDto: CreateUserUseCase.Input) {
+  async createUser(@Body() createUserDto: CreateUserDto) {
     const result = await this.createUserUsecaseProxy
       .getInstance()
       .execute(createUserDto)
