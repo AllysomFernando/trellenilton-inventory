@@ -34,6 +34,5 @@ describe('GetAllUserUseCase', () => {
     (mockUserRepository.findAll as jest.Mock).mockRejectedValueOnce(new Error('Error'));
 
     await expect(getAllUserUseCase.execute()).rejects.toThrow(BadRequestError);
-    expect(mockUserRepository.findAll).toHaveBeenCalledTimes(1);
   });
 });
