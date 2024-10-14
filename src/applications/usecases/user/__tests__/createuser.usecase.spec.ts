@@ -25,7 +25,7 @@ describe('CreateUserUseCase', () => {
 
   it('should create a user with valid input', async () => {
     const input = {
-      email: 'test@test.com',
+      email: 'allysomted12@gmail.com',
       name: 'Test',
       password: 'password123'
     }
