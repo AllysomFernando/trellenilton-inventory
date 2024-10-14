@@ -5,6 +5,12 @@ import { CreateUserUseCase } from '@/applications/usecases/user/createuser.useca
 import { UseCaseProxy } from 'src/infrastructures/usecaseproxy/usecase-proxy'
 import { UsecaseProxyModule } from 'src/infrastructures/usecaseproxy/usecase-proxy.module'
 import { CreateUserDto } from '@/applications/dto/user/createuser.dto'
+import {
+  IsEmail,
+  IsNotEmpty,
+  MinLength,
+  validateOrReject
+} from 'class-validator'
 
 @Controller('user')
 export class UserController {
@@ -40,6 +46,25 @@ export class UserController {
   }
   @Post('/')
   async createUser(@Body() createUserDto: CreateUserDto) {
+    class CreateUserValidation {
+      @IsEmail()
+      email: string
+
+      @IsNotEmpty()
+      name: string
+
+      @IsNotEmpty()
+      @MinLength(6)
+      password: string
+
+      constructor(createUserDto: CreateUserDto) {
+        this.email = createUserDto.email
+        this.name = createUserDto.name
+        this.password = createUserDto.password
+      }
+    }
+
+    await validateOrReject(new CreateUserValidation(createUserDto))
     const result = await this.createUserUsecaseProxy
       .getInstance()
       .execute(createUserDto)
