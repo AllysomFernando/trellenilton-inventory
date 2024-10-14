@@ -38,7 +38,11 @@ export class UsecaseProxyModule {
             new UseCaseProxy(new CreateUserUseCase.UseCase(userRepository))
         }
       ],
-      exports: [UsecaseProxyModule.GET_USER_BY_ID_USE_CASE]
+      exports: [
+        UsecaseProxyModule.GET_USER_BY_ID_USE_CASE,
+        UsecaseProxyModule.GET_ALL_USERS_USE_CASE,
+        UsecaseProxyModule.CREATE_USER_USE_CASE
+      ]
     }
   }
 }
