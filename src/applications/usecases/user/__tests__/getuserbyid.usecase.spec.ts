@@ -16,7 +16,7 @@ describe('GetUserByIdUseCase', () => {
     getUserByIdUseCase = new GetUserByIdUseCase.UseCase(mockUserRepository)
   })
 
-  it('should return a user successfully when a valid id is provided', async () => {
+  it('should return a user by ID successfully', async () => {
     const user: UserModel = {
       id: 1,
       email: 'user@example.com',
@@ -24,16 +24,18 @@ describe('GetUserByIdUseCase', () => {
       password: 'password123'
     }
 
-    ;(mockUserRepository.findById as jest.Mock).mockResolvedValueOnce(user)
+    ;(mockUserRepository.findById as jest.Mock).mockResolvedValueOnce(user) 
 
     const result = await getUserByIdUseCase.execute({ id: 1 })
 
     expect(result).toEqual(user)
-    expect(mockUserRepository.findById).toHaveBeenCalledWith(1)
+    expect(mockUserRepository.findById).toHaveBeenCalledWith(1) 
     expect(mockUserRepository.findById).toHaveBeenCalledTimes(1)
   })
 
   it('should throw BadRequestError if id is not provided', async () => {
+    ;(mockUserRepository.findById as jest.Mock).mockResolvedValueOnce(null)
+
     await expect(getUserByIdUseCase.execute({ id: undefined })).rejects.toThrow(
       new BadRequestError('Id é obrigatório.')
     )
