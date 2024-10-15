@@ -46,6 +46,15 @@ export class UserRepositoryOrm implements UserRepository {
     return this.toUser(entity)
   }
 
+  async delete(id: number): Promise<boolean> {
+    const entity = await this.userRepository.findOneBy({ id })
+    if (!entity) {
+      return false
+    }
+    await this.userRepository.remove(entity)
+    return true
+  }
+
   private toUser(userEntity: User): UserModel {
     const user: UserModel = new UserModel()
 
