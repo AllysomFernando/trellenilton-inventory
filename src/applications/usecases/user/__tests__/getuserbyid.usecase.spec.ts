@@ -32,7 +32,6 @@ describe('GetUserByIdUseCase', () => {
   })
 
   it('should throw BadRequestError if id is not provided', async () => {
-
     await expect(getUserByIdUseCase.execute({ id: undefined })).rejects.toThrow(
       new BadRequestError('Id é obrigatório.')
     )
