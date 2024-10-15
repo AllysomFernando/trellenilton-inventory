@@ -58,7 +58,7 @@ describe('GetUserByIdUseCase Integration', () => {
       new Error('Error')
     )
     await expect(getUserByIdUseCase.execute({ id: 1 })).rejects.toThrow(
-      new BadRequestError('Falha ao buscar o usuário com id informado.')
+      new BadRequestError('Usuário não encontrado.')
     )
   })
 })
