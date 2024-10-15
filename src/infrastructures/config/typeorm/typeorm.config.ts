@@ -2,7 +2,7 @@ import { DataSource } from 'typeorm';
 
 const config = new DataSource({
   type: 'sqlite',
-  database: 'database.sqlite',
+  database: '../../../../database/trelleniltonInventoryDB',
   entities: [__dirname + '../../../infrastructures/entities/*{.ts}'],
   synchronize: true,
   migrationsRun: true,
