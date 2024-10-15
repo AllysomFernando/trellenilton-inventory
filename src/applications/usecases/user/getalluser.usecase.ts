@@ -4,14 +4,12 @@ import { UserRepository } from '@/domain/repository/user.repository'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
 
 export namespace GetAllUserUseCase {
-  export type Input = void
-
   export type Output = UserModel[]
 
-  export class UseCase implements DefaultUseCase<Input, Output> {
+  export class UseCase implements DefaultUseCase<void, Output> {
     constructor(private userRepository: UserRepository) {}
 
-    async execute(input: Input): Promise<Output> {
+    async execute(): Promise<Output> {
       try {
         const entity = await this.userRepository.findAll()
         if (!entity) {
