@@ -14,10 +14,10 @@ export class UserRepositoryOrm implements UserRepository {
 
   async findAll(): Promise<User[]> {
     const users = await this.userRepository.find()
-    if (!users) {
-      return null
+    if (!users || users.length === 0) {
+      return []
     }
-    return users.map((user) => this.toUser(user))
+    return users
   }
 
   async findById(id: number): Promise<UserModel> {
