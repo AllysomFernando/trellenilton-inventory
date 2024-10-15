@@ -1,6 +1,6 @@
+import { DatabaseConfig } from '@/domain/config/database.interface';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { DatabaseConfig } from 'src/domain/config/database.interface';
 
 @Injectable()
 export class EnvironmentConfigService implements DatabaseConfig {
@@ -8,8 +8,5 @@ export class EnvironmentConfigService implements DatabaseConfig {
 
   getDatabasePath(): string {
     return this.configService.get<string>('DATABASE_PATH');
-  }
-  getDatabaseType(): string {
-    return this.configService.get<string>('DATABASE_TYPE');
   }
 }
