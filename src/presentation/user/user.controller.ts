@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Param,
+  Patch,
+  Post
+} from '@nestjs/common'
 import { GetUserByIdUseCase } from '@/applications/usecases/user/getuserbyid.usecase'
 import { GetAllUserUseCase } from '@/applications/usecases/user/getalluser.usecase'
 import { CreateUserUseCase } from '@/applications/usecases/user/createuser.usecase'
@@ -11,6 +19,7 @@ import {
   MinLength,
   validateOrReject
 } from 'class-validator'
+import { UpdateUserUseCase } from '@/applications/usecases/user/updateuser.usecase'
 
 @Controller('user')
 export class UserController {
@@ -20,7 +29,9 @@ export class UserController {
     @Inject(UsecaseProxyModule.GET_USER_BY_ID_USE_CASE)
     private readonly getUserByIdUsecaseProxy: UseCaseProxy<GetUserByIdUseCase.UseCase>,
     @Inject(UsecaseProxyModule.CREATE_USER_USE_CASE)
-    private readonly createUserUsecaseProxy: UseCaseProxy<CreateUserUseCase.UseCase>
+    private readonly createUserUsecaseProxy: UseCaseProxy<CreateUserUseCase.UseCase>,
+    @Inject(UsecaseProxyModule.UPDATE_USER_USE_CASE)
+    private readonly updateUserUsecaseProxy: UseCaseProxy<UpdateUserUseCase.UseCase>
   ) {}
   @Get('/')
   async getAllUsers() {
@@ -72,6 +83,40 @@ export class UserController {
       status: 'OK',
       code: 200,
       message: 'User created',
+      data: result
+    }
+  }
+  @Patch('/:id')
+  async updateUser(
+    @Param('id') id: number,
+    @Body() createUserDto: CreateUserDto
+  ) {
+    class UpdateUserValidation {
+      @IsEmail()
+      email: string
+
+      @IsNotEmpty()
+      name: string
+
+      @IsNotEmpty()
+      @MinLength(6)
+      password: string
+
+      constructor(createUserDto: CreateUserDto) {
+        this.email = createUserDto.email
+        this.name = createUserDto.name
+        this.password = createUserDto.password
+      }
+    }
+
+    await validateOrReject(new UpdateUserValidation(createUserDto))
+    const result = await this.updateUserUsecaseProxy
+      .getInstance()
+      .execute({ ...createUserDto, id })
+    return {
+      status: 'OK',
+      code: 200,
+      message: 'User updated',
       data: result
     }
   }
