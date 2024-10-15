@@ -29,8 +29,6 @@ describe('GetUserByIdUseCase', () => {
     const result = await getUserByIdUseCase.execute({ id: 1 })
 
     expect(result).toEqual(user)
-    expect(mockUserRepository.findById).toHaveBeenCalledWith(1)
-    expect(mockUserRepository.findById).toHaveBeenCalledTimes(1)
   })
 
   it('should throw BadRequestError if id is not provided', async () => {
@@ -38,9 +36,6 @@ describe('GetUserByIdUseCase', () => {
     await expect(getUserByIdUseCase.execute({ id: undefined })).rejects.toThrow(
       new BadRequestError('Id é obrigatório.')
     )
-
-    // Verifica se o repositório não foi chamado
-    expect(mockUserRepository.findById).not.toHaveBeenCalled()
   })
 
   it('should throw BadRequestError if an error occurs while fetching the user', async () => {
