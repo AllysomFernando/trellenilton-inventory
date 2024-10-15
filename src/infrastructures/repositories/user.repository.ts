@@ -34,6 +34,18 @@ export class UserRepositoryOrm implements UserRepository {
     return this.toUser(entity)
   }
 
+  async update(user: UserModel): Promise<UserModel> {
+    const entity = await this.userRepository.findOneBy({ id: user.id })
+    if (!entity) {
+      return null
+    }
+    entity.email = user.email
+    entity.name = user.name
+    entity.password = user.password
+    await this.userRepository.save(entity)
+    return this.toUser(entity)
+  }
+
   private toUser(userEntity: User): UserModel {
     const user: UserModel = new UserModel()
 
