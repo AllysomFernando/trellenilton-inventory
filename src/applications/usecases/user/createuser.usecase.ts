@@ -25,6 +25,9 @@ export namespace CreateUserUseCase {
       user.password = input.password
       try {
         const entity = await this.userRepository.save(user)
+        if(!entity) {
+          throw new BadRequestError('Falha ao salvar o usuário.')
+        }
         return entity
       } catch (e) {
         throw new BadRequestError('Falha ao salvar o usuário.')
