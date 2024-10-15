@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Inject,
   Param,
@@ -13,13 +14,14 @@ import { CreateUserUseCase } from '@/applications/usecases/user/createuser.useca
 import { UseCaseProxy } from 'src/infrastructures/usecaseproxy/usecase-proxy'
 import { UsecaseProxyModule } from 'src/infrastructures/usecaseproxy/usecase-proxy.module'
 import { CreateUserDto } from '@/applications/dto/user/createuser.dto'
+import { UpdateUserUseCase } from '@/applications/usecases/user/updateuser.usecase'
+import { DeleteUserUseCase } from '@/applications/usecases/user/deleteuser.usecase'
 import {
   IsEmail,
   IsNotEmpty,
   MinLength,
   validateOrReject
 } from 'class-validator'
-import { UpdateUserUseCase } from '@/applications/usecases/user/updateuser.usecase'
 
 @Controller('user')
 export class UserController {
@@ -31,7 +33,9 @@ export class UserController {
     @Inject(UsecaseProxyModule.CREATE_USER_USE_CASE)
     private readonly createUserUsecaseProxy: UseCaseProxy<CreateUserUseCase.UseCase>,
     @Inject(UsecaseProxyModule.UPDATE_USER_USE_CASE)
-    private readonly updateUserUsecaseProxy: UseCaseProxy<UpdateUserUseCase.UseCase>
+    private readonly updateUserUsecaseProxy: UseCaseProxy<UpdateUserUseCase.UseCase>,
+    @Inject(UsecaseProxyModule.DELETE_USER_USE_CASE)
+    private readonly deleteUserUsecaseProxy: UseCaseProxy<DeleteUserUseCase.UseCase>
   ) {}
   @Get('/')
   async getAllUsers() {
@@ -117,6 +121,18 @@ export class UserController {
       status: 'OK',
       code: 200,
       message: 'User updated',
+      data: result
+    }
+  }
+  @Delete('/:id')
+  async deleteUser(@Param('id') id: number) {
+    const result = await this.deleteUserUsecaseProxy
+      .getInstance()
+      .execute({ id })
+    return {
+      status: 'OK',
+      code: 200,
+      message: 'User deleted',
       data: result
     }
   }
