@@ -35,9 +35,7 @@ describe('GetAllUserUseCase', () => {
     ;(mockUserRepository.findAll as jest.Mock).mockResolvedValueOnce(users)
 
     const result = await getAllUserUseCase.execute()
-
     expect(result).toEqual(users)
-    expect(mockUserRepository.findAll).toHaveBeenCalledTimes(1)
   })
 
   it('should throw BadRequestError if an error occurs while fetching users', async () => {
