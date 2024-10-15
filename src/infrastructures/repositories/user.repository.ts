@@ -14,11 +14,17 @@ export class UserRepositoryOrm implements UserRepository {
 
   async findAll(): Promise<User[]> {
     const users = await this.userRepository.find()
+    if (!users) {
+      return null
+    }
     return users.map((user) => this.toUser(user))
   }
 
   async findById(id: number): Promise<UserModel> {
     const user = await this.userRepository.findOneBy({ id })
+    if (!user) {
+      return null
+    }
     return this.toUser(user)
   }
 
