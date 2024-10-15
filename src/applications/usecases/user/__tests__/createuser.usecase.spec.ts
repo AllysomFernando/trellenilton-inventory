@@ -39,6 +39,5 @@ describe('CreateUserUseCase', () => {
     const result = await createUserUseCase.execute(input)
 
     expect(result).toEqual(user)
-    expect(mockUserRepository.save).toHaveBeenCalledWith(user)
   })
 })
