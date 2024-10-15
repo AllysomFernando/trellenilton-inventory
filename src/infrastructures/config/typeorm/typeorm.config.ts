@@ -3,10 +3,10 @@ import { DataSource } from 'typeorm';
 const config = new DataSource({
   type: 'sqlite',
   database: 'database.sqlite',
-  entities: [__dirname + '/../../../**/*.entity{.ts}'],
+  entities: [__dirname + '../../../infrastructures/entities/*{.ts}'],
   synchronize: true,
   migrationsRun: true,
-  migrations: [__dirname + '/../../../infra/migrations/*{.ts}'],
+  migrations: [__dirname + '/../../../infrastructures/migrations/*{.ts}'],
 });
 
 config
