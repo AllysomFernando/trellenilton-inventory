@@ -7,7 +7,8 @@ const mockUserRepository: UserRepository = {
   findAll: jest.fn(),
   findById: jest.fn(),
   save: jest.fn(),
-  update: jest.fn()
+  update: jest.fn(),
+  delete: jest.fn()
 }
 
 describe('CreateUserUseCase', () => {
