@@ -20,11 +20,11 @@ export namespace GetUserByIdUseCase {
       try {
         const entity = await this.userRepository.findById(input.id)
         if (!entity) {
-          throw new BadRequestError('Usuário não encontrado.')
+          throw new BadRequestError('Falha ao buscar o usuário com id informado.')
         }
         return entity
       } catch (e) {
-        throw new BadRequestError('Falha ao buscar o usuário com id informado.')
+        throw new BadRequestError('Usuário não encontrado.')
       }
     }
   }
