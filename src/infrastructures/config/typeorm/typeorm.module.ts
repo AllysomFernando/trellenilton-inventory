@@ -9,7 +9,7 @@ export const getTypeOrmModuleOptions = (
   ({
     type: 'sqlite',
     database: config.getDatabasePath(),
-    entities: [__dirname + '/../../../**/*.entity{.ts}'],
+    entities: [__dirname + '../../../infrastructures/entities/*{.ts}'],
     synchronize: true,
     autoLoadEntities: true,
     migrationsRun: true,
