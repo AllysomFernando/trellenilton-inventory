@@ -35,14 +35,15 @@ describe('GetAllUserUseCase Integration', () => {
       { id: 1, email: 'user1@example.com', name: 'User One', password: 'pass1' },
       { id: 2, email: 'user2@example.com', name: 'User Two', password: 'pass2' },
     ];
-
+  
     (userRepository.findAll as jest.Mock).mockResolvedValueOnce(users);
-
+  
     const result = await getAllUserUseCase.execute();
-
+  
     expect(result).toEqual(users);
     expect(userRepository.findAll).toHaveBeenCalledTimes(1);
   });
+  
 
   it('should throw BadRequestError if repository throws an error', async () => {
     (userRepository.findAll as jest.Mock).mockRejectedValueOnce(new Error('Error'));
