@@ -14,6 +14,9 @@ export namespace GetAllUserUseCase {
     async execute(input: Input): Promise<Output> {
       try {
         const entity = await this.userRepository.findAll()
+        if (!entity) {
+          throw new BadRequestError('Usuários não encontrados.')
+        }
         return entity
       } catch (error) {
         throw new BadRequestError('Falha ao buscar os usuários.')
