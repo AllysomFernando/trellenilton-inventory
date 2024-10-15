@@ -6,7 +6,8 @@ import { BadRequestError } from '@/applications/errors/bad-request-erros'
 const mockUserRepository: UserRepository = {
   findAll: jest.fn(),
   findById: jest.fn(),
-  save: jest.fn()
+  save: jest.fn(),
+  update: jest.fn()
 }
 
 describe('GetUserByIdUseCase', () => {
