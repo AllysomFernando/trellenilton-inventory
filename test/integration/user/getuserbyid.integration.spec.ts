@@ -18,7 +18,10 @@ describe('GetUserByIdUseCase Integration', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        GetUserByIdUseCase.UseCase,
+        {
+          provide: GetUserByIdUseCase.UseCase,
+          useClass: GetUserByIdUseCase.UseCase
+        },
         {
           provide: UserRepositoryOrm,
           useValue: mockUserRepository
@@ -32,18 +35,15 @@ describe('GetUserByIdUseCase Integration', () => {
     userRepository = module.get<UserRepository>(UserRepositoryOrm)
   })
 
-  it('should return a user by ID successfully', async () => {
+  it('should return user successfully', async () => {
     const user: UserModel = {
       id: 1,
-      email: 'user1@example.com',
-      name: 'User One',
-      password: 'pass1'
+      email: 'teste@gmail.com',
+      name: 'Teste',
+      password: '123'
     }
-
-    ;(userRepository.findById as jest.Mock).mockResolvedValueOnce(user)
-
+    ;(mockUserRepository.findById as jest.Mock).mockResolvedValue(user)
     const result = await getUserByIdUseCase.execute({ id: 1 })
-
     expect(result).toEqual(user)
   })
 
