@@ -42,11 +42,8 @@ describe('GetAllUserUseCase Integration', () => {
       },
       { id: 2, email: 'user2@example.com', name: 'User Two', password: 'pass2' }
     ]
-
     ;(userRepository.findAll as jest.Mock).mockResolvedValueOnce(users)
-
     const result = await getAllUserUseCase.execute()
-
     expect(result).toEqual(users)
   })
 
