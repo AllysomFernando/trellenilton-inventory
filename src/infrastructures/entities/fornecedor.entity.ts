@@ -4,12 +4,12 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 export class Fornecedor {
   @PrimaryGeneratedColumn('increment')
   id: number
-  @Column('varchar')
+  @Column('varchar', { nullable: false })
   name: string
-  @Column('varchar')
+  @Column('varchar', { nullable: false })
   cnpj: string
   @Column('varchar')
   endereco: string
-  @Column('varchar')
+  @Column('varchar', { nullable: false })
   contato: string
 }
