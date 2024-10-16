@@ -1,7 +1,6 @@
 import { UseCase as DefaultUseCase } from '../use-case'
 import { UserRepository } from '@/domain/repository/user.repository'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
-import { ProdutoRepository } from '@/domain/repository/produto.repository'
 
 export namespace DeleteUserUseCase {
   export type Input = {
