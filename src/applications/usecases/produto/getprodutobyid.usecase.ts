@@ -15,7 +15,7 @@ export namespace GetProdutoByIdUseCase {
 
     async execute(input: Input): Promise<Output> {
       if (!input.id) {
-        throw new BadRequestError('Id é obrigatório.')
+        throw new BadRequestError('ID eh obrigatório.')
       }
       try {
         const entity = await this.produtoRepository.findById(input.id)
@@ -26,7 +26,7 @@ export namespace GetProdutoByIdUseCase {
         }
         return entity
       } catch (e) {
-        throw new BadRequestError('Produto não encontrado.')
+        throw new BadRequestError('Falha ao buscar o produto com id informado.')
       }
     }
   }
