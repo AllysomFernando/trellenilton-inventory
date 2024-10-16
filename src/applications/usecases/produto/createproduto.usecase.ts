@@ -34,7 +34,14 @@ export namespace CreateProdutoUseCase {
           'Nome, descrição, preço, quantidade, imagem e id do fornecedor são obrigatórios.'
         )
       }
-
+      if (input.price <= 0) {
+        throw new BadRequestError('O preço do produto deve ser maior que zero.')
+      }
+      if (input.quantity > 0 && Number.isInteger(input.quantity) === false) {
+        throw new BadRequestError(
+          'A quantidade do produto deve ser maior que zero.'
+        )
+      }
       //TODO: implementar logica de verificar o id do fornecedor antes de salvar o produto, se o fornecedor nao existir retornar um erro
       const produto = new ProdutoModel()
       produto.name = input.name
