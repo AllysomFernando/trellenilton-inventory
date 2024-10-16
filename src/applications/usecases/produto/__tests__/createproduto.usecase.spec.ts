@@ -37,8 +37,8 @@ describe('CreateProdutoUseCase', () => {
     const input = {
       name: 'Test',
       description: 'Test',
-      price: 0,
-      quantity: 0,
+      price: 1,
+      quantity: 1,
       image: 'test',
       fornecedorId: 1
     }
