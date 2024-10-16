@@ -18,16 +18,17 @@ export namespace UpdateProdutoUseCase {
   export type Output = ProdutoModel
 
   export class UseCase implements DefaultUseCase<Input, Output> {
-    constructor(private produtoRepository: ProdutoRepository) {}
+    constructor(
+      private produtoRepository: ProdutoRepository,
+      private getProdutoByIdUseCase: GetProdutoByIdUseCase.UseCase
+    ) {}
 
     async execute(input: Input): Promise<Output> {
       if (!input.id) {
         throw new Error('Id é obrigatório.')
       }
-      const getProdutoByIdUseCase = new GetProdutoByIdUseCase.UseCase(
-        this.produtoRepository
-      )
-      const existingProduto = await getProdutoByIdUseCase.execute({
+
+      const existingProduto = await this.getProdutoByIdUseCase.execute({
         id: input.id
       })
 
