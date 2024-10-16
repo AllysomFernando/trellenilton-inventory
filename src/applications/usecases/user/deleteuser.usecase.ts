@@ -11,16 +11,12 @@ export namespace DeleteUserUseCase {
   export type Output = void
 
   export class UseCase implements DefaultUseCase<Input, Output> {
-    constructor(
-      private userRepository: UserRepository,
-      private produtoRepository: ProdutoRepository
-    ) {}
+    constructor(private userRepository: UserRepository) {}
 
     async execute(input: Input): Promise<Output> {
       if (!input.id) {
         throw new Error('Id é obrigatório.')
       }
-      const produtos = await this.produtoRepository.findById(input.id)
       try {
         const entity = await this.userRepository.delete(input.id)
         if (!entity) {
