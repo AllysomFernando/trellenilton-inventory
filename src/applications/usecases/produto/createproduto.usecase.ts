@@ -34,6 +34,8 @@ export namespace CreateProdutoUseCase {
           'Nome, descrição, preço, quantidade, imagem e id do fornecedor são obrigatórios.'
         )
       }
+
+      //TODO: implementar logica de verificar o id do fornecedor antes de salvar o produto, se o fornecedor nao existir retornar um erro
       const produto = new ProdutoModel()
       produto.name = input.name
       produto.description = input.description
