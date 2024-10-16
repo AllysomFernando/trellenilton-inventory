@@ -4,6 +4,8 @@ import { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { UserRepository } from '@/domain/repository/user.repository'
 import { UserModel } from '@/domain/models/user'
+import { randomBytes, scrypt, createCipheriv } from 'crypto'
+import { promisify } from 'util'
 
 @Injectable()
 export class UserRepositoryOrm implements UserRepository {
@@ -30,6 +32,14 @@ export class UserRepositoryOrm implements UserRepository {
 
   async save(user: UserModel): Promise<UserModel> {
     const entity = this.userRepository.create(user)
+    const iv = randomBytes(16)
+    const key = (await promisify(scrypt)(entity.password, 'salt', 32)) as Buffer
+    const cipher = createCipheriv('aes-256-ctr', key, iv)
+    const encryptedPassword = Buffer.concat([
+      cipher.update(entity.password),
+      cipher.final()
+    ]).toString('hex')
+    entity.password = encryptedPassword
     await this.userRepository.save(entity)
     return this.toUser(entity)
   }
