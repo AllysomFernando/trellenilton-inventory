@@ -6,4 +6,5 @@ export interface ProdutoRepository {
   save(produto: ProdutoModel): Promise<ProdutoModel>
   update(produto: ProdutoModel): Promise<ProdutoModel>
   delete(id: number): Promise<boolean>
+  findByFornecedorId(fornecedorId: number): Promise<ProdutoModel[]>
 }
