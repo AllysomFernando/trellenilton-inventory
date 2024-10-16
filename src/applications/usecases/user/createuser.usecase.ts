@@ -2,6 +2,7 @@ import { UserModel } from '@/domain/models/user'
 import { UseCase as DefaultUseCase } from '../use-case'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
 import { UserRepository } from '@/domain/repository/user.repository'
+import { EmailValidator } from '@/applications/validators/email.validators'
 
 export namespace CreateUserUseCase {
   export type Input = {
@@ -16,6 +17,9 @@ export namespace CreateUserUseCase {
     constructor(private userRepository: UserRepository) {}
 
     async execute(input: Input): Promise<Output> {
+      if (!EmailValidator.isValid(input.email)) {
+        throw new BadRequestError('Email inválido.')
+      }
       if (!input.email || !input.name || !input.password) {
         throw new BadRequestError('Email, nome e senha são obrigatórios.')
       }
