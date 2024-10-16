@@ -15,7 +15,7 @@ export namespace DeleteProdutoUseCase {
 
     async execute(input: Input): Promise<Output> {
       if (!input.id) {
-        throw new Error('Id é obrigatório.')
+        throw new Error('ID eh obrigatório.')
       }
       try {
         const entity = await this.produtoRepository.delete(input.id)
