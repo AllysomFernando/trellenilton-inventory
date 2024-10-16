@@ -2,6 +2,7 @@ import { UserModel } from '@/domain/models/user'
 import { UseCase as DefaultUseCase } from '../use-case'
 import { UserRepository } from '@/domain/repository/user.repository'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
+import { GetUserByIdUseCase } from './getuserbyid.usecase'
 
 export namespace UpdateUserUseCase {
   export type Input = {
@@ -19,6 +20,15 @@ export namespace UpdateUserUseCase {
     async execute(input: Input): Promise<Output> {
       if (!input.id) {
         throw new Error('Id é obrigatório.')
+      }
+      const getUserByIdUseCase = new GetUserByIdUseCase.UseCase(
+        this.userRepository
+      )
+      const existingUser = await getUserByIdUseCase.execute({
+        id: input.id
+      })
+      if (!existingUser) {
+        throw new BadRequestError('Usuário não encontrado.')
       }
       if (!input.email && !input.name && !input.password) {
         throw new Error('Informe ao menos um campo para atualização.')
