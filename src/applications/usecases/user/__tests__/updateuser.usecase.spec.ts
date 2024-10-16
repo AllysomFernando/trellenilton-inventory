@@ -21,7 +21,14 @@ describe('UpdateUserUseCase', () => {
       'Id é obrigatório.'
     )
   })
+  it('should throw an error if user is not found', async () => {
+    const input = { id: 1, email: '', name: '', password: '' }
+    ;(userRepository.update as jest.Mock).mockResolvedValue(null)
 
+    await expect(updateUserUseCase.execute(input)).rejects.toThrow(
+      BadRequestError
+    )
+  })
   it('should throw an error if no fields are provided for update', async () => {
     const input = { id: 1, email: '', name: '', password: '' }
 
