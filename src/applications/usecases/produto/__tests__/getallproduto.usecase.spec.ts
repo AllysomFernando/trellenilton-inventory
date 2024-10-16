@@ -47,4 +47,12 @@ describe('GetAllProdutoUseCase', () => {
     const result = await getAllProdutoUseCase.execute()
     expect(result).toEqual(products)
   })
+
+  it('should throw BadRequestError if an error occurs while fetching products', async () => {
+    ;(mockProdutoRepository.findAll as jest.Mock).mockRejectedValueOnce(
+      new Error('Error')
+    )
+
+    await expect(getAllProdutoUseCase.execute()).rejects.toThrow()
+  })
 })
