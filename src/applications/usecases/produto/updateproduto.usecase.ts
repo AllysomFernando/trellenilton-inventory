@@ -2,6 +2,7 @@ import { ProdutoModel } from '@/domain/models/produto'
 import { UseCase as DefaultUseCase } from '../use-case'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
 import { ProdutoRepository } from '@/domain/repository/produto.repository'
+import { GetProdutoByIdUseCase } from './getprodutobyid.usecase'
 
 export namespace UpdateProdutoUseCase {
   export type Input = {
@@ -23,7 +24,16 @@ export namespace UpdateProdutoUseCase {
       if (!input.id) {
         throw new Error('Id é obrigatório.')
       }
-      //TODO: implementar logica de verificar se o produto existe antes de continuar, se nao existir retornar um erro
+      const getProdutoByIdUseCase = new GetProdutoByIdUseCase.UseCase(
+        this.produtoRepository
+      )
+      const existingProduto = await getProdutoByIdUseCase.execute({
+        id: input.id
+      })
+
+      if (!existingProduto) {
+        throw new BadRequestError('Produto não encontrado.')
+      }
       if (
         !input.name &&
         !input.description &&
