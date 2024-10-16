@@ -1,12 +1,14 @@
 import { ProdutoRepository } from '@/domain/repository/produto.repository'
 import { ProdutoModel } from '@/domain/models/produto'
 import { GetAllProdutoUseCase } from '../getallproduto.usecase'
+
 const mockProdutoRepository: ProdutoRepository = {
   findAll: jest.fn(),
   findById: jest.fn(),
   save: jest.fn(),
   update: jest.fn(),
-  delete: jest.fn()
+  delete: jest.fn(),
+  findByFornecedorId: jest.fn()
 }
 
 describe('GetAllProdutoUseCase', () => {
