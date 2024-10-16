@@ -7,7 +7,8 @@ const mockProdutoRepository: ProdutoRepository = {
   findById: jest.fn(),
   save: jest.fn(),
   update: jest.fn(),
-  delete: jest.fn()
+  delete: jest.fn(),
+  findByFornecedorId: jest.fn()
 }
 
 describe('CreateProdutoUseCase', () => {
