@@ -2,7 +2,7 @@ import { ProdutoModel } from '@/domain/models/produto'
 import { UseCase as DefaultUseCase } from '../use-case'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
 import { ProdutoRepository } from '@/domain/repository/produto.repository'
-export namespace GatAllProdutoUseCase {
+export namespace GetAllProdutoUseCase {
   export type Input = {
     page: number
     limit: number
