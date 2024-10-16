@@ -1,16 +1,16 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity('user')
 export class User {
   @PrimaryGeneratedColumn('increment')
-  id: number;
+  id: number
+
+  @Column('varchar', [{ unique: true }])
+  email: string
 
   @Column('varchar')
-  email: string;
+  name: string
 
   @Column('varchar')
-  name: string;
-
-  @Column('varchar')
-  password: string;
+  password: string
 }
