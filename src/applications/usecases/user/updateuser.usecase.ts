@@ -15,22 +15,22 @@ export namespace UpdateUserUseCase {
   export type Output = UserModel
 
   export class UseCase implements DefaultUseCase<Input, Output> {
-    constructor(private userRepository: UserRepository) {}
+    constructor(
+      private userRepository: UserRepository,
+      private getUserByIdUseCase: GetUserByIdUseCase.UseCase
+    ) {}
 
     async execute(input: Input): Promise<Output> {
       if (!input.id) {
         throw new Error('Id é obrigatório.')
       }
-      const getUserByIdUseCase = new GetUserByIdUseCase.UseCase(
-        this.userRepository
-      )
-      const existingUser = await getUserByIdUseCase.execute({
+      const existingUser = await this.getUserByIdUseCase.execute({
         id: input.id
       })
       if (!existingUser) {
         throw new BadRequestError('Usuário não encontrado.')
       }
-      if (!input.email && !input.name && !input.password) {
+      if (!input.email.trim() && !input.name.trim() && !input.password.trim()) {
         throw new Error('Informe ao menos um campo para atualização.')
       }
       const user = new UserModel()
