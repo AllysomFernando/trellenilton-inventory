@@ -10,6 +10,6 @@ export class Fornecedor {
   cnpj: string
   @Column('varchar')
   endereco: string
-  @Column('varchar', { nullable: false })
+  @Column('varchar', { nullable: false, unique: true })
   contato: string
 }
