@@ -44,7 +44,12 @@ export class UsecaseProxyModule {
           inject: [UserRepositoryOrm],
           provide: UsecaseProxyModule.UPDATE_USER_USE_CASE,
           useFactory: (userRepository: UserRepositoryOrm) =>
-            new UseCaseProxy(new UpdateUserUseCase.UseCase(userRepository))
+            new UseCaseProxy(
+              new UpdateUserUseCase.UseCase(
+                userRepository,
+                new GetUserByIdUseCase.UseCase(userRepository)
+              )
+            )
         },
         {
           inject: [UserRepositoryOrm],
