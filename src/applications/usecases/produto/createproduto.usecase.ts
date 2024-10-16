@@ -22,10 +22,13 @@ export namespace CreateProdutoUseCase {
       if (
         !input.name ||
         !input.description ||
-        !input.price ||
-        !input.quantity ||
+        input.price === null ||
+        input.price === undefined ||
+        input.quantity === null ||
+        input.quantity === undefined ||
         !input.image ||
-        !input.fornecedorId
+        input.fornecedorId === null ||
+        input.fornecedorId === undefined
       ) {
         throw new BadRequestError(
           'Nome, descrição, preço, quantidade, imagem e id do fornecedor são obrigatórios.'
