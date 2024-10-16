@@ -2,6 +2,7 @@ import { FornecedorModel } from '@/domain/models/fornecedor'
 import { UseCase as DefaultUseCase } from '../use-case'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
 import { FornecedorRepository } from '@/domain/repository/fornecedor.repository'
+import { CNPJValidator } from '@/applications/validators/cnpj.validators'
 
 export namespace CreateFornecedorUseCase {
   export type Input = {
@@ -15,8 +16,10 @@ export namespace CreateFornecedorUseCase {
 
   export class UseCase implements DefaultUseCase<Input, Output> {
     constructor(private fornecedorRepository: FornecedorRepository) {}
-
     async execute(input: Input): Promise<Output> {
+      if (!CNPJValidator.isValid(input.cnpj)) {
+        throw new BadRequestError('CNPJ inválido.')
+      }
       if (!input.name || !input.cnpj || !input.contato) {
         throw new BadRequestError('Nome, CNPJ e Contato são obrigatórios.')
       }
