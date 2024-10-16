@@ -1,7 +1,7 @@
 export class PedidoModels {
   id: number
   data: Date
-  clientId: number
+  clienteId: number
   status: string
   total: number
 }
