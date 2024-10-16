@@ -39,5 +39,12 @@ describe('GetAllProdutoUseCase', () => {
         fornecedorId: 2
       }
     ]
+
+    ;(mockProdutoRepository.findAll as jest.Mock).mockResolvedValueOnce(
+      products
+    )
+
+    const result = await getAllProdutoUseCase.execute()
+    expect(result).toEqual(products)
   })
 })
