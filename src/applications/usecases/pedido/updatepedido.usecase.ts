@@ -1,4 +1,4 @@
-import { PedidoModels } from '@/domain/models/pedido'
+import { PedidoModel } from '@/domain/models/pedido'
 import { UseCase as DefaultUseCase } from '../use-case'
 import { PedidoRepository } from '@/domain/repository/pedido.repository'
 import { GetPedidoByIdUseCase } from './getpedidobyid.usecase'
@@ -14,7 +14,7 @@ export namespace UpdatePedidoUseCase {
     total: number
   }
 
-  export type Output = PedidoModels
+  export type Output = PedidoModel
 
   export class UseCase implements DefaultUseCase<Input, Output> {
     constructor(
@@ -44,7 +44,7 @@ export namespace UpdatePedidoUseCase {
       if (!cliente) {
         throw new BadRequestError('Cliente não encontrado.')
       }
-      const pedido = new PedidoModels()
+      const pedido = new PedidoModel()
       pedido.id = input.id
       pedido.data = input.data
       pedido.clienteId = input.clienteId

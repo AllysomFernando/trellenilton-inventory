@@ -1,10 +1,10 @@
-import { PedidoModels } from '@/domain/models/pedido'
+import { PedidoModel } from '@/domain/models/pedido'
 import { UseCase as DefaultUseCase } from '../use-case'
 import { PedidoRepository } from '@/domain/repository/pedido.repository'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
 
 export namespace GetAllPedidoUseCase {
-  export type Output = PedidoModels[]
+  export type Output = PedidoModel[]
 
   export class UseCase implements DefaultUseCase<void, Output> {
     constructor(private pedidoRepository: PedidoRepository) {}

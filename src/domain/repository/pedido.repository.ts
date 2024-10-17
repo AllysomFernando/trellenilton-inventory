@@ -1,9 +1,9 @@
-import { PedidoModels } from '../models/pedido'
+import { PedidoModel } from '../models/pedido'
 
 export interface PedidoRepository {
-  findAll(): Promise<PedidoModels[]>
-  findById(id: number): Promise<PedidoModels>
-  save(produto: PedidoModels): Promise<PedidoModels>
-  update(produto: PedidoModels): Promise<PedidoModels>
+  findAll(): Promise<PedidoModel[]>
+  findById(id: number): Promise<PedidoModel>
+  save(produto: PedidoModel): Promise<PedidoModel>
+  update(produto: PedidoModel): Promise<PedidoModel>
   delete(id: number): Promise<boolean>
 }

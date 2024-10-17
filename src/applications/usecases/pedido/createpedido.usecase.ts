@@ -1,4 +1,4 @@
-import { PedidoModels } from '@/domain/models/pedido'
+import { PedidoModel } from '@/domain/models/pedido'
 import { UseCase as DefaultUseCase } from '../use-case'
 import { PedidoRepository } from '@/domain/repository/pedido.repository'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
@@ -11,7 +11,7 @@ export namespace CreatePedidoUseCase {
     total: number
   }
 
-  export type Output = PedidoModels
+  export type Output = PedidoModel
 
   export class UseCase implements DefaultUseCase<Input, Output> {
     constructor(private pedidoRepository: PedidoRepository) {}
@@ -22,7 +22,7 @@ export namespace CreatePedidoUseCase {
           'Data, clienteId, status e total são obrigatórios.'
         )
       }
-      const pedido = new PedidoModels()
+      const pedido = new PedidoModel()
       pedido.data = input.data
       pedido.clienteId = input.clienteId
       pedido.status = input.status

@@ -1,4 +1,4 @@
-export class PedidoModels {
+export class PedidoModel {
   id: number
   data: Date
   clienteId: number
