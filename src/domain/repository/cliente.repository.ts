@@ -6,4 +6,5 @@ export interface ClienteRepository {
   save(cliente: ClienteModel): Promise<ClienteModel>
   update(cliente: ClienteModel): Promise<ClienteModel>
   delete(id: number): Promise<boolean>
+  archive(id: number): Promise<boolean>
 }
