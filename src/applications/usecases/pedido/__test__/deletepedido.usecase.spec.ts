@@ -37,7 +37,7 @@ describe('DeletePedidoUseCase', () => {
 
   it('should throw BadRequestError if an exception occurs during deletion', async () => {
     ;(pedidoRepository.delete as jest.Mock).mockRejectedValue(
-      new Error('Some error')
+      new BadRequestError('Some error')
     )
     await expect(deletePedidoUseCase.execute({ id: 1 })).rejects.toThrow(
       BadRequestError
