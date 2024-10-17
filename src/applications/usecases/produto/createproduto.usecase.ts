@@ -2,6 +2,7 @@ import { ProdutoModel } from '@/domain/models/produto'
 import { UseCase as DefaultUseCase } from '../use-case'
 import { ProdutoRepository } from '@/domain/repository/produto.repository'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
+import { GetFornecedorByIdUseCase } from '../fornecedor/getfornecedorbyid,usecase'
 
 export namespace CreateProdutoUseCase {
   export type Input = {
@@ -16,7 +17,10 @@ export namespace CreateProdutoUseCase {
   export type Output = ProdutoModel
 
   export class UseCase implements DefaultUseCase<Input, Output> {
-    constructor(private produtoRepository: ProdutoRepository) {}
+    constructor(
+      private produtoRepository: ProdutoRepository,
+      private getFornecedorById: GetFornecedorByIdUseCase.UseCase
+    ) {}
 
     async execute(input: Input): Promise<Output> {
       if (
@@ -42,7 +46,15 @@ export namespace CreateProdutoUseCase {
           'A quantidade do produto deve ser maior que zero.'
         )
       }
-      //TODO: implementar logica de verificar o id do fornecedor antes de salvar o produto, se o fornecedor nao existir retornar um erro
+
+      const fornecedor = await this.getFornecedorById.execute({
+        id: input.fornecedorId
+      })
+
+      if (!fornecedor) {
+        throw new BadRequestError('Fornecedor não encontrado.')
+      }
+
       const produto = new ProdutoModel()
       produto.name = input.name
       produto.description = input.description
