@@ -9,6 +9,8 @@ export namespace CreateItemPedidoUseCase {
   export type Input = {
     pedidoId: number
     produtoId: number
+    quantidade: number
+    precoUnitario: number
   }
 
   export type Output = ItemPedidoModel
@@ -34,11 +36,14 @@ export namespace CreateItemPedidoUseCase {
       const itemPedido = new ItemPedidoModel()
       itemPedido.pedidoId = input.pedidoId
       itemPedido.produtoId = input.produtoId
-
+      itemPedido.quantidade = input.quantidade
+      itemPedido.precoUnitario = input.precoUnitario
       try {
         const entity = await this.itemPedidoRepository.save(
           itemPedido.pedidoId,
-          itemPedido.produtoId
+          itemPedido.produtoId,
+          itemPedido.quantidade,
+          itemPedido.precoUnitario
         )
         if (!entity) {
           throw new BadRequestError('Erro ao criar item pedido.')
