@@ -1,7 +1,12 @@
+export enum PedidoStatus {
+  Pendente = 'Pendente',
+  Concluido = 'Concluído'
+}
+
 export class PedidoModel {
   id: number
   data: Date
   clienteId: number
-  status: Enumerator<'Pendente' | 'Concluído'>
+  status: PedidoStatus.Concluido | PedidoStatus.Pendente
   total: number
 }
