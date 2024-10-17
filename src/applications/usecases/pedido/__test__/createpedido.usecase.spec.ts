@@ -1,6 +1,7 @@
 import { PedidoRepository } from '@/domain/repository/pedido.repository'
 import { CreatePedidoUseCase } from '../createpedido.usecase'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
+import { PedidoStatus } from '@/domain/models/pedido'
 
 const mockPedidoRepository: PedidoRepository = {
   findAll: jest.fn(),
@@ -14,17 +15,21 @@ describe('CreatePedidoUseCase', () => {
   let createPedidoUseCase: CreatePedidoUseCase.UseCase
 
   beforeEach(() => {
-    createPedidoUseCase = new CreatePedidoUseCase.UseCase(
-      mockPedidoRepository
-    )
+    createPedidoUseCase = new CreatePedidoUseCase.UseCase(mockPedidoRepository)
   })
 
   it('should throw an error if required fields are missing', async () => {
     const input = {
       data: new Date('2020/10/01'),
       clienteId: 0,
-      status: '',
-      total: 0
+      status: undefined,
+      itens: [
+        {
+          produtoId: 0,
+          quantidade: 0,
+          preco: 0
+        }
+      ]
     }
     await expect(createPedidoUseCase.execute(input)).rejects.toThrow(
       BadRequestError
@@ -35,15 +40,27 @@ describe('CreatePedidoUseCase', () => {
     const input = {
       data: new Date('2023-10-01'),
       clienteId: 1,
-      status: 'PENDING',
-      total: 100
+      status: PedidoStatus.Concluido,
+      itens: [
+        {
+          produtoId: 0,
+          quantidade: 0,
+          preco: 0
+        }
+      ]
     }
     const pedido = {
       id: 1,
       data: input.data,
       clienteId: input.clienteId,
       status: input.status,
-      total: input.total
+      itens: [
+        {
+          produtoId: 0,
+          quantidade: 0,
+          preco: 0
+        }
+      ]
     }
     ;(mockPedidoRepository.save as jest.Mock).mockResolvedValueOnce(pedido)
 
