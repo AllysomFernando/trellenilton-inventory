@@ -33,6 +33,12 @@ export namespace CreateItemPedidoUseCase {
         throw new BadRequestError('Produto não encontrado.')
       }
 
+      if (input.quantidade <= 0 || input.precoUnitario <= 0) {
+        throw new BadRequestError(
+          'Quantidade ou preço unitário precisam ser maior que 0.'
+        )
+      }
+
       const itemPedido = new ItemPedidoModel()
       itemPedido.pedidoId = input.pedidoId
       itemPedido.produtoId = input.produtoId
