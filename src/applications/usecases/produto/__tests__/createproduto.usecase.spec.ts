@@ -1,6 +1,7 @@
 import { ProdutoRepository } from '@/domain/repository/produto.repository'
 import { CreateProdutoUseCase } from '../createproduto.usecase'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
+import { FornecedorRepository } from '@/domain/repository/fornecedor.repository'
 
 const mockProdutoRepository: ProdutoRepository = {
   findAll: jest.fn(),
@@ -11,12 +12,21 @@ const mockProdutoRepository: ProdutoRepository = {
   findByFornecedorId: jest.fn()
 }
 
+const mockFornecedorRepository: FornecedorRepository = {
+  findAll: jest.fn(),
+  findById: jest.fn(),
+  save: jest.fn(),
+  update: jest.fn(),
+  delete: jest.fn()
+}
+
 describe('CreateProdutoUseCase', () => {
   let createProdutoUseCase: CreateProdutoUseCase.UseCase
 
   beforeEach(() => {
     createProdutoUseCase = new CreateProdutoUseCase.UseCase(
-      mockProdutoRepository
+      mockProdutoRepository,
+      mockFornecedorRepository
     )
   })
 
@@ -52,6 +62,9 @@ describe('CreateProdutoUseCase', () => {
       image: input.image,
       fornecedorId: input.fornecedorId
     }
+    ;(mockFornecedorRepository.findById as jest.Mock).mockResolvedValueOnce({
+      id: 1
+    })
     ;(mockProdutoRepository.save as jest.Mock).mockResolvedValueOnce(produto)
 
     const result = await createProdutoUseCase.execute(input)
