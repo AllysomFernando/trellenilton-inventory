@@ -1,5 +1,10 @@
 import { ItemPedidoModel } from '../models/itemPedido'
 
 export interface ItemPedidoRepository {
-  save: (pedidoId: number, produtoId: number) => Promise<ItemPedidoModel>
+  save: (
+    pedidoId: number,
+    produtoId: number,
+    quantidade: number,
+    precoUnitario: number
+  ) => Promise<ItemPedidoModel>
 }
