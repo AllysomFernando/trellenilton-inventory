@@ -14,6 +14,6 @@ export interface ItemPedidoRepository {
     quantidade: number,
     precoUnitario: number
   ) => Promise<ItemPedidoModel>
-
+  findById: (id: number) => Promise<ItemPedidoModel>
   delete: (id: number) => Promise<boolean>
 }
