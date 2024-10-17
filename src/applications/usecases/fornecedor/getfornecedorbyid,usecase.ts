@@ -14,7 +14,7 @@ export namespace GetFornecedorByIdUseCase {
     constructor(private fornecedorRepository: FornecedorRepository) {}
     async execute(input: Input): Promise<Output> {
       if (!input.id) {
-        throw new BadRequestError('ID eh obrigatório.')
+        throw new BadRequestError('ID é obrigatório.')
       }
       try {
         const entity = await this.fornecedorRepository.findById(input.id)
