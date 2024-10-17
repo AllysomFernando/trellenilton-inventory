@@ -1,5 +1,6 @@
 import { ClienteRepository } from '@/domain/repository/cliente.repository'
 import { UseCase as DefaultUseCase } from '../use-case'
+import { BadRequestError } from '@/applications/errors/bad-request-erros'
 
 export namespace DeleteClienteUseCase {
   export type Input = {
@@ -19,10 +20,10 @@ export namespace DeleteClienteUseCase {
       try {
         const entity = await this.clienteRepository.findById(input.id)
         if (!entity) {
-          throw new Error('Cliente não encontrado.')
+          throw new BadRequestError('Cliente não encontrado.')
         }
       } catch (e) {
-        throw new Error('Falha ao deletar o cliente.')
+        throw new BadRequestError('Falha ao deletar o cliente.')
       }
     }
   }
