@@ -7,4 +7,11 @@ export interface ItemPedidoRepository {
     quantidade: number,
     precoUnitario: number
   ) => Promise<ItemPedidoModel>
+  update: (
+    id: number,
+    pedidoId: number,
+    produtoId: number,
+    quantidade: number,
+    precoUnitario: number
+  ) => Promise<ItemPedidoModel>
 }
