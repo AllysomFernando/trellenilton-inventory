@@ -1,6 +1,7 @@
 import { PedidoRepository } from '@/domain/repository/pedido.repository'
 import { PedidoModel } from '@/domain/models/pedido'
 import { GetAllPedidoUseCase } from '../getallpedido.usecase'
+import { BadRequestError } from '@/applications/errors/bad-request-erros'
 
 const mockPedidoRepository: PedidoRepository = {
   findAll: jest.fn(),
@@ -47,7 +48,7 @@ describe('GetAllPedidoUseCase', () => {
 
   it('should throw BadRequestError if an error occurs while fetching pedidos', async () => {
     ;(mockPedidoRepository.findAll as jest.Mock).mockRejectedValueOnce(
-      new Error('Error')
+      new BadRequestError('Error')
     )
 
     await expect(getAllPedidoUseCase.execute()).rejects.toThrow()
