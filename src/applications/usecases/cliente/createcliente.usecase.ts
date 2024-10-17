@@ -3,7 +3,7 @@ import { UseCase as DefaultUseCase } from '../use-case'
 import { ClienteRepository } from '@/domain/repository/cliente.repository'
 import { IsCPFOrCnpj } from '@/applications/validators/cpfcnpj.validators'
 
-export namespace CreateClientUseCase {
+export namespace CreateClienteUseCase {
   export type Input = {
     name: string
     cpf_cnpj: string
