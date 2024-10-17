@@ -2,8 +2,8 @@ import { PedidoModel } from '@/domain/models/pedido'
 import { UseCase as DefaultUseCase } from '../use-case'
 import { PedidoRepository } from '@/domain/repository/pedido.repository'
 import { GetPedidoByIdUseCase } from './getpedidobyid.usecase'
-import { GetClientByIdUseCase } from '../cliente/getclientbyid.usecase'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
+import { ClienteRepository } from '@/domain/repository/cliente.repository'
 
 export namespace UpdatePedidoUseCase {
   export type Input = {
@@ -20,7 +20,7 @@ export namespace UpdatePedidoUseCase {
     constructor(
       private pedidoRepository: PedidoRepository,
       private getPedidoByIdUseCase: GetPedidoByIdUseCase.UseCase,
-      private getClienteByIdUseCase: GetClientByIdUseCase.UseCase
+      private clienteRepository: ClienteRepository
     ) {}
 
     async execute(input: Input): Promise<Output> {
@@ -38,9 +38,7 @@ export namespace UpdatePedidoUseCase {
       if (!input.data && !input.clienteId && !input.status && !input.total) {
         throw new BadRequestError('Informe ao menos um campo para atualização.')
       }
-      const cliente = await this.getClienteByIdUseCase.execute({
-        id: input.clienteId
-      })
+      const cliente = await this.clienteRepository.findById(input.clienteId)
       if (!cliente) {
         throw new BadRequestError('Cliente não encontrado.')
       }
