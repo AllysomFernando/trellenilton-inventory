@@ -1,7 +1,7 @@
 import { CNPJValidator } from '@/applications/validators/cnpj.validators'
 import { CPFValidator } from './cpf.validators'
 
-export class IsCPFOrCnpj {
+export class IsCPForCnpj {
   static isCpf(cpfCnpj: string): boolean {
     return cpfCnpj.length === 11
   }

@@ -1,6 +1,7 @@
 import { ClienteModel } from '@/domain/models/cliente'
 import { UseCase as DefaultUseCase } from '../use-case'
 import { ClienteRepository } from '@/domain/repository/cliente.repository'
+import { IsCPForCnpj } from '@/applications/validators/cpfcnpj.validators'
 
 export namespace UpdateClienteUseCase {
   export type Input = {
@@ -19,6 +20,10 @@ export namespace UpdateClienteUseCase {
     async execute(input: Input): Promise<ClienteModel> {
       if (!input.id) {
         throw new Error('Id é obrigatório.')
+      }
+      const isValidCpfCnpj = IsCPForCnpj.isValid(input.cpf_cnpj)
+      if (!isValidCpfCnpj) {
+        throw new Error('CPF ou CNPJ inválido.')
       }
       const cliente = new ClienteModel()
       cliente.id = input.id

@@ -1,7 +1,7 @@
 import { ClienteModel } from '@/domain/models/cliente'
 import { UseCase as DefaultUseCase } from '../use-case'
 import { ClienteRepository } from '@/domain/repository/cliente.repository'
-import { IsCPFOrCnpj } from '@/applications/validators/cpfcnpj.validators'
+import { IsCPForCnpj } from '@/applications/validators/cpfcnpj.validators'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
 
 export namespace CreateClienteUseCase {
@@ -21,7 +21,7 @@ export namespace CreateClienteUseCase {
       if (!input.name || !input.cpf_cnpj || !input.endereco || !input.contato) {
         throw new Error('Nome, CPF/CNPJ, Endereço e Contato são obrigatórios.')
       }
-      const isValidCpfCnpj = IsCPFOrCnpj.isValid(input.cpf_cnpj)
+      const isValidCpfCnpj = IsCPForCnpj.isValid(input.cpf_cnpj)
       if (!isValidCpfCnpj) {
         throw new BadRequestError('CPF ou CNPJ inválido.')
       }

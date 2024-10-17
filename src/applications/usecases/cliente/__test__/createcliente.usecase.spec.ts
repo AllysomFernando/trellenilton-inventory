@@ -2,7 +2,7 @@ import { ClienteRepository } from '@/domain/repository/cliente.repository'
 import { ClienteModel } from '@/domain/models/cliente'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
 import { CreateClienteUseCase } from '../createcliente.usecase'
-import { IsCPFOrCnpj } from '@/applications/validators/cpfcnpj.validators'
+import { IsCPForCnpj } from '@/applications/validators/cpfcnpj.validators'
 
 describe('CreateClienteUseCase', () => {
   let useCase: CreateClienteUseCase.UseCase
@@ -16,7 +16,7 @@ describe('CreateClienteUseCase', () => {
   })
 
   it('should throw BadRequestError if CPF or CNPJ is invalid', async () => {
-    jest.spyOn(IsCPFOrCnpj, 'isValid').mockReturnValueOnce(false)
+    jest.spyOn(IsCPForCnpj, 'isValid').mockReturnValueOnce(false)
 
     const input: CreateClienteUseCase.Input = {
       name: 'Cliente Teste',
@@ -58,7 +58,7 @@ describe('CreateClienteUseCase', () => {
     savedCliente.endereco = input.endereco
     savedCliente.contato = input.contato
 
-    jest.spyOn(IsCPFOrCnpj, 'isValid').mockReturnValueOnce(true)
+    jest.spyOn(IsCPForCnpj, 'isValid').mockReturnValueOnce(true)
     jest.spyOn(clienteRepository, 'save').mockResolvedValueOnce(savedCliente)
 
     const result = await useCase.execute(input)
@@ -82,7 +82,7 @@ describe('CreateClienteUseCase', () => {
       contato: '123456789'
     }
 
-    jest.spyOn(IsCPFOrCnpj, 'isValid').mockReturnValueOnce(true)
+    jest.spyOn(IsCPForCnpj, 'isValid').mockReturnValueOnce(true)
     jest.spyOn(clienteRepository, 'save').mockResolvedValueOnce(null)
 
     await expect(useCase.execute(input)).rejects.toThrow(BadRequestError)
