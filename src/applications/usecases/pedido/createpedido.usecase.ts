@@ -7,7 +7,7 @@ export namespace CreatePedidoUseCase {
   export type Input = {
     data: Date
     clienteId: number
-    status: string
+    status: Enumerator<'Pendente' | 'Concluído'>
     total: number
   }
 
@@ -27,6 +27,7 @@ export namespace CreatePedidoUseCase {
       pedido.clienteId = input.clienteId
       pedido.status = input.status
       pedido.total = input.total
+
       try {
         const entity = await this.pedidoRepository.save(pedido)
         if (!entity) {
