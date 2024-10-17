@@ -15,6 +15,7 @@ export namespace DeleteClienteUseCase {
       if (!input.id) {
         throw new Error('Id é obrigatório.')
       }
+      //TODO: quando implementar o usecase de itenspedidos verificar se o cliente possui algum item relacionado com ele.
       try {
         const entity = await this.clienteRepository.findById(input.id)
         if (!entity) {
