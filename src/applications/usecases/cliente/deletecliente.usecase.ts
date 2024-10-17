@@ -8,7 +8,7 @@ export namespace DeleteClienteUseCase {
     id: number
   }
 
-  export type Output = void
+  export type Output = boolean
 
   export class UseCase implements DefaultUseCase<Input, Output> {
     constructor(
@@ -21,14 +21,20 @@ export namespace DeleteClienteUseCase {
         throw new Error('Id é obrigatório.')
       }
       const verifyPedido = await this.pedidoRepository.findByClienteId(input.id)
-      if (verifyPedido.length > 0) {
-        throw new BadRequestError('Cliente possui pedidos.')
-      }
+
       try {
-        const entity = await this.clienteRepository.findById(input.id)
-        if (!entity) {
-          throw new BadRequestError('Cliente não encontrado.')
+        if (verifyPedido.length > 0) {
+          const entity = await this.clienteRepository.archive(input.id)
+          if (!entity) {
+            throw new BadRequestError('Cliente não arquivado')
+          }
+          return entity
         }
+        const entity = await this.clienteRepository.delete(input.id)
+        if (!entity) {
+          throw new BadRequestError('Cliente não deletado')
+        }
+        return entity
       } catch (e) {
         throw new BadRequestError('Falha ao deletar o cliente.')
       }
