@@ -3,6 +3,7 @@ import { UseCase as DefaultUseCase } from '../use-case'
 import { ProdutoRepository } from '@/domain/repository/produto.repository'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
 import { GetFornecedorByIdUseCase } from '../fornecedor/getfornecedorbyid,usecase'
+import { FornecedorRepository } from '@/domain/repository/fornecedor.repository'
 
 export namespace CreateProdutoUseCase {
   export type Input = {
@@ -19,7 +20,7 @@ export namespace CreateProdutoUseCase {
   export class UseCase implements DefaultUseCase<Input, Output> {
     constructor(
       private produtoRepository: ProdutoRepository,
-      private getFornecedorById: GetFornecedorByIdUseCase.UseCase
+      private fornecedorRepository: FornecedorRepository
     ) {}
 
     async execute(input: Input): Promise<Output> {
@@ -47,9 +48,9 @@ export namespace CreateProdutoUseCase {
         )
       }
 
-      const fornecedor = await this.getFornecedorById.execute({
-        id: input.fornecedorId
-      })
+      const fornecedor = await this.fornecedorRepository.findById(
+        input.fornecedorId
+      )
 
       if (!fornecedor) {
         throw new BadRequestError('Fornecedor não encontrado.')
