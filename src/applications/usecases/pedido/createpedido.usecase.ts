@@ -2,7 +2,6 @@ import { PedidoModel } from '@/domain/models/pedido'
 import { UseCase as DefaultUseCase } from '../use-case'
 import { PedidoRepository } from '@/domain/repository/pedido.repository'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
-import { ItemPedidoRepository } from '@/domain/repository/itempedido.repository'
 
 export namespace CreatePedidoUseCase {
   export type Input = {
@@ -15,10 +14,7 @@ export namespace CreatePedidoUseCase {
   export type Output = PedidoModel
 
   export class UseCase implements DefaultUseCase<Input, Output> {
-    constructor(
-      private pedidoRepository: PedidoRepository,
-      private itemPedidoRepository: ItemPedidoRepository
-    ) {}
+    constructor(private pedidoRepository: PedidoRepository) {}
 
     async execute(input: Input): Promise<Output> {
       if (
