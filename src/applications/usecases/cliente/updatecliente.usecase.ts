@@ -2,6 +2,7 @@ import { ClienteModel } from '@/domain/models/cliente'
 import { UseCase as DefaultUseCase } from '../use-case'
 import { ClienteRepository } from '@/domain/repository/cliente.repository'
 import { IsCPForCnpj } from '@/applications/validators/cpfcnpj.validators'
+import { BadRequestError } from '@/applications/errors/bad-request-erros'
 
 export namespace UpdateClienteUseCase {
   export type Input = {
@@ -23,7 +24,7 @@ export namespace UpdateClienteUseCase {
       }
       const isValidCpfCnpj = IsCPForCnpj.isValid(input.cpf_cnpj)
       if (!isValidCpfCnpj) {
-        throw new Error('CPF ou CNPJ inválido.')
+        throw new BadRequestError('CPF ou CNPJ inválido.')
       }
       const cliente = new ClienteModel()
       cliente.id = input.id
@@ -34,11 +35,11 @@ export namespace UpdateClienteUseCase {
       try {
         const entity = await this.clienteRepository.update(cliente)
         if (!entity) {
-          throw new Error('Falha ao atualizar o cliente.')
+          throw new BadRequestError('Falha ao atualizar o cliente.')
         }
         return entity
       } catch (e) {
-        throw new Error('Falha ao atualizar o cliente.')
+        throw new BadRequestError('Falha ao atualizar o cliente.')
       }
     }
   }
