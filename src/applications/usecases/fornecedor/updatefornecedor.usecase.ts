@@ -3,6 +3,7 @@ import { GetFornecedorByIdUseCase } from './getfornecedorbyid,usecase'
 import { UseCase as DefaultUseCase } from '../use-case'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
 import { FornecedorRepository } from '@/domain/repository/fornecedor.repository'
+import { CNPJValidator } from '@/applications/validators/cnpj.validators'
 
 export namespace UpdateFornecedorUseCase {
   export type Input = {
@@ -36,6 +37,11 @@ export namespace UpdateFornecedorUseCase {
       if (!input.name && !input.cnpj && !input.contato && !input.endereco) {
         throw new BadRequestError('Informe ao menos um campo para atualização.')
       }
+
+      if (!CNPJValidator.isValid(input.cnpj)) {
+        throw new BadRequestError('CNPJ inválido.')
+      }
+
       const fornecedor = new FornecedorModel()
       fornecedor.id = input.id
       fornecedor.name = input.name
