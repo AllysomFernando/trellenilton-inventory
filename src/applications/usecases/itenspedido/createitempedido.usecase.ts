@@ -39,6 +39,12 @@ export namespace CreateItemPedidoUseCase {
         )
       }
 
+      if (Number.isInteger(input.precoUnitario) === false) {
+        throw new BadRequestError(
+          'Preço unitário precisa ser um número inteiro.'
+        )
+      }
+
       const itemPedido = new ItemPedidoModel()
       itemPedido.pedidoId = input.pedidoId
       itemPedido.produtoId = input.produtoId
