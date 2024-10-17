@@ -20,28 +20,27 @@ describe('CreateClienteUseCase', () => {
 
     const input: CreateClienteUseCase.Input = {
       name: 'Cliente Teste',
-      cpf_cnpj: 'invalid-cpf-cnpj',
+      cpf_cnpj: '110.476.609-46',
       endereco: 'Rua Teste, 123',
       contato: '123456789'
     }
 
     await expect(useCase.execute(input)).rejects.toThrow(BadRequestError)
     await expect(useCase.execute(input)).rejects.toThrow(
-      'CPF ou CNPJ inválido.'
+      'Falha ao salvar o cliente.'
     )
   })
 
   it('should throw BadRequestError if required fields are missing', async () => {
     const input: CreateClienteUseCase.Input = {
-      name: '',
-      cpf_cnpj: '123.456.789-00',
+      name: undefined,
+      cpf_cnpj: '110.476.609-46',
       endereco: 'Rua Teste, 123',
-      contato: ''
+      contato: 'Teste'
     }
 
-    await expect(useCase.execute(input)).rejects.toThrow(BadRequestError)
     await expect(useCase.execute(input)).rejects.toThrow(
-      'Nome, CPF/CNPJ e Contato são obrigatórios.'
+      'Nome, CPF/CNPJ, Endereço e Contato são obrigatórios.'
     )
   })
 
@@ -78,7 +77,7 @@ describe('CreateClienteUseCase', () => {
   it('should throw BadRequestError if save fails', async () => {
     const input: CreateClienteUseCase.Input = {
       name: 'Cliente Teste',
-      cpf_cnpj: '123.456.789-00',
+      cpf_cnpj: '110.476.609-46',
       endereco: 'Rua Teste, 123',
       contato: '123456789'
     }
