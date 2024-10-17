@@ -2,7 +2,6 @@ import { PedidoRepository } from '@/domain/repository/pedido.repository'
 import { UseCase as DefaultUseCase } from '../use-case'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
 
-
 export namespace DeletePedidoUseCase {
   export type Input = {
     id: number
@@ -17,7 +16,10 @@ export namespace DeletePedidoUseCase {
         throw new BadRequestError('Id é obrigatório.')
       }
       try {
-        await this.pedidoRepository.delete(input.id)
+        const result = await this.pedidoRepository.delete(input.id)
+        if (!result) {
+          throw new BadRequestError('Pedido deletion failed')
+        }
       } catch (e) {
         throw new BadRequestError('Erro ao deletar pedido.')
       }
