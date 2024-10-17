@@ -6,4 +6,5 @@ export interface PedidoRepository {
   save(produto: PedidoModel): Promise<PedidoModel>
   update(produto: PedidoModel): Promise<PedidoModel>
   delete(id: number): Promise<boolean>
+  findByClienteId(clienteId: number): Promise<PedidoModel[]>
 }
