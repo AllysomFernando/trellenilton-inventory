@@ -6,7 +6,7 @@ export class Fornecedor {
   id: number
   @Column('varchar', { nullable: false })
   name: string
-  @Column('varchar', { nullable: false })
+  @Column('varchar', { nullable: false, unique: true })
   cnpj: string
   @Column('varchar')
   endereco: string
