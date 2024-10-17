@@ -16,7 +16,7 @@ describe('DeletePedidoUseCase', () => {
 
   it('should throw an error if id is not provided', async () => {
     await expect(deletePedidoUseCase.execute({ id: null })).rejects.toThrow(
-      'ID eh obrigatório.'
+      'Id é obrigatório.'
     )
   })
 

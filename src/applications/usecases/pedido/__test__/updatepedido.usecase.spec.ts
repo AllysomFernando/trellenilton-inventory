@@ -2,7 +2,7 @@ import { UpdatePedidoUseCase } from '../updatepedido.usecase'
 import { PedidoRepository } from '@/domain/repository/pedido.repository'
 import { GetPedidoByIdUseCase } from '../getpedidobyid.usecase'
 import { ClienteRepository } from '@/domain/repository/cliente.repository'
-import { PedidoModel } from '@/domain/models/pedido'
+import { PedidoModel, PedidoStatus } from '@/domain/models/pedido'
 
 describe('UpdatePedidoUseCase', () => {
   let pedidoRepository: PedidoRepository
@@ -50,7 +50,7 @@ describe('UpdatePedidoUseCase', () => {
         id: 1,
         data: new Date(),
         clienteId: 1,
-        status: 'pending',
+        status: PedidoStatus.Concluido,
         total: 100
       })
     ).rejects.toThrow('Pedido não encontrado.')
@@ -79,7 +79,7 @@ describe('UpdatePedidoUseCase', () => {
         id: 1,
         data: new Date(),
         clienteId: 1,
-        status: 'pending',
+        status: PedidoStatus.Concluido,
         total: 100
       })
     ).rejects.toThrow('Cliente não encontrado.')
@@ -95,7 +95,7 @@ describe('UpdatePedidoUseCase', () => {
         id: 1,
         data: new Date(),
         clienteId: 1,
-        status: 'pending',
+        status: PedidoStatus.Concluido,
         total: 100
       })
     ).rejects.toThrow('Falha ao atualizar o pedido.')
@@ -111,7 +111,7 @@ describe('UpdatePedidoUseCase', () => {
       id: 1,
       data: new Date(),
       clienteId: 1,
-      status: 'pending',
+      status: PedidoStatus.Concluido,
       total: 100
     })
 
@@ -121,7 +121,7 @@ describe('UpdatePedidoUseCase', () => {
         id: 1,
         data: expect.any(Date),
         clienteId: 1,
-        status: 'pending',
+        status: PedidoStatus.Concluido,
         total: 100
       })
     )

@@ -1,13 +1,14 @@
 import { PedidoRepository } from '@/domain/repository/pedido.repository'
 import { GetPedidoByIdUseCase } from '../getpedidobyid.usecase'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
+import { PedidoStatus } from '@/domain/models/pedido'
 
 const mockPedidoRepository: PedidoRepository = {
   findAll: jest.fn(),
   findById: jest.fn(),
   save: jest.fn(),
   update: jest.fn(),
-  delete: jest.fn(),
+  delete: jest.fn()
 }
 
 describe('GetPedidoByIdUseCase', () => {
@@ -24,13 +25,11 @@ describe('GetPedidoByIdUseCase', () => {
       id: 1,
       data: '2023-10-01',
       clienteId: 1,
-      status: 'PENDING',
+      status: PedidoStatus.Concluido,
       total: 100
     }
 
-    ;(mockPedidoRepository.findById as jest.Mock).mockResolvedValueOnce(
-      pedido
-    )
+    ;(mockPedidoRepository.findById as jest.Mock).mockResolvedValueOnce(pedido)
 
     const result = await getPedidoByIdUseCase.execute({ id: 1 })
 
@@ -40,7 +39,7 @@ describe('GetPedidoByIdUseCase', () => {
   it('should throw BadRequestError if id is not provided', async () => {
     await expect(
       getPedidoByIdUseCase.execute({ id: undefined })
-    ).rejects.toThrow(new BadRequestError('ID eh obrigatório.'))
+    ).rejects.toThrow(new BadRequestError('Id do pedido é obrigatório.'))
   })
 
   it('should throw BadRequestError if an error occurs while fetching the pedido', async () => {
@@ -49,7 +48,7 @@ describe('GetPedidoByIdUseCase', () => {
     )
 
     await expect(getPedidoByIdUseCase.execute({ id: 1 })).rejects.toThrow(
-      new BadRequestError('Falha ao buscar o pedido com id informado.')
+      new BadRequestError('Falha ao buscar o pedido.')
     )
   })
 })

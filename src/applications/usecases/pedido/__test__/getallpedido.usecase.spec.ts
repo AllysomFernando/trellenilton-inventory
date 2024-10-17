@@ -1,5 +1,5 @@
 import { PedidoRepository } from '@/domain/repository/pedido.repository'
-import { PedidoModel } from '@/domain/models/pedido'
+import { PedidoModel, PedidoStatus } from '@/domain/models/pedido'
 import { GetAllPedidoUseCase } from '../getallpedido.usecase'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
 
@@ -26,14 +26,14 @@ describe('GetAllPedidoUseCase', () => {
         id: 1,
         data: new Date('2023-10-01'),
         clienteId: 1,
-        status: 'PENDING',
+        status: PedidoStatus.Concluido,
         total: 100
       },
       {
         id: 2,
         data: new Date('2023-10-02'),
         clienteId: 2,
-        status: 'COMPLETED',
+        status: PedidoStatus.Pendente,
         total: 200
       }
     ]
