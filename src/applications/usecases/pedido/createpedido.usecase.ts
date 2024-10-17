@@ -2,31 +2,45 @@ import { PedidoModel } from '@/domain/models/pedido'
 import { UseCase as DefaultUseCase } from '../use-case'
 import { PedidoRepository } from '@/domain/repository/pedido.repository'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
+import { ItemPedidoRepository } from '@/domain/repository/itempedido.repository'
 
 export namespace CreatePedidoUseCase {
   export type Input = {
     data: Date
     clienteId: number
     status: Enumerator<'Pendente' | 'Concluído'>
-    total: number
+    itens: { produtoId: number; quantidade: number; preco: number }[]
   }
 
   export type Output = PedidoModel
 
   export class UseCase implements DefaultUseCase<Input, Output> {
-    constructor(private pedidoRepository: PedidoRepository) {}
+    constructor(
+      private pedidoRepository: PedidoRepository,
+      private itemPedidoRepository: ItemPedidoRepository
+    ) {}
 
     async execute(input: Input): Promise<Output> {
-      if (!input.data || !input.clienteId || !input.status || !input.total) {
+      if (
+        !input.data ||
+        !input.clienteId ||
+        !input.status ||
+        !input.itens ||
+        input.itens.length === 0
+      ) {
         throw new BadRequestError(
           'Data, clienteId, status e total são obrigatórios.'
         )
       }
+      const total = input.itens.reduce(
+        (sum, item) => sum + item.quantidade * item.preco,
+        0
+      )
       const pedido = new PedidoModel()
       pedido.data = input.data
       pedido.clienteId = input.clienteId
       pedido.status = input.status
-      pedido.total = input.total
+      pedido.total = total
 
       try {
         const entity = await this.pedidoRepository.save(pedido)
