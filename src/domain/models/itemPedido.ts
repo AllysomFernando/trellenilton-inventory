@@ -1,4 +1,4 @@
-export class ItemPedido {
+export class ItemPedidoModel {
     id: number
     pedidoId: number
     produtoId: number
