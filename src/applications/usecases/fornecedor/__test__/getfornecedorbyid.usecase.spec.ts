@@ -41,7 +41,7 @@ describe('GetFornecedorByIdUseCase', () => {
   it('should throw BadRequestError if id is not provided', async () => {
     await expect(
       getFornecedorByIdUseCase.execute({ id: undefined })
-    ).rejects.toThrow(new BadRequestError('Id é obrigatório.'))
+    ).rejects.toThrow(new BadRequestError('ID é obrigatório.'))
   })
 
   it('should throw BadRequestError if an error occurs while fetching the fornecedor', async () => {
@@ -50,7 +50,7 @@ describe('GetFornecedorByIdUseCase', () => {
     )
 
     await expect(getFornecedorByIdUseCase.execute({ id: 1 })).rejects.toThrow(
-      new BadRequestError('Fornecedor não encontrado.')
+      new BadRequestError('Falha ao buscar o fornecedor com id informado.')
     )
   })
 })
