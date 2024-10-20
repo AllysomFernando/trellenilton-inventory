@@ -10,4 +10,5 @@ export interface TransacaoRepository {
   ): Promise<TransacaoModel>
   findById(id: number): Promise<TransacaoModel>
   findAll(): Promise<TransacaoModel[]>
+  delete(id: number): Promise<boolean>
 }
