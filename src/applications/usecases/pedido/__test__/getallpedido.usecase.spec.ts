@@ -9,6 +9,7 @@ const mockPedidoRepository: PedidoRepository = {
   save: jest.fn(),
   update: jest.fn(),
   delete: jest.fn(),
+  findByClienteId: jest.fn(),
 }
 
 describe('GetAllPedidoUseCase', () => {
