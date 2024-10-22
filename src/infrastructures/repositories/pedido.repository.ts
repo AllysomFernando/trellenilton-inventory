@@ -57,11 +57,11 @@ export class PedidoRepositoryOrm implements PedidoRepository {
   }
 
   async findByClienteId(clienteId: number): Promise<PedidoModel[]> {
-    const pedidos = await this.pedidoRepository.findBy({ clienteId })
+    const pedidos = await this.pedidoRepository.find({ where: { clienteId } })
     if (!pedidos || pedidos.length === 0) {
       return []
     }
-    return pedidos
+    return pedidos.map((pedido) => this.toPedido(pedido))
   }
 
   private toPedido(pedidoEntity: Pedido): PedidoModel {
