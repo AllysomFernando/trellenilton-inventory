@@ -73,6 +73,13 @@ export class FornecedorUsecaseProxyModule {
               )
             )
         }
+      ],
+      exports: [
+        FornecedorUsecaseProxyModule.GET_ALL_FORNECEDOR_USE_CASE,
+        FornecedorUsecaseProxyModule.GET_FORNECEDOR_BY_ID_USE_CASE,
+        FornecedorUsecaseProxyModule.CREATE_FORNECEDOR_USE_CASE,
+        FornecedorUsecaseProxyModule.UPDATE_FORNECEDOR_USE_CASE,
+        FornecedorUsecaseProxyModule.DELETE_FORNECEDOR_USE_CASE
       ]
     }
   }
