@@ -1,3 +1,4 @@
+import { PedidoStatus } from '@/domain/models/pedido'
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity('pedido')
@@ -11,9 +12,9 @@ export class Pedido {
   @Column('datetime')
   data: Date
 
-  @Column('varchar')
-  status: string
-  
+  @Column('enum', { enum: PedidoStatus })
+  status: PedidoStatus
+
   @Column('decimal')
-  valorTotal: number
+  total: number
 }
