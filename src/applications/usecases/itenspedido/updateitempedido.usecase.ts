@@ -2,6 +2,8 @@ import { ItemPedidoModel } from '@/domain/models/itemPedido'
 import { UseCase as DefaultUseCase } from '@/applications/usecases/use-case'
 import { ItemPedidoRepository } from '@/domain/repository/itempedido.repository'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
+import { ProdutoRepository } from '@/domain/repository/produto.repository'
+import { PedidoRepository } from '@/domain/repository/pedido.repository'
 export namespace UpdateItemPedidoUseCase {
   export type Input = {
     id: number
@@ -14,11 +16,21 @@ export namespace UpdateItemPedidoUseCase {
   export type Output = ItemPedidoModel
 
   export class UseCase implements DefaultUseCase<Input, Output> {
-    constructor(private readonly itemPedidoRepository: ItemPedidoRepository) {}
+    constructor(
+      private itemPedidoRepository: ItemPedidoRepository,
+      private produtoRepository: ProdutoRepository,
+      private pedidoRepository: PedidoRepository
+    ) {}
 
     async execute(input: Input): Promise<ItemPedidoModel> {
       if (!input.id) {
         throw new BadRequestError('Id é obrigatório')
+      }
+      if (this.produtoRepository.findById(input.produtoId) === null) {
+        throw new BadRequestError('Produto não encontrado')
+      }
+      if (this.pedidoRepository.findById(input.pedidoId) === null) {
+        throw new BadRequestError('Pedido não encontrado')
       }
       if (input.quantidade <= 0 && input.precoUnitario <= 0) {
         throw new BadRequestError(
