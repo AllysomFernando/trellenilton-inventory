@@ -14,7 +14,6 @@ import {
   Param,
   Post
 } from '@nestjs/common'
-import { create } from 'domain'
 
 @Controller('transacao')
 export class TransacaoController {
