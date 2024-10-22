@@ -1,3 +1,4 @@
+import { CreateProdutoDto } from '@/applications/dto/produto/createproduto.dto'
 import { CreateProdutoUseCase } from '@/applications/usecases/produto/createproduto.usecase'
 import { DeleteProdutoUseCase } from '@/applications/usecases/produto/deleteproduto.usecase'
 import { GetAllProdutoUseCase } from '@/applications/usecases/produto/getallproduto.usecase'
@@ -5,7 +6,16 @@ import { GetProdutoByIdUseCase } from '@/applications/usecases/produto/getprodut
 import { UpdateProdutoUseCase } from '@/applications/usecases/produto/updateproduto.usecase'
 import { ProdutoUsecaseProxyModule } from '@/infrastructures/usecaseproxy/produto/produto.usecase-proxy.modules'
 import { UseCaseProxy } from '@/infrastructures/usecaseproxy/usecase-proxy'
-import { Controller, Get, Inject, Param, Post } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  Param,
+  Patch,
+  Post
+} from '@nestjs/common'
 
 @Controller('produto')
 export class ProdutoController {
@@ -46,4 +56,41 @@ export class ProdutoController {
   }
   @Post('/')
   async createProduto(@Body() createProdutoDto: CreateProdutoDto) {
+    const result = await this.createProdutoUsecaseProxy
+      .getInstance()
+      .execute(createProdutoDto)
+    return {
+      status: 'OK',
+      code: 200,
+      message: 'Produto created',
+      data: result
+    }
+  }
+  @Patch('/:id')
+  async updateProduto(
+    @Param('id') id: number,
+    @Body() updateProdutoDto: CreateProdutoDto
+  ) {
+    const result = await this.updateProdutoUsecaseProxy
+      .getInstance()
+      .execute({ id, ...updateProdutoDto })
+    return {
+      status: 'OK',
+      code: 200,
+      message: 'Produto updated',
+      data: result
+    }
+  }
+  @Delete('/:id')
+  async deleteProduto(@Param('id') id: number) {
+    const result = await this.deleteProdutoUsecaseProxy
+      .getInstance()
+      .execute({ id })
+    return {
+      status: 'OK',
+      code: 200,
+      message: 'Produto deleted',
+      data: result
+    }
+  }
 }
