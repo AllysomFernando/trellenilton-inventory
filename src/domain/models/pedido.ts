@@ -9,4 +9,5 @@ export class PedidoModel {
   clienteId: number
   status: PedidoStatus.Concluido | PedidoStatus.Pendente
   total: number
+  itens: { produtoId: number; quantidade: number; preco: number }[]
 }
