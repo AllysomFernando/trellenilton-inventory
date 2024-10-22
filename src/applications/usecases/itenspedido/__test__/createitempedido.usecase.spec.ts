@@ -94,9 +94,15 @@ describe('CreateItemPedidoUseCase', () => {
       quantidade: input.quantidade,
       precoUnitario: input.precoUnitario
     }
-    ;(mockPedidoRepository.findById as jest.Mock).mockResolvedValueOnce({ id: 1 })
-    ;(mockProdutoRepository.findById as jest.Mock).mockResolvedValueOnce({ id: 1 })
-    ;(mockItemPedidoRepository.save as jest.Mock).mockResolvedValueOnce(itemPedido)
+    ;(mockPedidoRepository.findById as jest.Mock).mockResolvedValueOnce({
+      id: 1
+    })
+    ;(mockProdutoRepository.findById as jest.Mock).mockResolvedValueOnce({
+      id: 1
+    })
+    ;(mockItemPedidoRepository.save as jest.Mock).mockResolvedValueOnce(
+      itemPedido
+    )
 
     const result = await createItemPedidoUseCase.execute(input)
 
