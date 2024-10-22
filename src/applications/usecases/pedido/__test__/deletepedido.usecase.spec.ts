@@ -20,6 +20,12 @@ describe('DeletePedidoUseCase', () => {
     )
   })
 
+  it('should throw BadRequestError if pedido was not found', async () => {
+    await expect(deletePedidoUseCase.execute({ id: 1 })).rejects.toThrow(
+      new BadRequestError('Pedido não encontrado.')
+    )
+  })
+
   it('should throw BadRequestError if pedido deletion fails', async () => {
     ;(pedidoRepository.delete as jest.Mock).mockResolvedValue(false)
     await expect(deletePedidoUseCase.execute({ id: 1 })).rejects.toThrow(
