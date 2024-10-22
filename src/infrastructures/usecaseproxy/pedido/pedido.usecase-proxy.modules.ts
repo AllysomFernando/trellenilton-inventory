@@ -64,6 +64,13 @@ export class PedidoUsecaseProxyModule {
           useFactory: (pedidoRepository: PedidoRepositoryOrm) =>
             new UseCaseProxy(new DeletePedidoUseCase.UseCase(pedidoRepository))
         }
+      ],
+      exports: [
+        PedidoUsecaseProxyModule.GET_ALL_PEDIDOS_USE_CASE,
+        PedidoUsecaseProxyModule.GET_PEDIDO_BY_ID_USE_CASE,
+        PedidoUsecaseProxyModule.CREATE_PEDIDO_USE_CASE,
+        PedidoUsecaseProxyModule.UPDATE_PEDIDO_USE_CASE,
+        PedidoUsecaseProxyModule.DELETE_PEDIDO_USE_CASE
       ]
     }
   }
