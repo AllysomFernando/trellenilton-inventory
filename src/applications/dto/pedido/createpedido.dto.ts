@@ -1,7 +1,8 @@
+import { PedidoStatus } from '@/domain/models/pedido'
+
 export class PedidoDto {
-  name: string
-  cpf_cnpj: string
-  endereco: string
-  contato: string
-  archived: boolean
+  data: Date
+  clienteId: number
+  status: PedidoStatus
+  total: number
 }
