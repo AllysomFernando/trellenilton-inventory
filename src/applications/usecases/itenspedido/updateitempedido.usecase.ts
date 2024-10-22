@@ -50,13 +50,7 @@ export namespace UpdateItemPedidoUseCase {
       itemPedido.precoUnitario = input.precoUnitario
 
       try {
-        const entity = await this.itemPedidoRepository.update(
-          itemPedido.id,
-          itemPedido.pedidoId,
-          itemPedido.produtoId,
-          itemPedido.quantidade,
-          itemPedido.precoUnitario
-        )
+        const entity = await this.itemPedidoRepository.update(itemPedido)
         if (!entity) {
           throw new BadRequestError('Erro ao atualizar item pedido')
         }
