@@ -11,8 +11,8 @@ import {
 import { GetUserByIdUseCase } from '@/applications/usecases/user/getuserbyid.usecase'
 import { GetAllUserUseCase } from '@/applications/usecases/user/getalluser.usecase'
 import { CreateUserUseCase } from '@/applications/usecases/user/createuser.usecase'
-import { UseCaseProxy } from 'src/infrastructures/usecaseproxy/usecase-proxy'
-import { UsecaseProxyModule } from 'src/infrastructures/usecaseproxy/usecase-proxy.module'
+import { UseCaseProxy } from '@/infrastructures/usecaseproxy/usecase-proxy'
+import { UserUsecaseProxyModule } from 'src/infrastructures/usecaseproxy/user/user.usecase-proxy.module'
 import { CreateUserDto } from '@/applications/dto/user/createuser.dto'
 import { UpdateUserUseCase } from '@/applications/usecases/user/updateuser.usecase'
 import { DeleteUserUseCase } from '@/applications/usecases/user/deleteuser.usecase'
@@ -26,15 +26,15 @@ import {
 @Controller('user')
 export class UserController {
   constructor(
-    @Inject(UsecaseProxyModule.GET_ALL_USERS_USE_CASE)
+    @Inject(UserUsecaseProxyModule.GET_ALL_USERS_USE_CASE)
     private readonly getAllUsersUsecaseProxy: UseCaseProxy<GetAllUserUseCase.UseCase>,
-    @Inject(UsecaseProxyModule.GET_USER_BY_ID_USE_CASE)
+    @Inject(UserUsecaseProxyModule.GET_USER_BY_ID_USE_CASE)
     private readonly getUserByIdUsecaseProxy: UseCaseProxy<GetUserByIdUseCase.UseCase>,
-    @Inject(UsecaseProxyModule.CREATE_USER_USE_CASE)
+    @Inject(UserUsecaseProxyModule.CREATE_USER_USE_CASE)
     private readonly createUserUsecaseProxy: UseCaseProxy<CreateUserUseCase.UseCase>,
-    @Inject(UsecaseProxyModule.UPDATE_USER_USE_CASE)
+    @Inject(UserUsecaseProxyModule.UPDATE_USER_USE_CASE)
     private readonly updateUserUsecaseProxy: UseCaseProxy<UpdateUserUseCase.UseCase>,
-    @Inject(UsecaseProxyModule.DELETE_USER_USE_CASE)
+    @Inject(UserUsecaseProxyModule.DELETE_USER_USE_CASE)
     private readonly deleteUserUsecaseProxy: UseCaseProxy<DeleteUserUseCase.UseCase>
   ) {}
   @Get('/')
