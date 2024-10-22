@@ -1,6 +1,5 @@
-import { CreateTransacaoDto } from '@/applications/dto/transcao/createtransacao.dto'
+import { CreateTransacaoDto } from '@/applications/dto/transacao/createtransacao.dto'
 import { GetAllClientUseCase } from '@/applications/usecases/cliente/getallcliente.usecase'
-import { GetClientByIdUseCase } from '@/applications/usecases/cliente/getclientebyid.usecase'
 import { CreateTransacoesUseCase } from '@/applications/usecases/transacoes/createtransacoes.usecase'
 import { DeleteTransacoesUseCase } from '@/applications/usecases/transacoes/deletetransacoes.usecase'
 import { GetTransacaoByIdUseCase } from '@/applications/usecases/transacoes/gettransacoesbyid.usecase'
