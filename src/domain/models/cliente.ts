@@ -4,4 +4,5 @@ export class ClienteModel {
   cpf_cnpj: string
   endereco: string
   contato: string
+  archived: boolean
 }
