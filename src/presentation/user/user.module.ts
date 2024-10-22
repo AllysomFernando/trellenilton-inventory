@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common';
-import { UsecaseProxyModule } from 'src/infrastructures/usecaseproxy/usecase-proxy.module';
-import { UserController } from './user.controller';
+import { Module } from '@nestjs/common'
+import { UserUsecaseProxyModule } from 'src/infrastructures/usecaseproxy/user/user.usecase-proxy.module'
+import { UserController } from './user.controller'
 
 @Module({
-  imports: [UsecaseProxyModule.register()],
-  controllers: [UserController],
+  imports: [UserUsecaseProxyModule.register()],
+  controllers: [UserController]
 })
 export class UserModule {}
