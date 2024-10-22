@@ -1,4 +1,4 @@
-export class ItemPedidoDto {
+export class CreateItemPedidoDto {
   pedidoId: number
   produtoId: number
   quantidade: number

@@ -1,4 +1,4 @@
-export class ClienteDto {
+export class CreateClienteDto {
   name: string
   cpcpf_cnpjf: string
   endereco: string

@@ -1,6 +1,6 @@
 import { PedidoStatus } from '@/domain/models/pedido'
 
-export class PedidoDto {
+export class CreatePedidoDto {
   data: Date
   clienteId: number
   status: PedidoStatus
