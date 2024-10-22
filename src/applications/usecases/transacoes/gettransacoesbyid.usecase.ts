@@ -2,7 +2,7 @@ import { TransacaoModel } from '@/domain/models/transacao'
 import { UseCase as DefaultUseCase } from '../use-case'
 import { TransacaoRepository } from '@/domain/repository/transacao.repository'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
-export namespace GetTransacaByIdUseCase {
+export namespace GetTransacaoByIdUseCase {
   export type Input = {
     id: number
   }
