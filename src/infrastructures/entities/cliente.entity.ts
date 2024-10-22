@@ -16,4 +16,7 @@ export class Cliente {
 
   @Column('varchar')
   contato: string
+
+  @Column('boolean')
+  archived: boolean
 }
