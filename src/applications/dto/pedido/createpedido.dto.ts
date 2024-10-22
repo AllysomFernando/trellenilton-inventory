@@ -5,4 +5,5 @@ export class CreatePedidoDto {
   clienteId: number
   status: PedidoStatus
   total: number
+  itens: { produtoId: number; quantidade: number; preco: number }[]
 }
