@@ -13,7 +13,7 @@ export const getTypeOrmModuleOptions = (
     synchronize: true,
     autoLoadEntities: true,
     migrationsRun: true,
-    migrations: [__dirname + '/migrations/**/*{.ts}'],
+    migrations: [__dirname + '/database/migrations/*{.ts}'],
   }) as TypeOrmModuleOptions
 @Module({
   imports: [
