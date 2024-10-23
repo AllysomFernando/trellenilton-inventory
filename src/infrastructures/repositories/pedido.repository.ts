@@ -13,19 +13,18 @@ export class PedidoRepositoryOrm implements PedidoRepository {
   ) {}
 
   async findAll(): Promise<PedidoModel[]> {
-    const pedidos = await this.pedidoRepository.find()
-    if (!pedidos || pedidos.length === 0) {
-      return []
-    }
+    const pedidos = await this.pedidoRepository.find({
+      relations: ['cliente', 'itens']
+    })
     return pedidos.map((pedido) => this.toPedido(pedido))
   }
 
   async findById(id: number): Promise<PedidoModel> {
-    const pedido = await this.pedidoRepository.findOneBy({ id })
-    if (!pedido) {
-      return null
-    }
-    return this.toPedido(pedido)
+    const pedido = await this.pedidoRepository.findOne({
+      where: { id },
+      relations: ['cliente', 'itens']
+    })
+    return pedido ? this.toPedido(pedido) : null
   }
 
   async save(pedido: PedidoModel): Promise<PedidoModel> {
@@ -36,43 +35,45 @@ export class PedidoRepositoryOrm implements PedidoRepository {
 
   async update(pedido: PedidoModel): Promise<PedidoModel> {
     const entity = await this.pedidoRepository.findOneBy({ id: pedido.id })
-    if (!entity) {
-      return null
-    }
-    entity.clienteId = pedido.clienteId
+    if (!entity) return null
+
+    entity.cliente = { id: pedido.clienteId } as any
     entity.data = pedido.data
     entity.status = pedido.status
     entity.total = pedido.total
+
     await this.pedidoRepository.save(entity)
     return this.toPedido(entity)
   }
 
   async delete(id: number): Promise<boolean> {
     const entity = await this.pedidoRepository.findOneBy({ id })
-    if (!entity) {
-      return false
-    }
+    if (!entity) return false
+
     await this.pedidoRepository.remove(entity)
     return true
   }
 
   async findByClienteId(clienteId: number): Promise<PedidoModel[]> {
-    const pedidos = await this.pedidoRepository.find({ where: { clienteId } })
-    if (!pedidos || pedidos.length === 0) {
-      return []
-    }
+    const pedidos = await this.pedidoRepository.find({
+      where: { cliente: { id: clienteId } },
+      relations: ['cliente', 'itens']
+    })
     return pedidos.map((pedido) => this.toPedido(pedido))
   }
 
   private toPedido(pedidoEntity: Pedido): PedidoModel {
-    const pedido: PedidoModel = new PedidoModel()
-
-    pedido.id = pedidoEntity.id
-    pedido.clienteId = pedidoEntity.clienteId
-    pedido.data = pedidoEntity.data
-    pedido.status = pedidoEntity.status as PedidoStatus
-    pedido.total = pedidoEntity.total
-
-    return pedido
+    return {
+      id: pedidoEntity.id,
+      clienteId: pedidoEntity.cliente.id,
+      data: pedidoEntity.data,
+      status: pedidoEntity.status as PedidoStatus,
+      total: pedidoEntity.total,
+      itens: pedidoEntity.itens.map((item) => ({
+        produtoId: item.produto.id,
+        quantidade: item.quantidade,
+        preco: item.precoUnitario
+      }))
+    }
   }
 }
