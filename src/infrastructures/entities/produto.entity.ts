@@ -1,5 +1,13 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn
+} from 'typeorm'
 import { Fornecedor } from './fornecedor.entity'
+import { ItemPedido } from './itemPedido.entity'
 
 @Entity('produto')
 export class Produto {
@@ -15,6 +23,9 @@ export class Produto {
   quantity: number
   @Column('varchar')
   image: string
+  @OneToMany(() => ItemPedido, (itemPedido) => itemPedido.produto)
+  itens: ItemPedido[]
   @ManyToOne(() => Fornecedor, (fornecedor) => fornecedor.id)
-  fornecedorId: number
+  @JoinColumn({ name: 'fornecedorId' })
+  fornecedor: Fornecedor
 }
