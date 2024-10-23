@@ -51,12 +51,7 @@ export namespace CreateItemPedidoUseCase {
       itemPedido.quantidade = input.quantidade
       itemPedido.precoUnitario = input.precoUnitario
       try {
-        const entity = await this.itemPedidoRepository.save(
-          itemPedido.pedidoId,
-          itemPedido.produtoId,
-          itemPedido.quantidade,
-          itemPedido.precoUnitario
-        )
+        const entity = await this.itemPedidoRepository.save(itemPedido)
         if (!entity) {
           throw new BadRequestError('Erro ao criar item pedido.')
         }
