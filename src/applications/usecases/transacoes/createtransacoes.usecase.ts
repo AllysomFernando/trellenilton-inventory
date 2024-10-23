@@ -49,22 +49,25 @@ export namespace CreateTransacoesUseCase {
       if (!produto) {
         throw new BadRequestError('Produto não encontrado.')
       }
-    
+
       const pedido = await this.pedidoRepository.findById(input.pedidoId)
 
       if (!pedido) {
         throw new BadRequestError('Pedido não encontrado.')
       }
 
-      const transacao = await this.transacaoRepository.save(
-        input.data,
-        input.tipo,
-        input.valor,
-        input.produtoId,
-        input.pedidoId
-      )
+      const transacao: TransacaoModel = {
+        id: 0,
+        data: input.data,
+        tipo: input.tipo,
+        valor: input.valor,
+        produtoId: input.produtoId,
+        pedidoId: input.pedidoId
+      }
 
-      return transacao
+      const savedTransacao = await this.transacaoRepository.save(transacao)
+
+      return savedTransacao
     }
   }
 }
