@@ -1,6 +1,6 @@
 export class CreateClienteDto {
   name: string
-  cpcpf_cnpjf: string
+  cpf_cnpj: string
   endereco: string
   contato: string
   archived: boolean
