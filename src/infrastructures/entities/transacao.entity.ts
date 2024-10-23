@@ -1,5 +1,13 @@
 import { TransacaoEnum } from '@/domain/models/transacao'
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn
+} from 'typeorm'
+import { Produto } from './produto.entity'
+import { Pedido } from './pedido.entity'
 
 @Entity('transacao')
 export class Transacao {
@@ -15,9 +23,11 @@ export class Transacao {
   @Column('int')
   valor: number
 
-  @Column('int')
-  produtoId: number
+  @ManyToOne(() => Produto)
+  @JoinColumn({ name: 'produtoId' })
+  produto: Produto
 
-  @Column('int')
-  pedidoId: number
+  @ManyToOne(() => Pedido)
+  @JoinColumn({ name: 'pedidoId' })
+  pedido: Pedido
 }
