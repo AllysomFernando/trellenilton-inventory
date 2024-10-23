@@ -5,7 +5,6 @@ import { RepositoriesModule } from '@/infrastructures/repositories/repository.mo
 import { DynamicModule, Module } from '@nestjs/common'
 import { UseCaseProxy } from '../usecase-proxy'
 import { GetPedidoByIdUseCase } from '@/applications/usecases/pedido/getpedidobyid.usecase'
-import { FornecedorRepository } from '@/domain/repository/fornecedor.repository'
 import { CreatePedidoUseCase } from '@/applications/usecases/pedido/createpedido.usecase'
 import { UpdatePedidoUseCase } from '@/applications/usecases/pedido/updatepedido.usecase'
 import { DeletePedidoUseCase } from '@/applications/usecases/pedido/deletepedido.usecase'
@@ -21,7 +20,7 @@ export class PedidoUsecaseProxyModule {
   static UPDATE_PEDIDO_USE_CASE = 'updatePedidoUseCaseProxy'
   static DELETE_PEDIDO_USE_CASE = 'deletePedidoUseCaseProxy'
 
-  static register(): DynamicModule {
+  static async register(): Promise<DynamicModule> {
     return {
       module: PedidoUsecaseProxyModule,
       providers: [
@@ -46,17 +45,20 @@ export class PedidoUsecaseProxyModule {
         {
           inject: [PedidoRepositoryOrm],
           provide: PedidoUsecaseProxyModule.UPDATE_PEDIDO_USE_CASE,
-          useFactory: (
+          useFactory: async (
             pedidoRepository: PedidoRepositoryOrm,
             clienteRepository: ClienteRepositoryOrm
-          ) =>
-            new UseCaseProxy(
-              new UpdatePedidoUseCase.UseCase(
-                pedidoRepository,
-                new GetPedidoByIdUseCase.UseCase(pedidoRepository),
-                clienteRepository.findById.bind(clienteRepository)
-              )
+          ) => {
+            const getPedidoByIdUseCase = new GetPedidoByIdUseCase.UseCase(
+              pedidoRepository
             )
+            const updatePedidoUseCase = new UpdatePedidoUseCase.UseCase(
+              pedidoRepository,
+              getPedidoByIdUseCase,
+              clienteRepository
+            )
+            return new UseCaseProxy(updatePedidoUseCase)
+          }
         },
         {
           inject: [PedidoRepositoryOrm],

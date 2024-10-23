@@ -2,6 +2,7 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm'
 import { EnvironmentConfigService } from '../environment-config/environment-config.service'
 import { Module } from '@nestjs/common'
 import { EnvironmentConfigModule } from '../environment-config/environment-config.module'
+import 'dotenv/config'
 
 export const getTypeOrmModuleOptions = (
   config: EnvironmentConfigService

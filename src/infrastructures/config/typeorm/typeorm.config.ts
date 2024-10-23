@@ -1,6 +1,5 @@
 import { DataSource } from 'typeorm'
 import 'dotenv/config'
-
 const config = new DataSource({
   type: 'sqlite',
   database: process.env.DATABASE_PATH,
