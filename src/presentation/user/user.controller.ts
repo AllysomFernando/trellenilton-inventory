@@ -12,7 +12,6 @@ import { GetUserByIdUseCase } from '@/applications/usecases/user/getuserbyid.use
 import { GetAllUserUseCase } from '@/applications/usecases/user/getalluser.usecase'
 import { CreateUserUseCase } from '@/applications/usecases/user/createuser.usecase'
 import { UseCaseProxy } from '@/infrastructures/usecaseproxy/usecase-proxy'
-import { UserUsecaseProxyModule } from 'src/infrastructures/usecaseproxy/user/user.usecase-proxy.module'
 import { CreateUserDto } from '@/applications/dto/user/createuser.dto'
 import { UpdateUserUseCase } from '@/applications/usecases/user/updateuser.usecase'
 import { DeleteUserUseCase } from '@/applications/usecases/user/deleteuser.usecase'
@@ -22,6 +21,7 @@ import {
   MinLength,
   validateOrReject
 } from 'class-validator'
+import { UserUsecaseProxyModule } from '@/infrastructures/usecaseproxy/user/user.usecase-proxy.module'
 
 @Controller('user')
 export class UserController {
