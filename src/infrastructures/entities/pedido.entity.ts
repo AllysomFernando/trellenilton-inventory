@@ -28,6 +28,6 @@ export class Pedido {
   @Column('decimal')
   total: number
 
-  @OneToMany(() => ItemPedido, (itemPedido) => itemPedido.pedidoId)
+  @OneToMany(() => ItemPedido, (itemPedido) => itemPedido.pedido)
   itens: ItemPedido[]
 }
