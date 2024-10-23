@@ -1,4 +1,3 @@
-import { CreateClienteDto } from '@/applications/dto/cliente/createcliente.dto'
 import { CreateItemPedidoDto } from '@/applications/dto/itemPedido/createitempedido.dto'
 import { CreateItemPedidoUseCase } from '@/applications/usecases/itenspedido/createitempedido.usecase'
 import { DeleteItemPedidoUseCase } from '@/applications/usecases/itenspedido/deleteitempedido.usecase'
