@@ -71,6 +71,7 @@ export class ClienteRepositoryOrm implements ClienteRepository {
     cliente.contato = clienteEntity.contato
     cliente.cpf_cnpj = clienteEntity.cpf_cnpj
     cliente.archived = clienteEntity.archived
+    cliente.pedidos = clienteEntity.pedidos
 
     return cliente
   }

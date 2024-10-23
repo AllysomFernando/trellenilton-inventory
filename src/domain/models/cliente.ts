@@ -5,4 +5,5 @@ export class ClienteModel {
   endereco: string
   contato: string
   archived: boolean
+  pedidos: any
 }

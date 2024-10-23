@@ -1,7 +1,7 @@
-import { UserModel } from 'src/domain/models/user'
+import { UserModel } from '@/domain/models/user'
 import { UseCase as DefaultUseCase } from '../use-case'
-import { UserRepository } from 'src/domain/repository/user.repository'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
+import { UserRepository } from '@/domain/repository/user.repository'
 
 export namespace GetUserByIdUseCase {
   export type Input = {

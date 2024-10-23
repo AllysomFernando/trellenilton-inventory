@@ -5,7 +5,7 @@ const config = new DataSource({
   type: 'sqlite',
   database: process.env.DATABASE_PATH,
   entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
-  synchronize: false,
+  synchronize: true,
   migrationsRun: true,
   migrations: [__dirname + '/../../database/migrations/*{.ts,.js}']
 })
