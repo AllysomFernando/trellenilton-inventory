@@ -31,7 +31,7 @@ export class Pedido1729689548906 implements MigrationInterface {
           {
             name: 'status',
             type: 'enum',
-            enum: ['PENDING', 'COMPLETED', 'CANCELLED'], 
+            enum: ['Pendente', 'Concluído'], 
             isNullable: false
           },
           {
