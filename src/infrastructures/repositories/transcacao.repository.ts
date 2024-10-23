@@ -12,20 +12,17 @@ export class TransacaoRepositoryOrm implements TransacaoRepository {
     private readonly transacaoRepository: Repository<Transacao>
   ) {}
 
-  async findAll(): Promise<Transacao[]> {
+  async findAll(): Promise<TransacaoModel[]> {
     const transacoes = await this.transacaoRepository.find()
-    if (!transacoes || transacoes.length === 0) {
-      return []
-    }
-    return transacoes
+    return transacoes.map((transacao) => this.toTransacao(transacao))
   }
 
   async findById(id: number): Promise<TransacaoModel> {
-    const transacao = await this.transacaoRepository.findOneBy({ id })
-    if (!transacao) {
-      return null
-    }
-    return this.toTransacao(transacao)
+    const transacao = await this.transacaoRepository.findOne({
+      where: { id },
+      relations: ['produto', 'pedido'] 
+    })
+    return transacao ? this.toTransacao(transacao) : null
   }
 
   async save(transacao: TransacaoModel): Promise<TransacaoModel> {
@@ -36,23 +33,20 @@ export class TransacaoRepositoryOrm implements TransacaoRepository {
 
   async delete(id: number): Promise<boolean> {
     const entity = await this.transacaoRepository.findOneBy({ id })
-    if (!entity) {
-      return false
-    }
+    if (!entity) return false
+
     await this.transacaoRepository.remove(entity)
     return true
   }
 
   private toTransacao(transacaoEntity: Transacao): TransacaoModel {
-    const transacao = new TransacaoModel()
-
-    transacao.id = transacaoEntity.id
-    transacao.data = transacaoEntity.data
-    transacao.produtoId = transacaoEntity.produtoId
-    transacao.pedidoId = transacaoEntity.pedidoId
-    transacao.tipo = transacaoEntity.tipo as TransacaoEnum
-    transacao.valor = transacaoEntity.valor
-
-    return transacao
+    return {
+      id: transacaoEntity.id,
+      tipo: transacaoEntity.tipo as TransacaoEnum,
+      data: transacaoEntity.data,
+      valor: transacaoEntity.valor,
+      produtoId: transacaoEntity.produto?.id,
+      pedidoId: transacaoEntity.pedido?.id
+    }
   }
 }
