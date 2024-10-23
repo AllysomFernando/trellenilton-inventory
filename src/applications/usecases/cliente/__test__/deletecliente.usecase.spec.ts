@@ -1,16 +1,25 @@
 import { ClienteRepository } from '@/domain/repository/cliente.repository'
 import { DeleteClienteUseCase } from '../deletecliente.usecase'
+import { PedidoRepository } from '@/domain/repository/pedido.repository'
 
 describe('DeleteClienteUseCase', () => {
   let useCase: DeleteClienteUseCase.UseCase
   let clienteRepository: ClienteRepository
+  let pedidoRepository: PedidoRepository
 
   beforeEach(() => {
     clienteRepository = {
       findById: jest.fn(),
       delete: jest.fn()
     } as unknown as ClienteRepository
-    useCase = new DeleteClienteUseCase.UseCase(clienteRepository)
+    pedidoRepository = {
+      findByClienteId: jest.fn()
+    } as unknown as PedidoRepository
+
+    useCase = new DeleteClienteUseCase.UseCase(
+      clienteRepository,
+      pedidoRepository
+    )
   })
 
   it('should throw an error if id is not provided', async () => {
@@ -37,7 +46,8 @@ describe('DeleteClienteUseCase', () => {
       name: 'Cliente Teste',
       contato: 'test',
       endereco: 'test',
-      cpf_cnpj: 'test'
+      cpf_cnpj: 'test',
+      archived: false
     }
     jest
       .spyOn(clienteRepository, 'findById')
@@ -57,7 +67,8 @@ describe('DeleteClienteUseCase', () => {
       name: 'Cliente Teste',
       contato: 'test',
       endereco: 'test',
-      cpf_cnpj: 'test'
+      cpf_cnpj: 'test',
+      archived: false
     }
     jest
       .spyOn(clienteRepository, 'findById')

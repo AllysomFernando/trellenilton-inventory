@@ -12,12 +12,12 @@ export class PedidoRepositoryOrm implements PedidoRepository {
     private readonly pedidoRepository: Repository<Pedido>
   ) {}
 
-  async findAll(): Promise<Pedido[]> {
+  async findAll(): Promise<PedidoModel[]> {
     const pedidos = await this.pedidoRepository.find()
     if (!pedidos || pedidos.length === 0) {
       return []
     }
-    return pedidos
+    return pedidos.map((pedido) => this.toPedido(pedido))
   }
 
   async findById(id: number): Promise<PedidoModel> {
