@@ -1,4 +1,4 @@
-import { PedidoStatus } from '@/domain/models/pedido'
+import { PedidoStatus } from '../../domain/models/pedido'
 import {
   Column,
   Entity,
@@ -22,7 +22,7 @@ export class Pedido {
   @Column('datetime')
   data: Date
 
-  @Column('enum', { enum: PedidoStatus })
+  @Column('varchar') 
   status: PedidoStatus
 
   @Column('decimal')

@@ -10,15 +10,18 @@ const config = new DataSource({
   migrations: [__dirname + '/../../database/migrations/*{.ts,.js}']
 })
 
-config
-  .initialize()
-  .then(() => {
+async function initializeDatabase() {
+  try {
+    await config.initialize()
     console.log('Database initialized')
-  })
-  .catch((error) => {
-    console.error('Error initializing database', error)
-  })
 
-console.log(config)
+    await config.runMigrations()
+    console.log('Migrations have been run')
+  } catch (error) {
+    console.error('Error initializing database', error)
+  }
+}
+
+initializeDatabase()
 
 export default config
