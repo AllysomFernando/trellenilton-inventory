@@ -4,11 +4,11 @@ import 'dotenv/config'
 
 const config = new DataSource({
   type: 'sqlite',
-  database: process.env.DATABASE_PATH,
-  entities: [__dirname + '/src/infrastructures/entities/*{.ts}'],
+  database:  process.env.DATABASE_PATH,
+  entities: [__dirname + './../../**/*.entity{.ts}'],
   synchronize: true,
   migrationsRun: true,
-  migrations: [__dirname + '/database/migrations/*{.ts}'],
+  migrations: [__dirname + '/migrations/**/*{.ts}'],
 })
 
 config
