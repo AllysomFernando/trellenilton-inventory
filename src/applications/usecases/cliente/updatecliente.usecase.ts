@@ -7,10 +7,11 @@ import { BadRequestError } from '@/applications/errors/bad-request-erros'
 export namespace UpdateClienteUseCase {
   export type Input = {
     id: number
-    nome: string
+    name: string
     cpf_cnpj: string
     contato: string
     endereco: string
+    archived?: boolean
   }
 
   export type Output = ClienteModel
@@ -28,7 +29,7 @@ export namespace UpdateClienteUseCase {
       }
       const cliente = new ClienteModel()
       cliente.id = input.id
-      cliente.name = input.nome
+      cliente.name = input.name
       cliente.cpf_cnpj = input.cpf_cnpj
       cliente.contato = input.contato
       cliente.endereco = input.endereco
