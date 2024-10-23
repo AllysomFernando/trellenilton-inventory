@@ -1,14 +1,13 @@
 import { DataSource } from 'typeorm'
 import 'dotenv/config'
 
-
 const config = new DataSource({
   type: 'sqlite',
-  database:  process.env.DATABASE_PATH,
-  entities: [__dirname + './../../**/*.entity{.ts}'],
-  synchronize: true,
+  database: process.env.DATABASE_PATH,
+  entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
+  synchronize: false,
   migrationsRun: true,
-  migrations: [__dirname + '/migrations/**/*{.ts}'],
+  migrations: [__dirname + '/../../database/migrations/*{.ts,.js}']
 })
 
 config

@@ -1,7 +1,7 @@
 import { TransacaoRepository } from '@/domain/repository/transacao.repository'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Transacao } from '../entities/transacao.entity'
+import { Transacao } from '../entities/transacao'
 import { Repository } from 'typeorm'
 import { TransacaoEnum, TransacaoModel } from '@/domain/models/transacao'
 
