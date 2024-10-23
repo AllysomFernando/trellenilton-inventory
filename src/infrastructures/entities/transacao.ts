@@ -14,7 +14,7 @@ export class Transacao {
   @PrimaryGeneratedColumn('increment')
   id: number
 
-  @Column('enum', { enum: TransacaoEnum })
+  @Column('varchar') 
   tipo: TransacaoEnum
 
   @Column('datetime')
