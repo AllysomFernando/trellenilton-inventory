@@ -2339,6 +2339,11 @@ dotenv@16.4.5, dotenv@^16.0.3:
   resolved "https://registry.npmjs.org/dotenv/-/dotenv-16.4.5.tgz"
   integrity sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==
 
+dotenv@^16.4.5:
+  version "16.4.5"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.4.5.tgz#cdd3b3b604cb327e286b4762e13502f717cb099f"
+  integrity sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==
+
 eastasianwidth@^0.2.0:
   version "0.2.0"
   resolved "https://registry.npmjs.org/eastasianwidth/-/eastasianwidth-0.2.0.tgz"
@@ -5464,7 +5469,7 @@ tree-kill@1.2.2:
     rxjs "^7.8.1"
     sqlite3 "^5.1.7"
     swagger-ui-express "^5.0.1"
-    trellenilton-inventory "file:../../../Library/Caches/Yarn/v6/npm-trellenilton-inventory-0.0.1-32a0d108-2677-48f9-947a-ae6e9c1ed6d4-1728869846915/node_modules/trellenilton-inventory"
+    trellenilton-inventory "file:../../../Library/Caches/Yarn/v6/npm-trellenilton-inventory-0.0.1-7db45d10-da81-4cd3-bfe1-b9d30b42baf6-1729698178316/node_modules/trellenilton-inventory"
     typeorm "^0.3.20"
 
 ts-api-utils@^1.0.1, ts-api-utils@^1.3.0:

@@ -9,11 +9,11 @@ export const getTypeOrmModuleOptions = (
   ({
     type: 'sqlite',
     database: config.getDatabasePath(),
-    entities: [__dirname + '../../../infrastructures/entities/*{.ts}'],
+    entities: [__dirname + '/src/infrastructures/entities/*{.ts}'],
     synchronize: true,
     autoLoadEntities: true,
     migrationsRun: true,
-    migrations: [__dirname + '/../../../infrastructures/migrations/*{.ts}']
+    migrations: [__dirname + '/database/migrations/*{.ts}'],
   }) as TypeOrmModuleOptions
 @Module({
   imports: [
