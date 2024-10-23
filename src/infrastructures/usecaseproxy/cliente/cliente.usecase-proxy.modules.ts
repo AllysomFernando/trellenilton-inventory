@@ -8,6 +8,8 @@ import { GetAllClientUseCase } from '@/applications/usecases/cliente/getallclien
 import { GetClientByIdUseCase } from '@/applications/usecases/cliente/getclientebyid.usecase'
 import { CreateClienteUseCase } from '@/applications/usecases/cliente/createcliente.usecase'
 import { UpdateClienteUseCase } from '@/applications/usecases/cliente/updatecliente.usecase'
+import { DeleteClienteUseCase } from '@/applications/usecases/cliente/deletecliente.usecase'
+import { PedidoRepository } from '@/domain/repository/pedido.repository'
 
 @Module({
   imports: [EnvironmentConfigModule, RepositoriesModule]
@@ -51,6 +53,20 @@ export class ClienteUsecaseProxyModule {
           useFactory: (clienteRepository: ClienteRepositoryOrm) =>
             new UseCaseProxy(
               new UpdateClienteUseCase.UseCase(clienteRepository)
+            )
+        },
+        {
+          inject: [ClienteRepositoryOrm],
+          provide: ClienteUsecaseProxyModule.DELETE_CLIENTE_USE_CASE,
+          useFactory: (
+            clienteRepository: ClienteRepositoryOrm,
+            pedidoRepository: PedidoRepository
+          ) =>
+            new UseCaseProxy(
+              new DeleteClienteUseCase.UseCase(
+                clienteRepository,
+                pedidoRepository
+              )
             )
         }
       ],
