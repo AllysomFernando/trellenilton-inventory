@@ -20,6 +20,8 @@ export class ProdutoUsecaseProxyModule {
   static CREATE_PRODUTO_USE_CASE = 'createProdutoUsecaseProxy'
   static UPDATE_PRODUTO_USE_CASE = 'updateProdutoUseCaseProxy'
   static DELETE_PRODUTO_USE_CASE = 'deleteProdutoUseCaseProxy'
+  static GET_PRODUTO_BY_FORNECEDOR_ID_USE_CASE =
+    'getProdutoByFornecedorIdUseCase'
 
   static register(): DynamicModule {
     return {
@@ -72,6 +74,15 @@ export class ProdutoUsecaseProxyModule {
           useFactory: (produtoRepository: ProdutoRepositoryOrm) =>
             new UseCaseProxy(
               new DeleteProdutoUseCase.UseCase(produtoRepository)
+            )
+        },
+        {
+          inject: [ProdutoRepositoryOrm],
+          provide:
+            ProdutoUsecaseProxyModule.GET_PRODUTO_BY_FORNECEDOR_ID_USE_CASE,
+          useFactory: (produtoRepository: ProdutoRepositoryOrm) =>
+            new UseCaseProxy(
+              new GetProdutoByIdUseCase.UseCase(produtoRepository)
             )
         }
       ],
