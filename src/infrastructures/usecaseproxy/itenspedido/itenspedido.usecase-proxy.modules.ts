@@ -43,7 +43,11 @@ export class ItensPedidoUsecaseProxyModule {
             )
         },
         {
-          inject: [ItemPedidoRepositoryOrm],
+          inject: [
+            ItemPedidoRepositoryOrm,
+            PedidoRepositoryOrm,
+            ProdutoRepositoryOrm
+          ],
           provide: ItensPedidoUsecaseProxyModule.CREATE_ITENS_PEDIDO_USE_CASE,
           useFactory: (
             itensPedidoRepository: ItemPedidoRepositoryOrm,
@@ -59,7 +63,11 @@ export class ItensPedidoUsecaseProxyModule {
             )
         },
         {
-          inject: [ItemPedidoRepositoryOrm],
+          inject: [
+            ItemPedidoRepositoryOrm,
+            PedidoRepositoryOrm,
+            ProdutoRepositoryOrm
+          ],
           provide: ItensPedidoUsecaseProxyModule.UPDATE_ITENS_PEDIDO_USE_CASE,
           useFactory: (
             itensPedidoRepository: ItemPedidoRepositoryOrm,
