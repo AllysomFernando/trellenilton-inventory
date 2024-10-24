@@ -9,6 +9,7 @@ import { CreatePedidoUseCase } from '@/applications/usecases/pedido/createpedido
 import { UpdatePedidoUseCase } from '@/applications/usecases/pedido/updatepedido.usecase'
 import { DeletePedidoUseCase } from '@/applications/usecases/pedido/deletepedido.usecase'
 import { ClienteRepositoryOrm } from '@/infrastructures/repositories/cliente.repository'
+import { GetPedidoByClienteIdUseCase } from '@/applications/usecases/pedido/getpedidobyclienteid.usecase'
 
 @Module({
   imports: [EnvironmentConfigModule, RepositoriesModule]
@@ -19,7 +20,7 @@ export class PedidoUsecaseProxyModule {
   static CREATE_PEDIDO_USE_CASE = 'createPedidoUsecaseProxy'
   static UPDATE_PEDIDO_USE_CASE = 'updatePedidoUseCaseProxy'
   static DELETE_PEDIDO_USE_CASE = 'deletePedidoUseCaseProxy'
-
+  static GET_PEDIDO_BY_ID_CLIENTE_USE_CASE = 'getPedidoByIdClienteUseCase'
   static async register(): Promise<DynamicModule> {
     return {
       module: PedidoUsecaseProxyModule,
@@ -65,6 +66,14 @@ export class PedidoUsecaseProxyModule {
           provide: PedidoUsecaseProxyModule.DELETE_PEDIDO_USE_CASE,
           useFactory: (pedidoRepository: PedidoRepositoryOrm) =>
             new UseCaseProxy(new DeletePedidoUseCase.UseCase(pedidoRepository))
+        },
+        {
+          inject: [PedidoRepositoryOrm],
+          provide: PedidoUsecaseProxyModule.GET_PEDIDO_BY_ID_CLIENTE_USE_CASE,
+          useFactory: (pedidoRepository: PedidoRepositoryOrm) =>
+            new UseCaseProxy(
+              new GetPedidoByClienteIdUseCase.UseCase(pedidoRepository)
+            )
         }
       ],
       exports: [
@@ -72,7 +81,8 @@ export class PedidoUsecaseProxyModule {
         PedidoUsecaseProxyModule.GET_PEDIDO_BY_ID_USE_CASE,
         PedidoUsecaseProxyModule.CREATE_PEDIDO_USE_CASE,
         PedidoUsecaseProxyModule.UPDATE_PEDIDO_USE_CASE,
-        PedidoUsecaseProxyModule.DELETE_PEDIDO_USE_CASE
+        PedidoUsecaseProxyModule.DELETE_PEDIDO_USE_CASE,
+        PedidoUsecaseProxyModule.GET_PEDIDO_BY_ID_CLIENTE_USE_CASE
       ]
     }
   }
