@@ -39,9 +39,9 @@ export namespace CreatePedidoUseCase {
       pedido.clienteId = input.clienteId
       pedido.status = input.status
       pedido.total = total
-
+      const entity = await this.pedidoRepository.save(pedido)
+      console.log()
       try {
-        const entity = await this.pedidoRepository.save(pedido)
         if (!entity) {
           throw new BadRequestError('Erro ao criar pedido.')
         }
