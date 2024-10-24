@@ -53,18 +53,22 @@ export namespace CreateTransacoesUseCase {
         throw new BadRequestError('Pedido não encontrado.')
       }
 
-      const transacao: TransacaoModel = {
-        id: 0,
-        data: input.data,
-        tipo: input.tipo,
-        valor: input.valor,
-        produtoId: input.produtoId,
-        pedidoId: input.pedidoId
+      const transacao = new TransacaoModel()
+      transacao.data = input.data
+      transacao.pedidoId = input.pedidoId
+      transacao.produtoId = input.produtoId
+      transacao.tipo = input.tipo
+      transacao.valor = input.valor
+
+      try {
+        const entity = await this.transacaoRepository.save(transacao)
+        if (!entity) {
+          throw new BadRequestError('Falha na transação.')
+        }
+        return entity
+      } catch (e) {
+        throw new BadRequestError('Falha na transação.')
       }
-
-      const savedTransacao = await this.transacaoRepository.save(transacao)
-
-      return savedTransacao
     }
   }
 }
