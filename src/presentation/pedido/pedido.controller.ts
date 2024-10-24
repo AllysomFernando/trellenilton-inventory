@@ -2,6 +2,7 @@ import { CreatePedidoDto } from '@/applications/dto/pedido/createpedido.dto'
 import { CreatePedidoUseCase } from '@/applications/usecases/pedido/createpedido.usecase'
 import { DeletePedidoUseCase } from '@/applications/usecases/pedido/deletepedido.usecase'
 import { GetAllPedidoUseCase } from '@/applications/usecases/pedido/getallpedido.usecase'
+import { GetPedidoByClienteIdUseCase } from '@/applications/usecases/pedido/getpedidobyclienteid.usecase'
 import { GetPedidoByIdUseCase } from '@/applications/usecases/pedido/getpedidobyid.usecase'
 import { UpdatePedidoUseCase } from '@/applications/usecases/pedido/updatepedido.usecase'
 import { PedidoUsecaseProxyModule } from '@/infrastructures/usecaseproxy/pedido/pedido.usecase-proxy.modules'
@@ -29,7 +30,9 @@ export class PedidoController {
     @Inject(PedidoUsecaseProxyModule.UPDATE_PEDIDO_USE_CASE)
     private readonly updatePedidoUseCase: UseCaseProxy<UpdatePedidoUseCase.UseCase>,
     @Inject(PedidoUsecaseProxyModule.DELETE_PEDIDO_USE_CASE)
-    private readonly deletePedidoUseCase: UseCaseProxy<DeletePedidoUseCase.UseCase>
+    private readonly deletePedidoUseCase: UseCaseProxy<DeletePedidoUseCase.UseCase>,
+    @Inject(PedidoUsecaseProxyModule.GET_PEDIDO_BY_ID_CLIENTE_USE_CASE)
+    private readonly getPedidoByIdClienteUseCase: UseCaseProxy<GetPedidoByClienteIdUseCase.UseCase>
   ) {}
   @Get('/')
   async getAllPedidos() {
@@ -44,6 +47,16 @@ export class PedidoController {
   @Get('/:id')
   async getPedidoById(@Param('id') id: number) {
     const result = await this.getPedidoByIdUseCase.getInstance().execute({ id })
+    return {
+      status: 'OK',
+      code: 200,
+      message: 'Pedido found',
+      data: result
+    }
+  }
+  @Get('/:id')
+  async getPedidoByIdCliente(@Param('id') clienteId: number) {
+    const result = await this.getPedidoByIdClienteUseCase.getInstance().execute({ clienteId })
     return {
       status: 'OK',
       code: 200,
