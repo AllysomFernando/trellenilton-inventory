@@ -17,7 +17,7 @@ export class Transacao {
   @Column('varchar') 
   tipo: TransacaoEnum
 
-  @Column('string')
+  @Column('varchar')
   data: string
 
   @Column('int')
