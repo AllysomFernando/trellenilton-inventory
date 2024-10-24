@@ -78,13 +78,13 @@ export class PedidoRepositoryOrm implements PedidoRepository {
     const pedido: PedidoModel = new PedidoModel()
 
     pedido.id = pedidoEntity.id
-    pedido.clienteId = pedidoEntity.cliente?.id || null
+    pedido.clienteId = pedidoEntity.cliente.id
     pedido.data = pedidoEntity.data
     pedido.status = pedidoEntity.status as PedidoStatus
     pedido.total = pedidoEntity.total
     pedido.itens =
       pedidoEntity.itens?.map((item) => ({
-        produtoId: item.produto?.id || null,
+        produtoId: item.produto.id,
         quantidade: item.quantidade,
         preco: item.precoUnitario
       })) || []
