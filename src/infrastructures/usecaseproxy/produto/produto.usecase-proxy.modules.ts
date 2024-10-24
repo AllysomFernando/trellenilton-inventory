@@ -73,6 +73,13 @@ export class ProdutoUsecaseProxyModule {
               new DeleteProdutoUseCase.UseCase(produtoRepository)
             )
         }
+      ],
+      exports: [
+        ProdutoUsecaseProxyModule.GET_ALL_PRODUTOS_USE_CASE,
+        ProdutoUsecaseProxyModule.GET_PRODUTO_BY_ID_USE_CASE,
+        ProdutoUsecaseProxyModule.CREATE_PRODUTO_USE_CASE,
+        ProdutoUsecaseProxyModule.UPDATE_PRODUTO_USE_CASE,
+        ProdutoUsecaseProxyModule.DELETE_PRODUTO_USE_CASE
       ]
     }
   }
