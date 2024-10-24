@@ -28,9 +28,17 @@ export class PedidoRepositoryOrm implements PedidoRepository {
   }
 
   async save(pedido: PedidoModel): Promise<PedidoModel> {
-    const entity = this.pedidoRepository.create(pedido)
-    await this.pedidoRepository.save(entity)
-    return this.toPedido(entity)
+    const entity = this.pedidoRepository.create({
+      ...pedido,
+      cliente: { id: pedido.clienteId } as any,
+      itens: pedido.itens.map((item) => ({
+        produto: { id: item.produtoId } as any,
+        quantidade: item.quantidade,
+        precoUnitario: item.preco
+      }))
+    })
+    const savedEntity = await this.pedidoRepository.save(entity)
+    return this.toPedido(savedEntity)
   }
 
   async update(pedido: PedidoModel): Promise<PedidoModel> {
@@ -66,14 +74,13 @@ export class PedidoRepositoryOrm implements PedidoRepository {
     const pedido: PedidoModel = new PedidoModel()
 
     pedido.id = pedidoEntity.id
-    pedido.clienteId = pedidoEntity.cliente.id
+    pedido.clienteId = pedidoEntity.cliente?.id || null
     pedido.data = pedidoEntity.data
     pedido.status = pedidoEntity.status as PedidoStatus
     pedido.total = pedidoEntity.total
     pedido.itens =
-      pedidoEntity.itens.map((item) => ({
-        id: item.id,
-        produtoId: item.produto.id,
+      pedidoEntity.itens?.map((item) => ({
+        produtoId: item.produto?.id || null,
         quantidade: item.quantidade,
         preco: item.precoUnitario
       })) || []
