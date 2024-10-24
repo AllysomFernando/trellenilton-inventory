@@ -12,6 +12,8 @@ import { PedidoUsecaseProxyModule } from './infrastructures/usecaseproxy/pedido/
 import { PedidoModule } from './presentation/pedido/pedido.module'
 import { TransacoesUsecaseProxyModule } from './infrastructures/usecaseproxy/transacoes/transacoes.usecase-proxy.modules'
 import { TransacaoModule } from './presentation/transacao/transacao.module'
+import { ProdutoUsecaseProxyModule } from './infrastructures/usecaseproxy/produto/produto.usecase-proxy.modules'
+import { ProdutoModule } from './presentation/produto/produto.module'
 
 @Module({
   imports: [
@@ -27,6 +29,8 @@ import { TransacaoModule } from './presentation/transacao/transacao.module'
     PedidoModule,
     TransacoesUsecaseProxyModule.register(),
     TransacaoModule,
+    ProdutoUsecaseProxyModule.register(),
+    ProdutoModule,
     EnvironmentConfigModule
   ]
 })
