@@ -11,27 +11,27 @@ export class ClienteRepositoryOrm implements ClienteRepository {
     @InjectRepository(Cliente)
     private readonly clienteRepository: Repository<Cliente>
   ) {}
-  async findAll(): Promise<Cliente[]> {
+  async findAll(): Promise<ClienteModel[]> {
     const clientes = await this.clienteRepository.find()
     if (!clientes || clientes.length === 0) {
       return []
     }
-    return clientes
+    return clientes.map((cliente) => this.toCliente(cliente))
   }
-  async findById(id: number): Promise<Cliente> {
+  async findById(id: number): Promise<ClienteModel> {
     const cliente = await this.clienteRepository.findOneBy({ id })
     if (!cliente) {
       return null
     }
-    return cliente
+    return this.toCliente(cliente)
   }
-  async save(cliente: Cliente): Promise<Cliente> {
+  async save(cliente: ClienteModel): Promise<ClienteModel> {
     const entity = this.clienteRepository.create(cliente)
     await this.clienteRepository.save(entity)
     return this.toCliente(entity)
   }
 
-  async update(cliente: Cliente): Promise<Cliente> {
+  async update(cliente: ClienteModel): Promise<ClienteModel> {
     const entity = await this.clienteRepository.findOneBy({ id: cliente.id })
     if (!entity) {
       return null
@@ -71,7 +71,18 @@ export class ClienteRepositoryOrm implements ClienteRepository {
     cliente.contato = clienteEntity.contato
     cliente.cpf_cnpj = clienteEntity.cpf_cnpj
     cliente.archived = clienteEntity.archived
-    cliente.pedidos = clienteEntity.pedidos
+    cliente.pedidos = clienteEntity.pedidos.map((pedido) => ({
+      id: pedido.id,
+      data: pedido.data,
+      clienteId: pedido.cliente.id,
+      status: pedido.status,
+      total: pedido.total,
+      itens: pedido.itens.map((item) => ({
+        produtoId: item.produto.id,
+        quantidade: item.quantidade,
+        preco: item.precoUnitario
+      }))
+    }))
 
     return cliente
   }
