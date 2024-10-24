@@ -63,17 +63,21 @@ export class PedidoRepositoryOrm implements PedidoRepository {
   }
 
   private toPedido(pedidoEntity: Pedido): PedidoModel {
-    return {
-      id: pedidoEntity.id,
-      clienteId: pedidoEntity.cliente.id,
-      data: pedidoEntity.data,
-      status: pedidoEntity.status as PedidoStatus,
-      total: pedidoEntity.total,
-      itens: pedidoEntity.itens.map((item) => ({
+    const pedido: PedidoModel = new PedidoModel()
+
+    pedido.id = pedidoEntity.id
+    pedido.clienteId = pedidoEntity.cliente.id
+    pedido.data = pedidoEntity.data
+    pedido.status = pedidoEntity.status as PedidoStatus
+    pedido.total = pedidoEntity.total
+    pedido.itens =
+      pedidoEntity.itens.map((item) => ({
+        id: item.id,
         produtoId: item.produto.id,
         quantidade: item.quantidade,
         preco: item.precoUnitario
-      }))
-    }
+      })) || []
+
+    return pedido
   }
 }
