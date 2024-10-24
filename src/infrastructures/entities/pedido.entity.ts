@@ -19,8 +19,8 @@ export class Pedido {
   @JoinColumn({ name: 'clienteId' })
   cliente: Cliente
 
-  @Column('datetime')
-  data: Date
+  @Column('varchar')
+  data: string
 
   @Column('varchar') 
   status: PedidoStatus

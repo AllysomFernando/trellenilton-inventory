@@ -5,7 +5,7 @@ export enum PedidoStatus {
 
 export class PedidoModel {
   id: number
-  data: Date
+  data: string
   clienteId: number
   status: PedidoStatus.Concluido | PedidoStatus.Pendente
   total: number

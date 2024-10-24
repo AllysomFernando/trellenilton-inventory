@@ -5,7 +5,7 @@ import { BadRequestError } from '@/applications/errors/bad-request-erros'
 
 export namespace CreatePedidoUseCase {
   export type Input = {
-    data: Date
+    data: string
     clienteId: number
     status: PedidoStatus
     itens: { produtoId: number; quantidade: number; preco: number }[]

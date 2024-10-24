@@ -14,7 +14,7 @@ export class PedidoRepositoryOrm implements PedidoRepository {
 
   async findAll(): Promise<PedidoModel[]> {
     const pedidos = await this.pedidoRepository.find({
-      relations: ['cliente', 'itens']
+      relations: ['cliente', 'itens', 'itens.produto']
     })
     return pedidos.map((pedido) => this.toPedido(pedido))
   }
@@ -22,7 +22,7 @@ export class PedidoRepositoryOrm implements PedidoRepository {
   async findById(id: number): Promise<PedidoModel> {
     const pedido = await this.pedidoRepository.findOne({
       where: { id },
-      relations: ['cliente', 'itens']
+      relations: ['cliente', 'itens', 'itens.produto']
     })
     return pedido ? this.toPedido(pedido) : null
   }
@@ -31,16 +31,18 @@ export class PedidoRepositoryOrm implements PedidoRepository {
     const entity = this.pedidoRepository.create({
       ...pedido,
       cliente: { id: pedido.clienteId } as any,
-      itens: Array.isArray(pedido.itens)
-        ? pedido.itens.map((item) => ({
-            produto: { id: item.produtoId } as any,
-            quantidade: item.quantidade,
-            precoUnitario: item.preco
-          }))
-        : []
+      itens: Array.isArray(pedido.itens) ? pedido.itens.map(item => ({
+        produto: { id: item.produtoId } as any,
+        quantidade: item.quantidade,
+        precoUnitario: item.preco
+      })) : []
     })
     const savedEntity = await this.pedidoRepository.save(entity)
-    return this.toPedido(savedEntity)
+    const savedPedido = await this.pedidoRepository.findOne({
+      where: { id: savedEntity.id },
+      relations: ['cliente', 'itens', 'itens.produto']
+    })
+    return this.toPedido(savedPedido)
   }
 
   async update(pedido: PedidoModel): Promise<PedidoModel> {
@@ -67,7 +69,7 @@ export class PedidoRepositoryOrm implements PedidoRepository {
   async findByClienteId(clienteId: number): Promise<PedidoModel[]> {
     const pedidos = await this.pedidoRepository.find({
       where: { cliente: { id: clienteId } },
-      relations: ['cliente', 'itens']
+      relations: ['cliente', 'itens', 'itens.produto']
     })
     return pedidos.map((pedido) => this.toPedido(pedido))
   }

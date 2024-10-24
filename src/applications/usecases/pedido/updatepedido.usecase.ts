@@ -8,7 +8,7 @@ import { ClienteRepository } from '@/domain/repository/cliente.repository'
 export namespace UpdatePedidoUseCase {
   export type Input = {
     id: number
-    data: Date
+    data: string
     clienteId: number
     status: string
     total: number
