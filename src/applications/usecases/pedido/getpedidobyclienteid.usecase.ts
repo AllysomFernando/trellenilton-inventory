@@ -23,7 +23,7 @@ export namespace GetPedidoByClienteIdUseCase {
           input.clienteId
         )
         if (!entity) {
-          throw new BadRequestError('Pedidos não encontrados.')
+          return []
         }
         return entity
       } catch (e) {
