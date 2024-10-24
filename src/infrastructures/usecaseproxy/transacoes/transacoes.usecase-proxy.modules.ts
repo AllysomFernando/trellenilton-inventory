@@ -39,7 +39,11 @@ export class TransacoesUsecaseProxyModule {
             )
         },
         {
-          inject: [TransacaoRepositoryOrm],
+          inject: [
+            TransacaoRepositoryOrm,
+            ProdutoRepositoryOrm,
+            PedidoRepositoryOrm
+          ],
           provide: TransacoesUsecaseProxyModule.CREATE_TRANSACAO_USE_CASE,
           useFactory: (
             transacoesRepository: TransacaoRepositoryOrm,
