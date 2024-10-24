@@ -1,3 +1,5 @@
+import { PedidoModel } from "./pedido"
+
 export class ClienteModel {
   id: number
   name: string
@@ -5,5 +7,5 @@ export class ClienteModel {
   endereco: string
   contato: string
   archived: boolean
-  pedidos: any
+  pedidos?: PedidoModel[]
 }
