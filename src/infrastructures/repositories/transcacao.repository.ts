@@ -45,8 +45,8 @@ export class TransacaoRepositoryOrm implements TransacaoRepository {
       tipo: transacaoEntity.tipo as TransacaoEnum,
       data: transacaoEntity.data,
       valor: transacaoEntity.valor,
-      produtoId: transacaoEntity.produto?.id,
-      pedidoId: transacaoEntity.pedido?.id
+      produtoId: transacaoEntity.produto.id,
+      pedidoId: transacaoEntity.pedido.id
     }
   }
 }
