@@ -7,7 +7,7 @@ import { BadRequestError } from '@/applications/errors/bad-request-erros'
 
 export namespace CreateTransacoesUseCase {
   export type Input = {
-    data: Date
+    data: string
     tipo: TransacaoEnum.Entrada | TransacaoEnum.Saida
     valor: number
     produtoId: number
