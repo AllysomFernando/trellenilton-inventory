@@ -31,11 +31,13 @@ export class PedidoRepositoryOrm implements PedidoRepository {
     const entity = this.pedidoRepository.create({
       ...pedido,
       cliente: { id: pedido.clienteId } as any,
-      itens: pedido.itens.map((item) => ({
-        produto: { id: item.produtoId } as any,
-        quantidade: item.quantidade,
-        precoUnitario: item.preco
-      }))
+      itens: Array.isArray(pedido.itens)
+        ? pedido.itens.map((item) => ({
+            produto: { id: item.produtoId } as any,
+            quantidade: item.quantidade,
+            precoUnitario: item.preco
+          }))
+        : []
     })
     const savedEntity = await this.pedidoRepository.save(entity)
     return this.toPedido(savedEntity)
