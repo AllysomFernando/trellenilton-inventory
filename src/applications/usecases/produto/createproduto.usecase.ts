@@ -59,18 +59,17 @@ export namespace CreateProdutoUseCase {
       produto.quantity = input.quantity
       produto.image = input.image
       produto.fornecedorId = input.fornecedorId
-      const entity = await this.produtoRepository.save(produto)
-      console.log(entity)
-      return entity
-      // try {
 
-      //   if (!entity) {
-      //     throw new BadRequestError('Falha ao salvar o produto.')
-      //   }
-      //   return entity
-      // } catch (e) {
-      //   throw new BadRequestError('Falha ao salvar o produto.')
-      // }
+      try {
+        const entity = await this.produtoRepository.save(produto)
+
+        if (!entity) {
+          throw new BadRequestError('Falha ao salvar o produto.')
+        }
+        return entity
+      } catch (e) {
+        throw new BadRequestError('Falha ao salvar o produto.')
+      }
     }
   }
 }
