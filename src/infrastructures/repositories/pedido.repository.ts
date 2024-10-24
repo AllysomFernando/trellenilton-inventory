@@ -19,7 +19,8 @@ export class PedidoRepositoryOrm implements PedidoRepository {
 
   async findById(id: number): Promise<PedidoModel> {
     const pedido = await this.pedidoRepository.findOne({
-      where: { id }
+      where: { id },
+      relations: ['cliente', 'itens', 'itens.produto']
     })
     return this.toPedido(pedido)
   }
