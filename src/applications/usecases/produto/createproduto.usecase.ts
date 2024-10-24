@@ -2,7 +2,6 @@ import { ProdutoModel } from '@/domain/models/produto'
 import { UseCase as DefaultUseCase } from '../use-case'
 import { ProdutoRepository } from '@/domain/repository/produto.repository'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
-import { GetFornecedorByIdUseCase } from '../fornecedor/getfornecedorbyid,usecase'
 import { FornecedorRepository } from '@/domain/repository/fornecedor.repository'
 
 export namespace CreateProdutoUseCase {
@@ -63,16 +62,18 @@ export namespace CreateProdutoUseCase {
       produto.quantity = input.quantity
       produto.image = input.image
       produto.fornecedorId = input.fornecedorId
+      const entity = await this.produtoRepository.save(produto)
+      console.log(entity)
+      return entity
+      // try {
 
-      try {
-        const entity = await this.produtoRepository.save(produto)
-        if (!entity) {
-          throw new BadRequestError('Falha ao salvar o produto.')
-        }
-        return entity
-      } catch (e) {
-        throw new BadRequestError('Falha ao salvar o produto.')
-      }
+      //   if (!entity) {
+      //     throw new BadRequestError('Falha ao salvar o produto.')
+      //   }
+      //   return entity
+      // } catch (e) {
+      //   throw new BadRequestError('Falha ao salvar o produto.')
+      // }
     }
   }
 }
