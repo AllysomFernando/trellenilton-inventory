@@ -13,7 +13,9 @@ export class PedidoRepositoryOrm implements PedidoRepository {
   ) {}
 
   async findAll(): Promise<PedidoModel[]> {
-    const pedidos = await this.pedidoRepository.find({})
+    const pedidos = await this.pedidoRepository.find({
+      relations: ['cliente', 'itens', 'itens.produto']
+    })
     return pedidos.map((pedido) => this.toPedido(pedido))
   }
 
