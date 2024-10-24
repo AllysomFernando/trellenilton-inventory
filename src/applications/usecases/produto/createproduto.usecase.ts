@@ -59,7 +59,6 @@ export namespace CreateProdutoUseCase {
       produto.quantity = input.quantity
       produto.image = input.image
       produto.fornecedorId = input.fornecedorId
-
       try {
         const entity = await this.produtoRepository.save(produto)
 
