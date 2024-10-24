@@ -21,17 +21,19 @@ export namespace CreatePedidoUseCase {
         !input.data ||
         !input.clienteId ||
         !input.status ||
-        !input.itens ||
+        !Array.isArray(input.itens) ||
         input.itens.length === 0
       ) {
         throw new BadRequestError(
-          'Data, clienteId, status e total são obrigatórios.'
+          'data, clienteId, status e itens são obrigatórios.'
         )
       }
+
       const total = input.itens.reduce(
         (sum, item) => sum + item.quantidade * item.preco,
         0
       )
+
       const pedido = new PedidoModel()
       pedido.data = input.data
       pedido.clienteId = input.clienteId
