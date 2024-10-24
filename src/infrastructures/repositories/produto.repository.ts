@@ -14,7 +14,9 @@ export class ProdutoRepositoryOrm implements ProdutoRepository {
   ) {}
 
   async findAll(): Promise<ProdutoModel[]> {
-    const produtos = await this.produtoRepository.find()
+    const produtos = await this.produtoRepository.find({
+      relations: ['fornecedor', 'itens']
+    })
     return produtos.map((produto) => this.toProduto(produto))
   }
 
