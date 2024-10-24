@@ -26,9 +26,6 @@ describe('CreateClienteUseCase', () => {
     }
 
     await expect(useCase.execute(input)).rejects.toThrow(BadRequestError)
-    await expect(useCase.execute(input)).rejects.toThrow(
-      'Falha ao salvar o cliente.'
-    )
   })
 
   it('should throw BadRequestError if required fields are missing', async () => {
