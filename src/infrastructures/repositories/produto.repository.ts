@@ -25,7 +25,6 @@ export class ProdutoRepositoryOrm implements ProdutoRepository {
     return produto ? this.toProduto(produto) : null
   }
 
-  // Salva um novo produto
   async save(produto: ProdutoModel): Promise<ProdutoModel> {
     const entity = this.produtoRepository.create(produto)
     await this.produtoRepository.save(entity)
@@ -64,14 +63,12 @@ export class ProdutoRepositoryOrm implements ProdutoRepository {
   }
 
   private toProduto(produtoEntity: Produto): ProdutoModel {
-    return {
-      id: produtoEntity.id,
-      name: produtoEntity.name,
-      description: produtoEntity.description,
-      price: produtoEntity.price,
-      quantity: produtoEntity.quantity,
-      image: produtoEntity.image,
-      fornecedorId: produtoEntity.fornecedor.id
-    }
+    const produto = new ProdutoModel()
+    produto.id = produtoEntity.id
+    produto.name = produtoEntity.name
+    produto.description = produtoEntity.description
+    produto.price = produtoEntity.price
+    produto.quantity = produtoEntity.quantity
+    return produto
   }
 }
