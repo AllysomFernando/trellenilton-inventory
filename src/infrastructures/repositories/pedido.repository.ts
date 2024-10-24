@@ -13,29 +13,28 @@ export class PedidoRepositoryOrm implements PedidoRepository {
   ) {}
 
   async findAll(): Promise<PedidoModel[]> {
-    const pedidos = await this.pedidoRepository.find({
-      relations: ['cliente', 'itens', 'itens.produto']
-    })
+    const pedidos = await this.pedidoRepository.find({})
     return pedidos.map((pedido) => this.toPedido(pedido))
   }
 
   async findById(id: number): Promise<PedidoModel> {
     const pedido = await this.pedidoRepository.findOne({
-      where: { id },
-      relations: ['cliente', 'itens', 'itens.produto']
+      where: { id }
     })
-    return pedido ? this.toPedido(pedido) : null
+    return this.toPedido(pedido)
   }
 
   async save(pedido: PedidoModel): Promise<PedidoModel> {
     const entity = this.pedidoRepository.create({
       ...pedido,
       cliente: { id: pedido.clienteId } as any,
-      itens: Array.isArray(pedido.itens) ? pedido.itens.map(item => ({
-        produto: { id: item.produtoId } as any,
-        quantidade: item.quantidade,
-        precoUnitario: item.preco
-      })) : []
+      itens: Array.isArray(pedido.itens)
+        ? pedido.itens.map((item) => ({
+            produto: { id: item.produtoId } as any,
+            quantidade: item.quantidade,
+            precoUnitario: item.preco
+          }))
+        : []
     })
     const savedEntity = await this.pedidoRepository.save(entity)
     const savedPedido = await this.pedidoRepository.findOne({
@@ -69,7 +68,7 @@ export class PedidoRepositoryOrm implements PedidoRepository {
   async findByClienteId(clienteId: number): Promise<PedidoModel[]> {
     const pedidos = await this.pedidoRepository.find({
       where: { cliente: { id: clienteId } },
-      relations: ['cliente', 'itens', 'itens.produto']
+      relations: ['cliente']
     })
     return pedidos.map((pedido) => this.toPedido(pedido))
   }
@@ -82,12 +81,11 @@ export class PedidoRepositoryOrm implements PedidoRepository {
     pedido.data = pedidoEntity.data
     pedido.status = pedidoEntity.status as PedidoStatus
     pedido.total = pedidoEntity.total
-    pedido.itens =
-      pedidoEntity.itens?.map((item) => ({
-        produtoId: item.produto.id,
-        quantidade: item.quantidade,
-        preco: item.precoUnitario
-      })) || []
+    pedido.itens = pedidoEntity.itens.map((item) => ({
+      produtoId: item.produto.id,
+      quantidade: item.quantidade,
+      preco: item.precoUnitario
+    }))
 
     return pedido
   }
