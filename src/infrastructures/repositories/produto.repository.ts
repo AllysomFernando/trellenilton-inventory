@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Produto } from '../entities/produto.entity'
 import { Repository } from 'typeorm'
 import { ProdutoModel } from '@/domain/models/produto'
+import { Fornecedor } from '../entities/fornecedor.entity'
 
 @Injectable()
 export class ProdutoRepositoryOrm implements ProdutoRepository {
@@ -26,7 +27,21 @@ export class ProdutoRepositoryOrm implements ProdutoRepository {
   }
 
   async save(produto: ProdutoModel): Promise<ProdutoModel> {
-    const entity = this.produtoRepository.create(produto)
+    const fornecedor = await this.produtoRepository.manager.findOne(
+      Fornecedor,
+      {
+        where: { id: produto.fornecedorId }
+      }
+    )
+    if (!fornecedor) {
+      throw new Error(
+        `Fornecedor com id ${produto.fornecedorId} não encontrado.`
+      )
+    }
+    const entity = this.produtoRepository.create({
+      ...produto,
+      fornecedor
+    })
     await this.produtoRepository.save(entity)
     return this.toProduto(entity)
   }
@@ -64,11 +79,14 @@ export class ProdutoRepositoryOrm implements ProdutoRepository {
 
   private toProduto(produtoEntity: Produto): ProdutoModel {
     const produto = new ProdutoModel()
-    produto.id = produtoEntity.id
+    if (produtoEntity.id !== undefined) {
+      produto.id = produtoEntity.id
+    }
     produto.name = produtoEntity.name
     produto.description = produtoEntity.description
     produto.price = produtoEntity.price
     produto.quantity = produtoEntity.quantity
+    produto.fornecedorId = produtoEntity.fornecedor.id
     return produto
   }
 }
