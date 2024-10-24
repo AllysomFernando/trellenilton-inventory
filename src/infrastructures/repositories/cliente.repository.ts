@@ -11,20 +11,28 @@ export class ClienteRepositoryOrm implements ClienteRepository {
     @InjectRepository(Cliente)
     private readonly clienteRepository: Repository<Cliente>
   ) {}
+
   async findAll(): Promise<ClienteModel[]> {
-    const clientes = await this.clienteRepository.find()
+    const clientes = await this.clienteRepository.find({
+      relations: ['pedidos']
+    })
     if (!clientes || clientes.length === 0) {
       return []
     }
     return clientes.map((cliente) => this.toCliente(cliente))
   }
+
   async findById(id: number): Promise<ClienteModel> {
-    const cliente = await this.clienteRepository.findOneBy({ id })
+    const cliente = await this.clienteRepository.findOne({
+      where: { id },
+      relations: ['pedidos']
+    })
     if (!cliente) {
       return null
     }
     return this.toCliente(cliente)
   }
+
   async save(cliente: ClienteModel): Promise<ClienteModel> {
     const entity = this.clienteRepository.create(cliente)
     await this.clienteRepository.save(entity)
@@ -32,7 +40,10 @@ export class ClienteRepositoryOrm implements ClienteRepository {
   }
 
   async update(cliente: ClienteModel): Promise<ClienteModel> {
-    const entity = await this.clienteRepository.findOneBy({ id: cliente.id })
+    const entity = await this.clienteRepository.findOne({
+      where: { id: cliente.id },
+      relations: ['pedidos']
+    })
     if (!entity) {
       return null
     }
@@ -45,7 +56,10 @@ export class ClienteRepositoryOrm implements ClienteRepository {
   }
 
   async delete(id: number): Promise<boolean> {
-    const entity = await this.clienteRepository.findOneBy({ id })
+    const entity = await this.clienteRepository.findOne({
+      where: { id },
+      relations: ['pedidos']
+    })
     if (!entity) {
       return false
     }
@@ -54,7 +68,10 @@ export class ClienteRepositoryOrm implements ClienteRepository {
   }
 
   async archive(id: number): Promise<boolean> {
-    const entity = await this.clienteRepository.findOneBy({ id })
+    const entity = await this.clienteRepository.findOne({
+      where: { id },
+      relations: ['pedidos']
+    })
     if (!entity) {
       return false
     }
@@ -71,18 +88,19 @@ export class ClienteRepositoryOrm implements ClienteRepository {
     cliente.contato = clienteEntity.contato
     cliente.cpf_cnpj = clienteEntity.cpf_cnpj
     cliente.archived = clienteEntity.archived
-    cliente.pedidos = clienteEntity.pedidos.map((pedido) => ({
-      id: pedido.id,
-      data: pedido.data,
-      clienteId: pedido.cliente.id,
-      status: pedido.status,
-      total: pedido.total,
-      itens: pedido.itens.map((item) => ({
-        produtoId: item.produto.id,
-        quantidade: item.quantidade,
-        preco: item.precoUnitario
-      }))
-    }))
+    cliente.pedidos =
+      clienteEntity.pedidos?.map((pedido) => ({
+        id: pedido.id,
+        data: pedido.data,
+        clienteId: pedido.cliente.id,
+        status: pedido.status,
+        total: pedido.total,
+        itens: pedido.itens.map((item) => ({
+          produtoId: item.produto.id,
+          quantidade: item.quantidade,
+          preco: item.precoUnitario
+        }))
+      })) || []
 
     return cliente
   }

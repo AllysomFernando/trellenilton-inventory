@@ -30,18 +30,15 @@ export namespace CreateClienteUseCase {
       cliente.cpf_cnpj = input.cpf_cnpj
       cliente.endereco = input.endereco
       cliente.contato = input.contato
-      const entity = await this.clienteRepository.save(cliente)
-      console.log(entity)
-      return entity
-      // try {
-
-      //   if (!entity) {
-      //     throw new BadRequestError('Falha ao salvar o cliente.')
-      //   }
-      //   return entity
-      // } catch (e) {
-      //   throw new BadRequestError('Falha ao salvar o cliente.')
-      // }
+      try {
+        const entity = await this.clienteRepository.save(cliente)
+        if (!entity) {
+          throw new BadRequestError('Falha ao salvar o cliente.')
+        }
+        return entity
+      } catch (e) {
+        throw new BadRequestError('Falha ao salvar o cliente.')
+      }
     }
   }
 }
