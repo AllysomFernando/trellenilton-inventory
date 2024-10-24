@@ -60,7 +60,7 @@ export class FornecedorUsecaseProxyModule {
             )
         },
         {
-          inject: [FornecedorRepositoryOrm],
+          inject: [FornecedorRepositoryOrm, ProdutoRepositoryOrm],
           provide: FornecedorUsecaseProxyModule.DELETE_FORNECEDOR_USE_CASE,
           useFactory: (
             fornecedorRepository: FornecedorRepositoryOrm,
