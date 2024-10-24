@@ -19,6 +19,7 @@ export namespace GetPedidoByIdUseCase {
       }
       try {
         const entity = await this.pedidoRepository.findById(input.id)
+
         if (!entity) {
           throw new BadRequestError('Pedido não encontrado.')
         }
