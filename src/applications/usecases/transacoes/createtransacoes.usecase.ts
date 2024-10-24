@@ -27,12 +27,9 @@ export namespace CreateTransacoesUseCase {
       if (
         !input.data ||
         !input.tipo ||
-        input.valor === null ||
-        input.valor === undefined ||
-        input.produtoId === null ||
-        input.produtoId === undefined ||
-        input.pedidoId === null ||
-        input.pedidoId === undefined
+        !input.valor ||
+        !input.produtoId ||
+        !input.pedidoId
       ) {
         throw new BadRequestError(
           'Data, tipo, valor, id do produto e id do pedido são obrigatórios.'
