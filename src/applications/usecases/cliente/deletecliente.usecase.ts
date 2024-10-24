@@ -21,7 +21,6 @@ export namespace DeleteClienteUseCase {
         throw new Error('Id é obrigatório.')
       }
       const verifyPedido = await this.pedidoRepository.findByClienteId(input.id)
-
       try {
         if (verifyPedido.length > 0) {
           const entity = await this.clienteRepository.archive(input.id)
