@@ -84,11 +84,13 @@ export class PedidoRepositoryOrm implements PedidoRepository {
     pedido.data = pedidoEntity.data
     pedido.status = pedidoEntity.status as PedidoStatus
     pedido.total = pedidoEntity.total
-    pedido.itens = pedidoEntity.itens.map((item) => ({
-      produtoId: item.produto.id,
-      quantidade: item.quantidade,
-      preco: item.precoUnitario
-    }))
+    pedido.itens = Array.isArray(pedidoEntity.itens)
+      ? pedidoEntity.itens.map((item) => ({
+          produtoId: item.produto.id,
+          quantidade: item.quantidade,
+          preco: item.precoUnitario
+        }))
+      : []
 
     return pedido
   }

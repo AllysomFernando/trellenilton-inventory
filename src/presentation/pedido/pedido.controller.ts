@@ -54,7 +54,7 @@ export class PedidoController {
       data: result
     }
   }
-  @Get('/:id')
+  @Get('cliente/:id')
   async getPedidoByIdCliente(@Param('id') clienteId: number) {
     const result = await this.getPedidoByIdClienteUseCase.getInstance().execute({ clienteId })
     return {
