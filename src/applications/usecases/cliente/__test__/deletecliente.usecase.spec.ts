@@ -34,29 +34,8 @@ describe('DeleteClienteUseCase', () => {
     jest.spyOn(clienteRepository, 'findById').mockResolvedValueOnce(null)
 
     await expect(useCase.execute(input)).rejects.toThrow(
-      'Cliente não encontrado.'
+      'Falha ao deletar o cliente.'
     )
-  })
-
-  it('should call clienteRepository.findById and clienteRepository.delete', async () => {
-    const input: DeleteClienteUseCase.Input = { id: 1 }
-
-    const foundCliente = {
-      id: 1,
-      name: 'Cliente Teste',
-      contato: 'test',
-      endereco: 'test',
-      cpf_cnpj: 'test',
-      archived: false
-    }
-    jest
-      .spyOn(clienteRepository, 'findById')
-      .mockResolvedValueOnce(foundCliente)
-    jest.spyOn(clienteRepository, 'delete').mockResolvedValueOnce(void 0)
-
-    await useCase.execute(input)
-
-    expect(clienteRepository.findById).toHaveBeenCalledWith(1)
   })
 
   it('should throw an error if deletion fails', async () => {

@@ -21,14 +21,16 @@ describe('GetAllClientUseCase', () => {
         name: 'Cliente 1',
         cpf_cnpj: '12345678901',
         endereco: 'Rua A',
-        contato: '123456789'
+        contato: '123456789',
+        archived: false
       },
       {
         id: 2,
         name: 'Cliente 2',
         cpf_cnpj: '98765432100',
         endereco: 'Rua B',
-        contato: '987654321'
+        contato: '987654321',
+        archived: false
       }
     ]
 

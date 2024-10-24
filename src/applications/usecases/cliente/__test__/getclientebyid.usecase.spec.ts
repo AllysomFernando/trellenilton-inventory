@@ -25,7 +25,8 @@ describe('GetClientByIdUseCase', () => {
       name: 'Cliente Teste',
       cpf_cnpj: '12345678901',
       endereco: 'Rua Teste',
-      contato: '123456789'
+      contato: '123456789',
+      archived: false
     }
 
     jest.spyOn(clienteRepository, 'findById').mockResolvedValueOnce(client)
@@ -44,7 +45,7 @@ describe('GetClientByIdUseCase', () => {
     const input: GetClientByIdUseCase.Input = { id: 1 }
 
     await expect(useCase.execute(input)).rejects.toThrow(
-      'Cliente não encontrado.'
+      'Falha ao buscar o cliente.'
     )
   })
 
