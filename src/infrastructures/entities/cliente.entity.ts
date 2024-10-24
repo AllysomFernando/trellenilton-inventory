@@ -18,7 +18,7 @@ export class Cliente {
   @Column('varchar')
   contato: string
 
-  @Column('boolean')
+  @Column('boolean', { default: false })
   archived: boolean
 
   @OneToMany(() => Pedido, (pedido) => pedido.cliente)
