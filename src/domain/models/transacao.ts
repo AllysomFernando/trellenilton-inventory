@@ -6,7 +6,7 @@ export enum TransacaoEnum {
 export class TransacaoModel {
   id: number
   tipo: TransacaoEnum.Entrada | TransacaoEnum.Saida
-  data: Date
+  data: string
   valor: number
   produtoId: number
   pedidoId: number
