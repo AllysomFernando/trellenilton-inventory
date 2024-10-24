@@ -91,7 +91,8 @@ export class ProdutoUsecaseProxyModule {
         ProdutoUsecaseProxyModule.GET_PRODUTO_BY_ID_USE_CASE,
         ProdutoUsecaseProxyModule.CREATE_PRODUTO_USE_CASE,
         ProdutoUsecaseProxyModule.UPDATE_PRODUTO_USE_CASE,
-        ProdutoUsecaseProxyModule.DELETE_PRODUTO_USE_CASE
+        ProdutoUsecaseProxyModule.DELETE_PRODUTO_USE_CASE,
+        ProdutoUsecaseProxyModule.GET_PRODUTO_BY_FORNECEDOR_ID_USE_CASE
       ]
     }
   }
