@@ -2,6 +2,7 @@ import { CreateProdutoDto } from '@/applications/dto/produto/createproduto.dto'
 import { CreateProdutoUseCase } from '@/applications/usecases/produto/createproduto.usecase'
 import { DeleteProdutoUseCase } from '@/applications/usecases/produto/deleteproduto.usecase'
 import { GetAllProdutoUseCase } from '@/applications/usecases/produto/getallproduto.usecase'
+import { GetProdutoByFornecedorIdUseCase } from '@/applications/usecases/produto/getprodutobyfornecedorid'
 import { GetProdutoByIdUseCase } from '@/applications/usecases/produto/getprodutobyid.usecase'
 import { UpdateProdutoUseCase } from '@/applications/usecases/produto/updateproduto.usecase'
 import { ProdutoUsecaseProxyModule } from '@/infrastructures/usecaseproxy/produto/produto.usecase-proxy.modules'
@@ -29,7 +30,9 @@ export class ProdutoController {
     @Inject(ProdutoUsecaseProxyModule.UPDATE_PRODUTO_USE_CASE)
     private readonly updateProdutoUsecaseProxy: UseCaseProxy<UpdateProdutoUseCase.UseCase>,
     @Inject(ProdutoUsecaseProxyModule.DELETE_PRODUTO_USE_CASE)
-    private readonly deleteProdutoUsecaseProxy: UseCaseProxy<DeleteProdutoUseCase.UseCase>
+    private readonly deleteProdutoUsecaseProxy: UseCaseProxy<DeleteProdutoUseCase.UseCase>,
+    @Inject(ProdutoUsecaseProxyModule.GET_PRODUTO_BY_FORNECEDOR_ID_USE_CASE)
+    private readonly getProdutoByFornecedorIdUsecaseProxy: UseCaseProxy<GetProdutoByFornecedorIdUseCase.UseCase>
   ) {}
 
   @Get('/')
@@ -47,6 +50,18 @@ export class ProdutoController {
     const result = await this.getProdutoByIdUsecaseProxy
       .getInstance()
       .execute({ id })
+    return {
+      status: 'OK',
+      code: 200,
+      message: 'Produto found',
+      data: result
+    }
+  }
+  @Get('/produto/:id')
+  async getProdutoByFornecedorId(@Param('id') fornecedorId: number) {
+    const result = await this.getProdutoByFornecedorIdUsecaseProxy
+      .getInstance()
+      .execute({ fornecedorId })
     return {
       status: 'OK',
       code: 200,
