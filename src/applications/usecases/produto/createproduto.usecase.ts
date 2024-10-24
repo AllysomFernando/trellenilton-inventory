@@ -24,15 +24,12 @@ export namespace CreateProdutoUseCase {
 
     async execute(input: Input): Promise<Output> {
       if (
-        !input.name ||
         !input.description ||
-        input.price === null ||
-        input.price === undefined ||
-        input.quantity === null ||
-        input.quantity === undefined ||
+        !input.name ||
+        !input.price ||
+        !input.quantity ||
         !input.image ||
-        input.fornecedorId === null ||
-        input.fornecedorId === undefined
+        !input.fornecedorId
       ) {
         throw new BadRequestError(
           'Nome, descrição, preço, quantidade, imagem e id do fornecedor são obrigatórios.'
