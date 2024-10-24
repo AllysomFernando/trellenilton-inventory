@@ -13,7 +13,9 @@ export class TransacaoRepositoryOrm implements TransacaoRepository {
   ) {}
 
   async findAll(): Promise<TransacaoModel[]> {
-    const transacoes = await this.transacaoRepository.find()
+    const transacoes = await this.transacaoRepository.find({
+      relations: ['produto', 'pedido']
+    })
     return transacoes.map((transacao) => this.toTransacao(transacao))
   }
 
