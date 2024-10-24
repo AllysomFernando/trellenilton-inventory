@@ -9,6 +9,7 @@ import { CreateProdutoUseCase } from '@/applications/usecases/produto/createprod
 import { FornecedorRepository } from '@/domain/repository/fornecedor.repository'
 import { UpdateProdutoUseCase } from '@/applications/usecases/produto/updateproduto.usecase'
 import { DeleteProdutoUseCase } from '@/applications/usecases/produto/deleteproduto.usecase'
+import { FornecedorRepositoryOrm } from '@/infrastructures/repositories/fornecedor.repository'
 
 @Module({
   imports: [EnvironmentConfigModule, RepositoriesModule]
@@ -41,7 +42,7 @@ export class ProdutoUsecaseProxyModule {
             )
         },
         {
-          inject: [ProdutoRepositoryOrm],
+          inject: [ProdutoRepositoryOrm, FornecedorRepositoryOrm],
           provide: ProdutoUsecaseProxyModule.CREATE_PRODUTO_USE_CASE,
           useFactory: (
             produtoRepository: ProdutoRepositoryOrm,
