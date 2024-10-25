@@ -14,20 +14,18 @@ export class Transacao {
   @PrimaryGeneratedColumn('increment')
   id: number
 
-  @Column('varchar') 
-  tipo: TransacaoEnum
+  @Column()
+  data: string
 
   @Column('varchar')
-  data: string
+  tipo: TransacaoEnum
 
   @Column('int')
   valor: number
 
-  @ManyToOne(() => Produto)
-  @JoinColumn({ name: 'produtoId' })
+  @ManyToOne(() => Produto, { eager: true, nullable: false })
   produto: Produto
 
-  @ManyToOne(() => Pedido)
-  @JoinColumn({ name: 'pedidoId' })
+  @ManyToOne(() => Pedido, { eager: true, nullable: false })
   pedido: Pedido
 }
