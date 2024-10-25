@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Transacao } from '../entities/transacao'
 import { Repository } from 'typeorm'
 import { TransacaoEnum, TransacaoModel } from '@/domain/models/transacao'
+import { BadRequestError } from '@/applications/errors/bad-request-erros'
 
 @Injectable()
 export class TransacaoRepositoryOrm implements TransacaoRepository {
@@ -22,7 +23,7 @@ export class TransacaoRepositoryOrm implements TransacaoRepository {
   async findById(id: number): Promise<TransacaoModel> {
     const transacao = await this.transacaoRepository.findOne({
       where: { id },
-      relations: ['produto', 'pedido'] 
+      relations: ['produto', 'pedido']
     })
     return transacao ? this.toTransacao(transacao) : null
   }
@@ -30,7 +31,13 @@ export class TransacaoRepositoryOrm implements TransacaoRepository {
   async save(transacao: TransacaoModel): Promise<TransacaoModel> {
     const entity = this.transacaoRepository.create(transacao)
     await this.transacaoRepository.save(entity)
-    return this.toTransacao(entity)
+
+    const savedTransacao = await this.transacaoRepository.findOne({
+      where: { id: entity.id },
+      relations: ['produto', 'pedido']
+    })
+
+    return this.toTransacao(savedTransacao)
   }
 
   async delete(id: number): Promise<boolean> {
@@ -42,6 +49,9 @@ export class TransacaoRepositoryOrm implements TransacaoRepository {
   }
 
   private toTransacao(transacaoEntity: Transacao): TransacaoModel {
+    if (!transacaoEntity.produto || !transacaoEntity.pedido) {
+      throw new BadRequestError('Produto ou Pedido não estão definidos na transação.')
+    }
     return {
       id: transacaoEntity.id,
       tipo: transacaoEntity.tipo as TransacaoEnum,
