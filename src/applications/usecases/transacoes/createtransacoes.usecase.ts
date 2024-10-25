@@ -14,7 +14,7 @@ export namespace CreateTransacoesUseCase {
     pedidoId: number
   }
 
-  export type Output = void
+  export type Output = TransacaoModel
 
   export class UseCase implements DefaultUseCase<Input, Output> {
     constructor(
@@ -59,17 +59,17 @@ export namespace CreateTransacoesUseCase {
       transacao.produtoId = produto.id
       transacao.tipo = input.tipo
       transacao.valor = input.valor
-      const entity = await this.transacaoRepository.save(transacao)
-      console.log(entity)
-      // try {
-     
-      //   if (!entity) {
-      //     throw new BadRequestError('Falha na transação.')
-      //   }
-      //   return entity
-      // } catch (e) {
-      //   throw new BadRequestError('Falha na transação.')
-      // }
+
+      try {
+        const entity = await this.transacaoRepository.save(transacao)
+
+        if (!entity) {
+          throw new BadRequestError('Falha na transação.')
+        }
+        return entity
+      } catch (e) {
+        throw new BadRequestError('Falha na transação.')
+      }
     }
   }
 }
