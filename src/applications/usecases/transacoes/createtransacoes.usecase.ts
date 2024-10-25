@@ -14,7 +14,7 @@ export namespace CreateTransacoesUseCase {
     pedidoId: number
   }
 
-  export type Output = TransacaoModel
+  export type Output = void
 
   export class UseCase implements DefaultUseCase<Input, Output> {
     constructor(
@@ -23,7 +23,7 @@ export namespace CreateTransacoesUseCase {
       private pedidoRepository: PedidoRepository
     ) {}
 
-    async execute(input: Input): Promise<TransacaoModel> {
+    async execute(input: Input): Promise<Output> {
       if (
         !input.data ||
         !input.tipo ||
@@ -59,16 +59,17 @@ export namespace CreateTransacoesUseCase {
       transacao.produtoId = produto.id
       transacao.tipo = input.tipo
       transacao.valor = input.valor
-
-      try {
-        const entity = await this.transacaoRepository.save(transacao)
-        if (!entity) {
-          throw new BadRequestError('Falha na transação.')
-        }
-        return entity
-      } catch (e) {
-        throw new BadRequestError('Falha na transação.')
-      }
+      const entity = await this.transacaoRepository.save(transacao)
+      console.log(entity)
+      // try {
+     
+      //   if (!entity) {
+      //     throw new BadRequestError('Falha na transação.')
+      //   }
+      //   return entity
+      // } catch (e) {
+      //   throw new BadRequestError('Falha na transação.')
+      // }
     }
   }
 }
