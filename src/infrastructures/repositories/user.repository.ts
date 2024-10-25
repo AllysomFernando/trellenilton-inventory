@@ -7,6 +7,7 @@ import { UserModel } from '@/domain/models/user'
 import { randomBytes, scrypt, createCipheriv, createDecipheriv } from 'crypto'
 import { promisify } from 'util'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
+import * as jwt from 'jsonwebtoken'
 
 @Injectable()
 export class UserRepositoryOrm implements UserRepository {
@@ -65,7 +66,10 @@ export class UserRepositoryOrm implements UserRepository {
     await this.userRepository.remove(entity)
     return true
   }
-  async login(email: string, password: string): Promise<UserModel> {
+  async login(
+    email: string,
+    password: string
+  ): Promise<{ user: UserModel; token: string }> {
     const entity = await this.userRepository.findOne({
       where: { email }
     })
@@ -85,7 +89,14 @@ export class UserRepositoryOrm implements UserRepository {
       throw new BadRequestError('Invalid password')
     }
 
-    return this.toUser(entity)
+    const user = this.toUser(entity)
+    const token = jwt.sign(
+      { id: user.id, email: user.email },
+      'trelles',
+      { expiresIn: '1h' }
+    )
+
+    return { user, token }
   }
 
   private toUser(userEntity: User): UserModel {
