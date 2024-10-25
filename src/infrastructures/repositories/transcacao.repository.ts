@@ -5,6 +5,8 @@ import { Transacao } from '../entities/transacao'
 import { Repository } from 'typeorm'
 import { TransacaoEnum, TransacaoModel } from '@/domain/models/transacao'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
+import { Produto } from '../entities/produto.entity'
+import { Pedido } from '../entities/pedido.entity'
 
 @Injectable()
 export class TransacaoRepositoryOrm implements TransacaoRepository {
@@ -29,15 +31,29 @@ export class TransacaoRepositoryOrm implements TransacaoRepository {
   }
 
   async save(transacao: TransacaoModel): Promise<TransacaoModel> {
-    const entity = this.transacaoRepository.create(transacao)
-    await this.transacaoRepository.save(entity)
-
-    const savedTransacao = await this.transacaoRepository.findOne({
-      where: { id: entity.id },
-      relations: ['produto', 'pedido']
+    const produto = await this.transacaoRepository.manager.findOne(Produto, {
+      where: { id: transacao.produtoId }
     })
-
-    return this.toTransacao(savedTransacao)
+    if (!produto) {
+      throw new BadRequestError(
+        `Produto com id ${transacao.produtoId} não encontrado.`
+      )
+    }
+    const pedido = await this.transacaoRepository.manager.findOne(Pedido, {
+      where: { id: transacao.pedidoId }
+    })
+    if (!pedido) {
+      throw new BadRequestError(
+        `Pedido com id ${transacao.pedidoId} não encontrado.`
+      )
+    }
+    const entity = this.transacaoRepository.create({
+      ...transacao,
+      produto,
+      pedido
+    })
+    await this.transacaoRepository.save(entity)
+    return this.toTransacao(entity)
   }
 
   async delete(id: number): Promise<boolean> {
@@ -50,7 +66,9 @@ export class TransacaoRepositoryOrm implements TransacaoRepository {
 
   private toTransacao(transacaoEntity: Transacao): TransacaoModel {
     if (!transacaoEntity.produto || !transacaoEntity.pedido) {
-      throw new BadRequestError('Produto ou Pedido não estão definidos na transação.')
+      throw new BadRequestError(
+        'Produto ou Pedido não estão definidos na transação.'
+      )
     }
     return {
       id: transacaoEntity.id,
