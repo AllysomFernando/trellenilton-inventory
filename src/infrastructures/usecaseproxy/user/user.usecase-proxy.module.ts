@@ -8,6 +8,7 @@ import { CreateUserUseCase } from '@/applications/usecases/user/createuser.useca
 import { UseCaseProxy } from '../usecase-proxy'
 import { UpdateUserUseCase } from '@/applications/usecases/user/updateuser.usecase'
 import { DeleteUserUseCase } from '@/applications/usecases/user/deleteuser.usecase'
+import { LoginUseCase } from '@/applications/usecases/user/login.usecase'
 
 @Module({
   imports: [EnvironmentConfigModule, RepositoriesModule]
@@ -18,6 +19,7 @@ export class UserUsecaseProxyModule {
   static CREATE_USER_USE_CASE = 'createUserUsecaseProxy'
   static UPDATE_USER_USE_CASE = 'updateUserUseCaseProxy'
   static DELETE_USER_USE_CASE = 'deleteUserUseCaseProxy'
+  static LOGIN_USER_USE_CASE = 'loginUserUseCaseProxy'
   static register(): DynamicModule {
     return {
       module: UserUsecaseProxyModule,
@@ -56,6 +58,12 @@ export class UserUsecaseProxyModule {
           provide: UserUsecaseProxyModule.DELETE_USER_USE_CASE,
           useFactory: (userRepository: UserRepositoryOrm) =>
             new UseCaseProxy(new DeleteUserUseCase.UseCase(userRepository))
+        },
+        {
+          inject: [UserRepositoryOrm],
+          provide: UserUsecaseProxyModule.LOGIN_USER_USE_CASE,
+          useFactory: (userRepository: UserRepositoryOrm) =>
+            new UseCaseProxy(new LoginUseCase.UseCase(userRepository))
         }
       ],
       exports: [
@@ -63,7 +71,8 @@ export class UserUsecaseProxyModule {
         UserUsecaseProxyModule.GET_USER_BY_ID_USE_CASE,
         UserUsecaseProxyModule.CREATE_USER_USE_CASE,
         UserUsecaseProxyModule.UPDATE_USER_USE_CASE,
-        UserUsecaseProxyModule.DELETE_USER_USE_CASE
+        UserUsecaseProxyModule.DELETE_USER_USE_CASE,
+        UserUsecaseProxyModule.LOGIN_USER_USE_CASE
       ]
     }
   }
