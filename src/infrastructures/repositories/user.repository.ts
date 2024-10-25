@@ -6,6 +6,7 @@ import { UserRepository } from '@/domain/repository/user.repository'
 import { UserModel } from '@/domain/models/user'
 import { randomBytes, scrypt, createCipheriv } from 'crypto'
 import { promisify } from 'util'
+import { BadRequestError } from '@/applications/errors/bad-request-erros'
 
 @Injectable()
 export class UserRepositoryOrm implements UserRepository {
@@ -63,6 +64,16 @@ export class UserRepositoryOrm implements UserRepository {
     }
     await this.userRepository.remove(entity)
     return true
+  }
+  async login(email: string, password: string): Promise<UserModel> {
+    const entity = await this.userRepository.findOne({
+      where: { email, password }
+    })
+    if (!entity) {
+      throw new BadRequestError('User not found')
+    }
+
+    return this.toUser(entity)
   }
 
   private toUser(userEntity: User): UserModel {
