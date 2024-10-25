@@ -4,7 +4,7 @@ import { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { UserRepository } from '@/domain/repository/user.repository'
 import { UserModel } from '@/domain/models/user'
-import { randomBytes, scrypt, createCipheriv } from 'crypto'
+import { randomBytes, scrypt, createCipheriv, createDecipheriv } from 'crypto'
 import { promisify } from 'util'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
 
@@ -67,10 +67,22 @@ export class UserRepositoryOrm implements UserRepository {
   }
   async login(email: string, password: string): Promise<UserModel> {
     const entity = await this.userRepository.findOne({
-      where: { email, password }
+      where: { email }
     })
     if (!entity) {
       throw new BadRequestError('User not found')
+    }
+
+    const key = (await promisify(scrypt)(password, 'salt', 32)) as Buffer
+    const iv = Buffer.from(entity.password.slice(0, 32), 'hex')
+    const decipher = createDecipheriv('aes-256-ctr', key, iv)
+    const decryptedPassword = Buffer.concat([
+      decipher.update(Buffer.from(entity.password.slice(32), 'hex')),
+      decipher.final()
+    ]).toString()
+
+    if (decryptedPassword !== password) {
+      throw new BadRequestError('Invalid password')
     }
 
     return this.toUser(entity)
