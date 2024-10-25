@@ -22,6 +22,7 @@ import {
   validateOrReject
 } from 'class-validator'
 import { UserUsecaseProxyModule } from '@/infrastructures/usecaseproxy/user/user.usecase-proxy.module'
+import { LoginUseCase } from '@/applications/usecases/user/login.usecase'
 
 @Controller('user')
 export class UserController {
@@ -35,7 +36,9 @@ export class UserController {
     @Inject(UserUsecaseProxyModule.UPDATE_USER_USE_CASE)
     private readonly updateUserUsecaseProxy: UseCaseProxy<UpdateUserUseCase.UseCase>,
     @Inject(UserUsecaseProxyModule.DELETE_USER_USE_CASE)
-    private readonly deleteUserUsecaseProxy: UseCaseProxy<DeleteUserUseCase.UseCase>
+    private readonly deleteUserUsecaseProxy: UseCaseProxy<DeleteUserUseCase.UseCase>,
+    @Inject(UserUsecaseProxyModule.LOGIN_USER_USE_CASE)
+    private readonly loginUserUsecaseProxy: UseCaseProxy<LoginUseCase.UseCase>
   ) {}
   @Get('/')
   async getAllUsers() {
@@ -87,6 +90,18 @@ export class UserController {
       status: 'OK',
       code: 200,
       message: 'User created',
+      data: result
+    }
+  }
+  @Post('/login')
+  async loginUser(@Body() email: string, password: string) {
+    const result = await this.loginUserUsecaseProxy
+      .getInstance()
+      .execute({ email, password })
+    return {
+      status: 'OK',
+      code: 200,
+      message: 'User logged in',
       data: result
     }
   }
