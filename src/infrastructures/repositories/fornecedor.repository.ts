@@ -4,6 +4,7 @@ import { Fornecedor } from '../entities/fornecedor.entity'
 import { Repository } from 'typeorm'
 import { FornecedorModel } from '@/domain/models/fornecedor'
 import { FornecedorRepository } from '@/domain/repository/fornecedor.repository'
+import { BadRequestError } from '@/applications/errors/bad-request-erros'
 
 @Injectable()
 export class FornecedorRepositoryOrm implements FornecedorRepository {
@@ -27,13 +28,19 @@ export class FornecedorRepositoryOrm implements FornecedorRepository {
     }
     return fornecedor
   }
-
   async save(fornecedor: Fornecedor): Promise<Fornecedor> {
+    const existingFornecedor = await this.fornecedorRepository.findOne({
+      where: [{ cnpj: fornecedor.cnpj }, { contato: fornecedor.contato }]
+    })
+
+    if (existingFornecedor) {
+      throw new BadRequestError('CNPJ ou contato já cadastrado.')
+    }
+
     const entity = this.fornecedorRepository.create(fornecedor)
     await this.fornecedorRepository.save(entity)
     return this.toFornecedor(entity)
   }
-
   async update(fornecedor: Fornecedor): Promise<Fornecedor> {
     const entity = await this.fornecedorRepository.findOneBy({
       id: fornecedor.id
