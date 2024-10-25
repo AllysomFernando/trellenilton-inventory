@@ -9,27 +9,28 @@ export namespace LoginUseCase {
     password: string
   }
 
-  export type Output = UserModel
+  export type Output = {
+    user: UserModel
+    token: string
+  }
 
   export class UseCase implements DefaultUseCase<Input, Output> {
     constructor(private userRepository: UserRepository) {}
 
     async execute(input: Input): Promise<Output> {
       if (!input.email || !input.password) {
-        throw new BadRequestError('Email, nome e senha são obrigatórios.')
+        throw new BadRequestError('Email e senha são obrigatórios.')
       }
-      const user = new UserModel()
-      user.email = input.email
-      user.password = input.password
+
       try {
-        const entity = await this.userRepository.login(
-          user.email,
-          user.password
+        const { user, token } = await this.userRepository.login(
+          input.email,
+          input.password
         )
-        if (!entity) {
+        if (!user || !token) {
           throw new BadRequestError('Erro ao logar')
         }
-        return entity
+        return { user, token }
       } catch (e) {
         throw new BadRequestError('Erro ao logar')
       }
