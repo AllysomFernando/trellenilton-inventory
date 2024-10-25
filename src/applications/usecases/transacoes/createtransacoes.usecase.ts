@@ -55,8 +55,8 @@ export namespace CreateTransacoesUseCase {
 
       const transacao = new TransacaoModel()
       transacao.data = input.data
-      transacao.pedidoId = input.pedidoId
-      transacao.produtoId = input.produtoId
+      transacao.pedidoId = pedido.id
+      transacao.produtoId = produto.id
       transacao.tipo = input.tipo
       transacao.valor = input.valor
 
