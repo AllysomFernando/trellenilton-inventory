@@ -6,5 +6,8 @@ export interface UserRepository {
   save(user: UserModel): Promise<UserModel>
   update(user: UserModel): Promise<UserModel>
   delete(id: number): Promise<boolean>
-  login(email: string, password: string): Promise<UserModel>
+  login(
+    email: string,
+    password: string
+  ): Promise<{ user: UserModel; token: string }>
 }
