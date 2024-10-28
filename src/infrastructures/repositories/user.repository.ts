@@ -3,7 +3,7 @@ import { User } from '../entities/user.entity'
 import { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { UserRepository } from '@/domain/repository/user.repository'
-import { UserModel } from '@/domain/models/user'
+import { UserModel, UsuarioEnum } from '@/domain/models/user'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
 import * as jwt from 'jsonwebtoken'
 import * as bcrypt from 'bcrypt'
@@ -55,6 +55,7 @@ export class UserRepositoryOrm implements UserRepository {
     entity.email = user.email
     entity.name = user.name
     entity.password = user.password
+    entity.tipo = user.tipo
     await this.userRepository.save(entity)
     return this.toUser(entity)
   }
@@ -99,7 +100,7 @@ export class UserRepositoryOrm implements UserRepository {
     user.email = userEntity.email
     user.name = userEntity.name
     user.password = userEntity.password
-
+    user.tipo = userEntity.tipo as UsuarioEnum
     return user
   }
 }
