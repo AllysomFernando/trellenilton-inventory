@@ -1,8 +1,9 @@
-import { UserModel, UsuarioEnum } from '@/domain/models/user'
+import { UserModel } from '@/domain/models/user'
 import { UseCase as DefaultUseCase } from '../use-case'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
 import { UserRepository } from '@/domain/repository/user.repository'
 import { EmailValidator } from '@/applications/validators/email.validators'
+import { UsuarioEnum } from '@/applications/enum/user.enum'
 
 export namespace CreateUserUseCase {
   export type Input = {
