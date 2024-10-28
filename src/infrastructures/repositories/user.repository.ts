@@ -3,10 +3,11 @@ import { User } from '../entities/user.entity'
 import { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { UserRepository } from '@/domain/repository/user.repository'
-import { UserModel, UsuarioEnum } from '@/domain/models/user'
+import { UserModel } from '@/domain/models/user'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
 import * as jwt from 'jsonwebtoken'
 import * as bcrypt from 'bcrypt'
+import { UsuarioEnum } from '@/applications/enum/user.enum'
 
 @Injectable()
 export class UserRepositoryOrm implements UserRepository {
