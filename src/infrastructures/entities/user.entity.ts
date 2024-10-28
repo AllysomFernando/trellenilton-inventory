@@ -1,3 +1,4 @@
+import { UsuarioEnum } from '@/domain/models/user'
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity('user')
@@ -13,4 +14,7 @@ export class User {
 
   @Column('varchar')
   password: string
+
+  @Column('varchar')
+  tipo: UsuarioEnum
 }
