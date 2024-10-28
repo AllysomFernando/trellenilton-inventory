@@ -1,4 +1,4 @@
-import { UserModel } from '@/domain/models/user'
+import { UserModel, UsuarioEnum } from '@/domain/models/user'
 import { UseCase as DefaultUseCase } from '../use-case'
 import { UserRepository } from '@/domain/repository/user.repository'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
@@ -10,6 +10,7 @@ export namespace UpdateUserUseCase {
     email: string
     name: string
     password: string
+    tipo: UsuarioEnum
   }
 
   export type Output = UserModel
