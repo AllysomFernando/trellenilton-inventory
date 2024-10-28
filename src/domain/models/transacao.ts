@@ -1,11 +1,9 @@
-export enum TransacaoEnum {
-  Entrada = 'Entrada',
-  Saida = 'Saída'
-}
+import { TransacaoEnum } from "@/applications/enum/transacao.enum"
+
 
 export class TransacaoModel {
   id: number
-  tipo: TransacaoEnum.Entrada | TransacaoEnum.Saida
+  tipo: TransacaoEnum
   data: string
   valor: number
   produtoId: number
