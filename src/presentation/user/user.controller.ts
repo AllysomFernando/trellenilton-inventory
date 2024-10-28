@@ -24,6 +24,15 @@ import {
 import { UserUsecaseProxyModule } from '@/infrastructures/usecaseproxy/user/user.usecase-proxy.module'
 import { LoginUseCase } from '@/applications/usecases/user/login.usecase'
 
+class LoginDto {
+  @IsEmail()
+  email: string
+
+  @IsNotEmpty()
+  @MinLength(6)
+  password: string
+}
+
 @Controller('user')
 export class UserController {
   constructor(
@@ -40,6 +49,7 @@ export class UserController {
     @Inject(UserUsecaseProxyModule.LOGIN_USER_USE_CASE)
     private readonly loginUserUsecaseProxy: UseCaseProxy<LoginUseCase.UseCase>
   ) {}
+
   @Get('/')
   async getAllUsers() {
     const result = await this.getAllUsersUsecaseProxy.getInstance().execute()
@@ -50,6 +60,7 @@ export class UserController {
       data: result
     }
   }
+
   @Get('/:id')
   async getUserById(@Param('id') id: number) {
     const result = await this.getUserByIdUsecaseProxy
@@ -62,6 +73,7 @@ export class UserController {
       data: result
     }
   }
+
   @Post('/')
   async createUser(@Body() createUserDto: CreateUserDto) {
     class CreateUserValidation {
@@ -93,11 +105,13 @@ export class UserController {
       data: result
     }
   }
+
   @Post('/login')
-  async loginUser(@Body() email: string, password: string) {
+  async loginUser(@Body() loginDto: LoginDto) {
+    await validateOrReject(loginDto)
     const result = await this.loginUserUsecaseProxy
       .getInstance()
-      .execute({ email, password })
+      .execute(loginDto)
     return {
       status: 'OK',
       code: 200,
@@ -105,6 +119,7 @@ export class UserController {
       data: result
     }
   }
+
   @Patch('/:id')
   async updateUser(
     @Param('id') id: number,
@@ -139,6 +154,7 @@ export class UserController {
       data: result
     }
   }
+
   @Delete('/:id')
   async deleteUser(@Param('id') id: number) {
     const result = await this.deleteUserUsecaseProxy
