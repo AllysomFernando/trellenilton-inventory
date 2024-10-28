@@ -1,4 +1,4 @@
-import { UserModel } from '@/domain/models/user'
+import { UserModel, UsuarioEnum } from '@/domain/models/user'
 import { UseCase as DefaultUseCase } from '../use-case'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
 import { UserRepository } from '@/domain/repository/user.repository'
@@ -9,6 +9,7 @@ export namespace CreateUserUseCase {
     email: string
     name: string
     password: string
+    tipo: UsuarioEnum
   }
 
   export type Output = UserModel
@@ -20,8 +21,10 @@ export namespace CreateUserUseCase {
       if (!EmailValidator.isValid(input.email)) {
         throw new BadRequestError('Email inválido.')
       }
-      if (!input.email || !input.name || !input.password) {
-        throw new BadRequestError('Email, nome e senha são obrigatórios.')
+      if (!input.email || !input.name || !input.password || !input.tipo) {
+        throw new BadRequestError(
+          'Email, nome e senha e tipos são obrigatórios.'
+        )
       }
       const user = new UserModel()
       user.email = input.email
