@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm'
 
 export class User1728667070380 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -10,29 +10,34 @@ export class User1728667070380 implements MigrationInterface {
             name: 'id',
             type: 'int',
             isPrimary: true,
-            isGenerated: true,
+            isGenerated: true
           },
           {
             name: 'name',
             type: 'varchar',
-            isNullable: false,
+            isNullable: false
           },
           {
             name: 'email',
             type: 'varchar',
-            isNullable: false,
+            isNullable: false
           },
           {
             name: 'password',
             type: 'varchar',
-            isNullable: false,
+            isNullable: false
           },
-        ],
-      }),
-    );
+          {
+            name: 'tipo',
+            type: 'varchar',
+            isNullable: false
+          }
+        ]
+      })
+    )
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('user');
+    await queryRunner.dropTable('user')
   }
 }
