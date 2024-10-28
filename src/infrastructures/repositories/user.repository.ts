@@ -4,10 +4,9 @@ import { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { UserRepository } from '@/domain/repository/user.repository'
 import { UserModel } from '@/domain/models/user'
-import { randomBytes, scrypt, createCipheriv, createDecipheriv } from 'crypto'
-import { promisify } from 'util'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
 import * as jwt from 'jsonwebtoken'
+import * as bcrypt from 'bcrypt'
 
 @Injectable()
 export class UserRepositoryOrm implements UserRepository {
@@ -34,14 +33,16 @@ export class UserRepositoryOrm implements UserRepository {
 
   async save(user: UserModel): Promise<UserModel> {
     const entity = this.userRepository.create(user)
-    const iv = randomBytes(16)
-    const key = (await promisify(scrypt)(entity.password, 'salt', 32)) as Buffer
-    const cipher = createCipheriv('aes-256-ctr', key, iv)
-    const encryptedPassword = Buffer.concat([
-      cipher.update(entity.password),
-      cipher.final()
-    ]).toString('hex')
-    entity.password = encryptedPassword
+    const userExists = await this.userRepository.findOneBy({
+      email: entity.email
+    })
+    if (userExists) {
+      throw new BadRequestError('User already exists')
+    }
+    const saltOrRounds = 10
+    const hash = await bcrypt.hash(entity.password, saltOrRounds)
+    entity.password = hash
+
     await this.userRepository.save(entity)
     return this.toUser(entity)
   }
@@ -66,6 +67,7 @@ export class UserRepositoryOrm implements UserRepository {
     await this.userRepository.remove(entity)
     return true
   }
+
   async login(
     email: string,
     password: string
@@ -77,28 +79,18 @@ export class UserRepositoryOrm implements UserRepository {
       throw new BadRequestError('User not found')
     }
 
-    const iv = Buffer.from(entity.password.slice(0, 32), 'hex')
-    const encryptedPassword = entity.password.slice(32)
-    const key = (await promisify(scrypt)(password, 'salt', 32)) as Buffer
-    const decipher = createDecipheriv('aes-256-ctr', key, iv)
-    const decryptedPassword = Buffer.concat([
-      decipher.update(Buffer.from(encryptedPassword, 'hex')),
-      decipher.final()
-    ]).toString()
-
-    if (decryptedPassword !== password) {
+    const isValid = await bcrypt.compare(password, entity.password)
+    if (!isValid) {
       throw new BadRequestError('Invalid password')
     }
 
     const user = this.toUser(entity)
-    const token = jwt.sign(
-      { id: user.id, email: user.email },
-      'trelles',
-      { expiresIn: '1h' }
-    )
+    const token = jwt.sign({ id: user.id, email: user.email }, 'trelles', {
+      expiresIn: '3h'
+    })
 
     return { user, token }
-  } 
+  }
 
   private toUser(userEntity: User): UserModel {
     const user: UserModel = new UserModel()
