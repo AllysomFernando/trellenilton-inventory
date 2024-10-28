@@ -1,4 +1,4 @@
-import { UsuarioEnum } from '@/domain/models/user'
+import { UsuarioEnum } from '@/applications/enum/user.enum'
 
 export class CreateUserDto {
   name: string
