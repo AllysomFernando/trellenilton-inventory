@@ -1,14 +1,15 @@
-import { TransacaoEnum, TransacaoModel } from '@/domain/models/transacao'
+import { TransacaoModel } from '@/domain/models/transacao'
 import { UseCase as DefaultUseCase } from '../use-case'
 import { TransacaoRepository } from '@/domain/repository/transacao.repository'
 import { ProdutoRepository } from '@/domain/repository/produto.repository'
 import { PedidoRepository } from '@/domain/repository/pedido.repository'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
+import { TransacaoEnum } from '@/applications/enum/transacao.enum'
 
 export namespace CreateTransacoesUseCase {
   export type Input = {
     data: string
-    tipo: TransacaoEnum.Entrada | TransacaoEnum.Saida
+    tipo: TransacaoEnum
     valor: number
     produtoId: number
     pedidoId: number

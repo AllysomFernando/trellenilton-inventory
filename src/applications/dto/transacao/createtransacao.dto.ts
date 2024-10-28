@@ -1,4 +1,4 @@
-import { TransacaoEnum } from '@/domain/models/transacao'
+import { TransacaoEnum } from '@/applications/enum/transacao.enum'
 
 export class CreateTransacaoDto {
   tipo: TransacaoEnum

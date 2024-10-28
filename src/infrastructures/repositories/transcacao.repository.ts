@@ -3,10 +3,11 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Transacao } from '../entities/transacao'
 import { Repository } from 'typeorm'
-import { TransacaoEnum, TransacaoModel } from '@/domain/models/transacao'
+import { TransacaoModel } from '@/domain/models/transacao'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
 import { Produto } from '../entities/produto.entity'
 import { Pedido } from '../entities/pedido.entity'
+import { TransacaoEnum } from '@/applications/enum/transacao.enum'
 
 @Injectable()
 export class TransacaoRepositoryOrm implements TransacaoRepository {

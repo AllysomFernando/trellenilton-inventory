@@ -1,4 +1,3 @@
-import { TransacaoEnum } from '@/domain/models/transacao'
 import {
   Column,
   Entity,
@@ -8,6 +7,7 @@ import {
 } from 'typeorm'
 import { Produto } from './produto.entity'
 import { Pedido } from './pedido.entity'
+import { TransacaoEnum } from '@/applications/enum/transacao.enum'
 
 @Entity('transacao')
 export class Transacao {
