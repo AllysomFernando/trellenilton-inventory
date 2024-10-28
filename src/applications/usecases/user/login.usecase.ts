@@ -18,22 +18,14 @@ export namespace LoginUseCase {
     constructor(private userRepository: UserRepository) {}
 
     async execute(input: Input): Promise<Output> {
-      if (!input.email || !input.password) {
-        throw new BadRequestError('Email e senha são obrigatórios.')
-      }
-
-      try {
-        const { user, token } = await this.userRepository.login(
-          input.email,
-          input.password
-        )
-        if (!user || !token) {
-          throw new BadRequestError('Erro ao logar')
-        }
-        return { user, token }
-      } catch (e) {
+      const { user, token } = await this.userRepository.login(
+        input.email,
+        input.password
+      )
+      if (!user || !token) {
         throw new BadRequestError('Erro ao logar')
       }
+      return { user, token }
     }
   }
 }
