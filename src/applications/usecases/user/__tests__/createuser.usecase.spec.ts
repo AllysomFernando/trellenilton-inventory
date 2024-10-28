@@ -2,6 +2,7 @@ import { CreateUserUseCase } from '@/applications/usecases/user/createuser.useca
 import { UserRepository } from '@/domain/repository/user.repository'
 import { UserModel } from '@/domain/models/user'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
+import { UsuarioEnum } from '@/applications/enum/user.enum'
 
 const mockUserRepository: UserRepository = {
   findAll: jest.fn(),
@@ -19,7 +20,7 @@ describe('CreateUserUseCase', () => {
   })
 
   it('should throw an error if required fields are missing', async () => {
-    const input = { email: '', name: '', password: '' }
+    const input = { email: '', name: '', password: '', tipo: 'Admin' as UsuarioEnum }
     await expect(createUserUseCase.execute(input)).rejects.toThrow(
       BadRequestError
     )
