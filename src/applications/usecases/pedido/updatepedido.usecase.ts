@@ -1,9 +1,10 @@
-import { PedidoModel, PedidoStatus } from '@/domain/models/pedido'
+import { PedidoModel } from '@/domain/models/pedido'
 import { UseCase as DefaultUseCase } from '../use-case'
 import { PedidoRepository } from '@/domain/repository/pedido.repository'
 import { GetPedidoByIdUseCase } from './getpedidobyid.usecase'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
 import { ClienteRepository } from '@/domain/repository/cliente.repository'
+import { PedidoEnum } from '@/applications/enum/pedido.enum'
 
 export namespace UpdatePedidoUseCase {
   export type Input = {
@@ -46,7 +47,7 @@ export namespace UpdatePedidoUseCase {
       pedido.id = input.id
       pedido.data = input.data
       pedido.clienteId = input.clienteId
-      pedido.status = input.status as PedidoStatus
+      pedido.status = input.status as PedidoEnum
       pedido.total = input.total
       try {
         const entity = await this.pedidoRepository.update(pedido)

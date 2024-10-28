@@ -1,13 +1,14 @@
-import { PedidoModel, PedidoStatus } from '@/domain/models/pedido'
+import { PedidoModel } from '@/domain/models/pedido'
 import { UseCase as DefaultUseCase } from '../use-case'
 import { PedidoRepository } from '@/domain/repository/pedido.repository'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
+import { PedidoEnum } from '@/applications/enum/pedido.enum'
 
 export namespace CreatePedidoUseCase {
   export type Input = {
     data: string
     clienteId: number
-    status: PedidoStatus
+    status: PedidoEnum
     itens: { produtoId: number; quantidade: number; preco: number }[]
   }
 

@@ -1,7 +1,8 @@
 import { PedidoRepository } from '@/domain/repository/pedido.repository'
-import { PedidoModel, PedidoStatus } from '@/domain/models/pedido'
+import { PedidoModel } from '@/domain/models/pedido'
 import { GetAllPedidoUseCase } from '../getallpedido.usecase'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
+import { PedidoEnum } from '@/applications/enum/pedido.enum'
 
 const mockPedidoRepository: PedidoRepository = {
   findAll: jest.fn(),
@@ -9,39 +10,37 @@ const mockPedidoRepository: PedidoRepository = {
   save: jest.fn(),
   update: jest.fn(),
   delete: jest.fn(),
-  findByClienteId: jest.fn(),
+  findByClienteId: jest.fn()
 }
 
 describe('GetAllPedidoUseCase', () => {
   let getAllPedidoUseCase: GetAllPedidoUseCase.UseCase
 
   beforeEach(() => {
-    getAllPedidoUseCase = new GetAllPedidoUseCase.UseCase(
-      mockPedidoRepository
-    )
+    getAllPedidoUseCase = new GetAllPedidoUseCase.UseCase(mockPedidoRepository)
   })
 
   it('should return a list of pedidos successfully', async () => {
     const pedidos: PedidoModel[] = [
       {
         id: 1,
-        data: new Date('2023-10-01'),
+        data: '2023-10-01',
         clienteId: 1,
-        status: PedidoStatus.Concluido,
-        total: 100
+        status: PedidoEnum.Concluido,
+        total: 100,
+        itens: []
       },
       {
         id: 2,
-        data: new Date('2023-10-02'),
+        data: '2023-10-01',
         clienteId: 2,
-        status: PedidoStatus.Pendente,
-        total: 200
+        status: PedidoEnum.Pendente,
+        total: 200,
+        itens: []
       }
     ]
 
-    ;(mockPedidoRepository.findAll as jest.Mock).mockResolvedValueOnce(
-      pedidos
-    )
+    ;(mockPedidoRepository.findAll as jest.Mock).mockResolvedValueOnce(pedidos)
 
     const result = await getAllPedidoUseCase.execute()
     expect(result).toEqual(pedidos)

@@ -3,7 +3,8 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Pedido } from '../entities/pedido.entity'
 import { Repository } from 'typeorm'
-import { PedidoModel, PedidoStatus } from '@/domain/models/pedido'
+import { PedidoModel } from '@/domain/models/pedido'
+import { PedidoEnum } from '@/applications/enum/pedido.enum'
 
 @Injectable()
 export class PedidoRepositoryOrm implements PedidoRepository {
@@ -82,7 +83,7 @@ export class PedidoRepositoryOrm implements PedidoRepository {
     pedido.id = pedidoEntity.id
     pedido.clienteId = pedidoEntity.cliente.id
     pedido.data = pedidoEntity.data
-    pedido.status = pedidoEntity.status as PedidoStatus
+    pedido.status = pedidoEntity.status as PedidoEnum
     pedido.total = pedidoEntity.total
     pedido.itens = Array.isArray(pedidoEntity.itens)
       ? pedidoEntity.itens.map((item) => ({

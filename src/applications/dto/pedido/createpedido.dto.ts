@@ -1,9 +1,9 @@
-import { PedidoStatus } from '@/domain/models/pedido'
+import { PedidoEnum } from "@/applications/enum/pedido.enum"
 
 export class CreatePedidoDto {
   data: string
   clienteId: number
-  status: PedidoStatus
+  status: PedidoEnum
   total: number
   itens: { produtoId: number; quantidade: number; preco: number }[]
 }

@@ -1,13 +1,10 @@
-export enum PedidoStatus {
-  Pendente = 'Pendente',
-  Concluido = 'Concluído'
-}
+import { PedidoEnum } from '@/applications/enum/pedido.enum'
 
 export class PedidoModel {
   id: number
   data: string
   clienteId: number
-  status: PedidoStatus.Concluido | PedidoStatus.Pendente
+  status: PedidoEnum
   total: number
   itens: { produtoId: number; quantidade: number; preco: number }[]
 }

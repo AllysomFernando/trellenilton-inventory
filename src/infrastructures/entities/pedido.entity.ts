@@ -1,4 +1,3 @@
-import { PedidoStatus } from '../../domain/models/pedido'
 import {
   Column,
   Entity,
@@ -9,6 +8,7 @@ import {
 } from 'typeorm'
 import { Cliente } from './cliente.entity'
 import { ItemPedido } from './itemPedido.entity'
+import { PedidoEnum } from '@/applications/enum/pedido.enum'
 
 @Entity('pedido')
 export class Pedido {
@@ -22,8 +22,8 @@ export class Pedido {
   @Column('varchar')
   data: string
 
-  @Column('varchar') 
-  status: PedidoStatus
+  @Column('varchar')
+  status: PedidoEnum
 
   @Column('decimal')
   total: number
