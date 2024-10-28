@@ -77,11 +77,12 @@ export class UserRepositoryOrm implements UserRepository {
       throw new BadRequestError('User not found')
     }
 
-    const key = (await promisify(scrypt)(password, 'salt', 32)) as Buffer
     const iv = Buffer.from(entity.password.slice(0, 32), 'hex')
+    const encryptedPassword = entity.password.slice(32)
+    const key = (await promisify(scrypt)(password, 'salt', 32)) as Buffer
     const decipher = createDecipheriv('aes-256-ctr', key, iv)
     const decryptedPassword = Buffer.concat([
-      decipher.update(Buffer.from(entity.password.slice(32), 'hex')),
+      decipher.update(Buffer.from(encryptedPassword, 'hex')),
       decipher.final()
     ]).toString()
 
@@ -97,7 +98,7 @@ export class UserRepositoryOrm implements UserRepository {
     )
 
     return { user, token }
-  }
+  } 
 
   private toUser(userEntity: User): UserModel {
     const user: UserModel = new UserModel()
