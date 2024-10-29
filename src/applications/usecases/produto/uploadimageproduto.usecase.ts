@@ -6,7 +6,9 @@ export namespace UploadImageProdutoUseCase {
     image: string
   }
 
-  export type Output = void
+  export type Output = {
+    imageUrl: string
+  }
 
   export class UseCase implements DefaultUseCase<Input, Output> {
     constructor(private produtoRepository: ProdutoRepository) {}
@@ -16,7 +18,8 @@ export namespace UploadImageProdutoUseCase {
         throw new Error('Imagem é obrigatória.')
       }
       try {
-        await this.produtoRepository.uploadImage(input.image)
+        const imageUrl = await this.produtoRepository.uploadImage(input.image)
+        return { imageUrl }
       } catch (error) {
         throw new Error('Erro ao fazer upload da imagem.')
       }
