@@ -87,7 +87,7 @@ export class ProdutoController {
       data: result
     }
   }
-  @Post('/upload-image')
+  @Post('/upload')
   @UseInterceptors(FileInterceptor('image'))
   async uploadImageProduto(@UploadedFile() file: Express.Multer.File) {
     const result = await this.uploadImageProdutoUsecaseProxy
