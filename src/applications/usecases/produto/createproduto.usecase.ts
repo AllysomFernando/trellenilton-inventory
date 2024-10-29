@@ -10,7 +10,7 @@ export namespace CreateProdutoUseCase {
     description: string
     price: number
     quantity: number
-    image: string
+    image: Express.Multer.File
     fornecedorId: number
   }
 
@@ -43,7 +43,10 @@ export namespace CreateProdutoUseCase {
           'A quantidade do produto deve ser maior que zero.'
         )
       }
-
+      let imageUrl = ''
+      if (input.image) {
+        imageUrl = await this.produtoRepository.uploadImage(input.image)
+      }
       const fornecedor = await this.fornecedorRepository.findById(
         input.fornecedorId
       )
