@@ -5,7 +5,6 @@ import { GetAllProdutoUseCase } from '@/applications/usecases/produto/getallprod
 import { GetProdutoByFornecedorIdUseCase } from '@/applications/usecases/produto/getprodutobyfornecedorid'
 import { GetProdutoByIdUseCase } from '@/applications/usecases/produto/getprodutobyid.usecase'
 import { UpdateProdutoUseCase } from '@/applications/usecases/produto/updateproduto.usecase'
-import { UploadImageProdutoUseCase } from '@/applications/usecases/produto/uploadimageproduto.usecase'
 import { ProdutoUsecaseProxyModule } from '@/infrastructures/usecaseproxy/produto/produto.usecase-proxy.modules'
 import { UseCaseProxy } from '@/infrastructures/usecaseproxy/usecase-proxy'
 import {
@@ -36,9 +35,7 @@ export class ProdutoController {
     @Inject(ProdutoUsecaseProxyModule.DELETE_PRODUTO_USE_CASE)
     private readonly deleteProdutoUsecaseProxy: UseCaseProxy<DeleteProdutoUseCase.UseCase>,
     @Inject(ProdutoUsecaseProxyModule.GET_PRODUTO_BY_FORNECEDOR_ID_USE_CASE)
-    private readonly getProdutoByFornecedorIdUsecaseProxy: UseCaseProxy<GetProdutoByFornecedorIdUseCase.UseCase>,
-    @Inject(ProdutoUsecaseProxyModule.UPLOAD_IMAGE_PRODUTO_USE_CASE)
-    private readonly uploadImageProdutoUsecaseProxy: UseCaseProxy<UploadImageProdutoUseCase.UseCase>
+    private readonly getProdutoByFornecedorIdUsecaseProxy: UseCaseProxy<GetProdutoByFornecedorIdUseCase.UseCase>
   ) {}
 
   @Get('/')
@@ -76,10 +73,14 @@ export class ProdutoController {
     }
   }
   @Post('/')
-  async createProduto(@Body() createProdutoDto: CreateProdutoDto) {
+  @UseInterceptors(FileInterceptor('image'))
+  async createProduto(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() createProdutoDto: CreateProdutoDto
+  ) {
     const result = await this.createProdutoUsecaseProxy
       .getInstance()
-      .execute(createProdutoDto)
+      .execute({ ...createProdutoDto, image: file })
     return {
       status: 'OK',
       code: 200,
@@ -87,19 +88,7 @@ export class ProdutoController {
       data: result
     }
   }
-  @Post('/upload')
-  @UseInterceptors(FileInterceptor('image'))
-  async uploadImageProduto(@UploadedFile() file: Express.Multer.File) {
-    const result = await this.uploadImageProdutoUsecaseProxy
-      .getInstance()
-      .execute({ file })
-    return {
-      status: 'OK',
-      code: 200,
-      message: 'Image uploaded',
-      data: result
-    }
-  }
+
   @Patch('/:id')
   async updateProduto(
     @Param('id') id: number,
