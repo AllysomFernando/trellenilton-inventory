@@ -84,15 +84,15 @@ export class ProdutoRepositoryOrm implements ProdutoRepository {
     return produtos.map((produto) => this.toProduto(produto))
   }
 
-  async uploadImage(image: string): Promise<string> {
+  async uploadImage(file: Express.Multer.File): Promise<string> {
     await fs.mkdir(this.uploadDir, { recursive: true })
-    const fileName = path.basename(image)
-    const filePath = path.join(this.uploadDir, fileName)
+    const filePath = path.join(this.uploadDir, file.originalname)
+    await fs.writeFile(filePath, file.buffer)
 
-    await fs.copyFile(image, filePath)
+    await fs.copyFile(file.originalname, filePath)
 
     console.log(`Imagem salva em: ${filePath}`)
-    return `/uploads/${fileName}`
+    return `/uploads/${file.originalname}`
   }
 
   private toProduto(produtoEntity: Produto): ProdutoModel {
