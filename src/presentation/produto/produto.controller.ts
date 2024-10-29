@@ -16,8 +16,11 @@ import {
   Inject,
   Param,
   Patch,
-  Post
+  Post,
+  UploadedFile,
+  UseInterceptors
 } from '@nestjs/common'
+import { FileInterceptor } from '@nestjs/platform-express'
 
 @Controller('produto')
 export class ProdutoController {
@@ -85,12 +88,16 @@ export class ProdutoController {
     }
   }
   @Post('/upload-image')
-  async uploadImageProduto(@Body() { image }: { image: string }) {
-    await this.uploadImageProdutoUsecaseProxy.getInstance().execute({ image })
+  @UseInterceptors(FileInterceptor('image'))
+  async uploadImageProduto(@UploadedFile() file: Express.Multer.File) {
+    const result = await this.uploadImageProdutoUsecaseProxy
+      .getInstance()
+      .execute({ file })
     return {
       status: 'OK',
       code: 200,
-      message: 'Image uploaded'
+      message: 'Image uploaded',
+      data: result
     }
   }
   @Patch('/:id')
