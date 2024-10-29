@@ -10,6 +10,7 @@ import { FornecedorRepository } from '@/domain/repository/fornecedor.repository'
 import { UpdateProdutoUseCase } from '@/applications/usecases/produto/updateproduto.usecase'
 import { DeleteProdutoUseCase } from '@/applications/usecases/produto/deleteproduto.usecase'
 import { FornecedorRepositoryOrm } from '@/infrastructures/repositories/fornecedor.repository'
+import { UploadImageProdutoUseCase } from '@/applications/usecases/produto/uploadimageproduto.usecase'
 
 @Module({
   imports: [EnvironmentConfigModule, RepositoriesModule]
@@ -22,6 +23,7 @@ export class ProdutoUsecaseProxyModule {
   static DELETE_PRODUTO_USE_CASE = 'deleteProdutoUseCaseProxy'
   static GET_PRODUTO_BY_FORNECEDOR_ID_USE_CASE =
     'getProdutoByFornecedorIdUseCase'
+  static UPLOAD_IMAGE_PRODUTO_USE_CASE = 'uploadImageProdutoUseCase'
 
   static register(): DynamicModule {
     return {
@@ -84,6 +86,14 @@ export class ProdutoUsecaseProxyModule {
             new UseCaseProxy(
               new GetProdutoByIdUseCase.UseCase(produtoRepository)
             )
+        },
+        {
+          inject: [ProdutoRepositoryOrm],
+          provide: ProdutoUsecaseProxyModule.UPLOAD_IMAGE_PRODUTO_USE_CASE,
+          useFactory: (produtoRepository: ProdutoRepositoryOrm) =>
+            new UseCaseProxy(
+              new UploadImageProdutoUseCase.UseCase(produtoRepository)
+            )
         }
       ],
       exports: [
@@ -92,7 +102,8 @@ export class ProdutoUsecaseProxyModule {
         ProdutoUsecaseProxyModule.CREATE_PRODUTO_USE_CASE,
         ProdutoUsecaseProxyModule.UPDATE_PRODUTO_USE_CASE,
         ProdutoUsecaseProxyModule.DELETE_PRODUTO_USE_CASE,
-        ProdutoUsecaseProxyModule.GET_PRODUTO_BY_FORNECEDOR_ID_USE_CASE
+        ProdutoUsecaseProxyModule.GET_PRODUTO_BY_FORNECEDOR_ID_USE_CASE,
+        ProdutoUsecaseProxyModule.UPLOAD_IMAGE_PRODUTO_USE_CASE
       ]
     }
   }
