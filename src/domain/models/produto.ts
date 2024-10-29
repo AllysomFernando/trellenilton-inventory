@@ -4,6 +4,6 @@ export class ProdutoModel {
   description: string
   price: number
   quantity: number
-  image: string
+  image: Express.Multer.File
   fornecedorId: number
 }
