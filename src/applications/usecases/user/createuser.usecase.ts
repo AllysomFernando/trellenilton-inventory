@@ -31,6 +31,7 @@ export namespace CreateUserUseCase {
       user.email = input.email
       user.name = input.name
       user.password = input.password
+      user.tipo = input.tipo
       try {
         const entity = await this.userRepository.save(user)
         if (!entity) {
