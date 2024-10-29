@@ -102,6 +102,7 @@ export class ProdutoRepositoryOrm implements ProdutoRepository {
     produto.description = produtoEntity.description
     produto.price = produtoEntity.price
     produto.quantity = produtoEntity.quantity
+    produto.image = produtoEntity.image
     produto.fornecedorId = produtoEntity.fornecedor.id
     return produto
   }
