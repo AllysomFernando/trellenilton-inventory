@@ -99,13 +99,25 @@ export class ProdutoController {
   }
 
   @Patch('/:id')
+  @UseInterceptors(FileInterceptor('image'))
   async updateProduto(
     @Param('id') id: number,
-    @Body() updateProdutoDto: CreateProdutoDto
+    @UploadedFile() file: Express.Multer.File,
+    @Body('name') name: string,
+    @Body('description') description: string,
+    @Body('price') price: string,
+    @Body('quantity') quantity: string,
+    @Body('fornecedorId') fornecedorId: string
   ) {
-    const result = await this.updateProdutoUsecaseProxy
-      .getInstance()
-      .execute({ id, ...updateProdutoDto })
+    const result = await this.updateProdutoUsecaseProxy.getInstance().execute({
+      id,
+      name,
+      description,
+      price: price ? Number(price) : undefined,
+      quantity: quantity ? Number(quantity) : undefined,
+      image: file,
+      fornecedorId: fornecedorId ? Number(fornecedorId) : undefined
+    })
     return {
       status: 'OK',
       code: 200,
