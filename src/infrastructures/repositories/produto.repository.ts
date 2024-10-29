@@ -89,8 +89,6 @@ export class ProdutoRepositoryOrm implements ProdutoRepository {
     const filePath = path.join(this.uploadDir, file.originalname)
     await fs.writeFile(filePath, file.buffer)
 
-    await fs.copyFile(file.originalname, filePath)
-
     console.log(`Imagem salva em: ${filePath}`)
     return `/uploads/${file.originalname}`
   }
