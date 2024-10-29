@@ -76,11 +76,20 @@ export class ProdutoController {
   @UseInterceptors(FileInterceptor('image'))
   async createProduto(
     @UploadedFile() file: Express.Multer.File,
-    @Body() createProdutoDto: CreateProdutoDto
+    @Body('name') name: string,
+    @Body('description') description: string,
+    @Body('price') price: string,
+    @Body('quantity') quantity: string,
+    @Body('fornecedorId') fornecedorId: string
   ) {
-    const result = await this.createProdutoUsecaseProxy
-      .getInstance()
-      .execute({ ...createProdutoDto, image: file })
+    const result = await this.createProdutoUsecaseProxy.getInstance().execute({
+      name,
+      description,
+      price: Number(price),
+      quantity: Number(quantity),
+      image: file,
+      fornecedorId: Number(fornecedorId)
+    })
     return {
       status: 'OK',
       code: 200,
