@@ -18,8 +18,9 @@ export namespace UploadImageProdutoUseCase {
       if (!input.file) {
         throw new Error('Imagem é obrigatória.')
       }
+      const imageUrl = await this.produtoRepository.uploadImage(input.file)
+      console.log("--------->", imageUrl)
       try {
-        const imageUrl = await this.produtoRepository.uploadImage(input.file)
         return { imageUrl }
       } catch (error) {
         throw new Error('Erro ao fazer upload da imagem.')
