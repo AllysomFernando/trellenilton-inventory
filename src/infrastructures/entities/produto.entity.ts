@@ -22,7 +22,7 @@ export class Produto {
   @Column('int')
   quantity: number
   @Column('varchar')
-  image: string
+  image: Express.Multer.File
   @OneToMany(() => ItemPedido, (itemPedido) => itemPedido.produto)
   itens: ItemPedido[]
   @ManyToOne(() => Fornecedor, (fornecedor) => fornecedor.id)
