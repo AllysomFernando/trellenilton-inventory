@@ -5,13 +5,18 @@ import { Produto } from '../entities/produto.entity'
 import { Repository } from 'typeorm'
 import { ProdutoModel } from '@/domain/models/produto'
 import { Fornecedor } from '../entities/fornecedor.entity'
+import path from 'path'
+import { promises as fs } from 'fs'
 
 @Injectable()
 export class ProdutoRepositoryOrm implements ProdutoRepository {
+  private uploadDir: string
   constructor(
     @InjectRepository(Produto)
     private readonly produtoRepository: Repository<Produto>
-  ) {}
+  ) {
+    this.uploadDir = path.join(__dirname, '..', '..', '..', 'uploads')
+  }
 
   async findAll(): Promise<ProdutoModel[]> {
     const produtos = await this.produtoRepository.find({
@@ -77,6 +82,16 @@ export class ProdutoRepositoryOrm implements ProdutoRepository {
       relations: ['fornecedor']
     })
     return produtos.map((produto) => this.toProduto(produto))
+  }
+
+  async uploadImage(image: string): Promise<void> {
+    await fs.mkdir(this.uploadDir, { recursive: true })
+    const fileName = path.basename(image)
+    const filePath = path.join(this.uploadDir, fileName)
+
+    await fs.copyFile(image, filePath)
+
+    console.log(`Imagem salva em: ${filePath}`)
   }
 
   private toProduto(produtoEntity: Produto): ProdutoModel {
