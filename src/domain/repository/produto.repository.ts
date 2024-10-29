@@ -7,5 +7,5 @@ export interface ProdutoRepository {
   update(produto: ProdutoModel): Promise<ProdutoModel>
   delete(id: number): Promise<boolean>
   findByFornecedorId(fornecedorId: number): Promise<ProdutoModel[]>
-  uploadImage(image: string): Promise<void>
+  uploadImage(image: string): Promise<string>
 }
