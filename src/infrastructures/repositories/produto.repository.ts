@@ -5,7 +5,7 @@ import { Produto } from '../entities/produto.entity'
 import { Repository } from 'typeorm'
 import { ProdutoModel } from '@/domain/models/produto'
 import { Fornecedor } from '../entities/fornecedor.entity'
-import path from 'path'
+import * as path from 'path'
 import { promises as fs } from 'fs'
 
 @Injectable()
@@ -91,8 +91,8 @@ export class ProdutoRepositoryOrm implements ProdutoRepository {
 
     await fs.copyFile(image, filePath)
 
-    console.log(`Imagem salva em: ${filePath}`);
-    return `/uploads/${fileName}`;
+    console.log(`Imagem salva em: ${filePath}`)
+    return `/uploads/${fileName}`
   }
 
   private toProduto(produtoEntity: Produto): ProdutoModel {
