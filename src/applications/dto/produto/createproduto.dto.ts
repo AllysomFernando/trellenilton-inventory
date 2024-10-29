@@ -3,6 +3,6 @@ export class CreateProdutoDto {
   description: string
   price: number
   quantity: number
-  image: Express.Multer.File
+  image: string
   fornecedorId: number
 }
