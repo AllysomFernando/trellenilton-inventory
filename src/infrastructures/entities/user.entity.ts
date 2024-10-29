@@ -1,4 +1,4 @@
-import { UsuarioEnum } from '@/applications/enum/user.enum'
+import { UsuarioEnum } from '../../applications/enum/user.enum'
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity('user')
