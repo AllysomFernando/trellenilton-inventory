@@ -11,7 +11,7 @@ export namespace UpdateProdutoUseCase {
     description: string
     price: number
     quantity: number
-    image: Express.Multer.File
+    image?: Express.Multer.File
     fornecedorId: number
   }
 
@@ -45,14 +45,21 @@ export namespace UpdateProdutoUseCase {
       ) {
         throw new BadRequestError('Informe ao menos um campo para atualização.')
       }
+
+      let imageUrl = existingProduto.image
+      if (input.image) {
+        imageUrl = await this.produtoRepository.uploadImage(input.image)
+      }
+
       const produto = new ProdutoModel()
       produto.id = input.id
-      produto.name = input.name
-      produto.description = input.description
-      produto.price = input.price
-      produto.quantity = input.quantity
-      produto.image = input.image
-      produto.fornecedorId = input.fornecedorId
+      produto.name = input.name ?? existingProduto.name
+      produto.description = input.description ?? existingProduto.description
+      produto.price = input.price ?? existingProduto.price
+      produto.quantity = input.quantity ?? existingProduto.quantity
+      produto.image = imageUrl
+      produto.fornecedorId = input.fornecedorId ?? existingProduto.fornecedorId
+
       try {
         const entity = await this.produtoRepository.update(produto)
         if (!entity) {
