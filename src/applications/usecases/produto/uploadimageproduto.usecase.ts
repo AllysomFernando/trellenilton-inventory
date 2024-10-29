@@ -3,8 +3,9 @@ import { UseCase as DefaultUseCase } from '../use-case'
 
 export namespace UploadImageProdutoUseCase {
   export type Input = {
-    image: string
+    file: Express.Multer.File
   }
+
 
   export type Output = {
     imageUrl: string
@@ -14,11 +15,11 @@ export namespace UploadImageProdutoUseCase {
     constructor(private produtoRepository: ProdutoRepository) {}
 
     async execute(input: Input): Promise<Output> {
-      if (!input.image) {
+      if (!input.file) {
         throw new Error('Imagem é obrigatória.')
       }
       try {
-        const imageUrl = await this.produtoRepository.uploadImage(input.image)
+        const imageUrl = await this.produtoRepository.uploadImage(input.file)
         return { imageUrl }
       } catch (error) {
         throw new Error('Erro ao fazer upload da imagem.')
