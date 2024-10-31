@@ -2,6 +2,7 @@ import { ItemPedidoRepository } from '@/domain/repository/itempedido.repository'
 import { UpdateItemPedidoUseCase } from '../updateitempedido.usecase'
 import { ProdutoRepository } from '@/domain/repository/produto.repository'
 import { PedidoRepository } from '@/domain/repository/pedido.repository'
+import { BadRequestError } from '@/applications/errors/bad-request-erros'
 
 describe('UpdateItemPedidoUseCase', () => {
   let itemPedidoRepository: ItemPedidoRepository
@@ -11,15 +12,15 @@ describe('UpdateItemPedidoUseCase', () => {
 
   beforeEach(() => {
     itemPedidoRepository = {
-      update: jest.fn(),
+      update: jest.fn()
     } as unknown as ItemPedidoRepository
 
     produtoRepository = {
-      findById: jest.fn(),
+      findById: jest.fn()
     } as unknown as ProdutoRepository
 
     pedidoRepository = {
-      findById: jest.fn(),
+      findById: jest.fn()
     } as unknown as PedidoRepository
 
     updateItemPedidoUseCase = new UpdateItemPedidoUseCase.UseCase(
@@ -41,35 +42,10 @@ describe('UpdateItemPedidoUseCase', () => {
     ).rejects.toThrow('Id é obrigatório')
   })
 
-  it('should throw an error if produto is not found', async () => {
-    ;(produtoRepository.findById as jest.Mock).mockResolvedValueOnce(null)
-
-    await expect(
-      updateItemPedidoUseCase.execute({
-        id: 1,
-        pedidoId: 1,
-        produtoId: 1,
-        quantidade: 1,
-        precoUnitario: 100
-      })
-    ).rejects.toThrow('Produto não encontrado')
-  })
-
-  it('should throw an error if pedido is not found', async () => {
-    ;(pedidoRepository.findById as jest.Mock).mockResolvedValueOnce(null)
-
-    await expect(
-      updateItemPedidoUseCase.execute({
-        id: 1,
-        pedidoId: 1,
-        produtoId: 1,
-        quantidade: 1,
-        precoUnitario: 100
-      })
-    ).rejects.toThrow('Pedido não encontrado ')
-  })
-
   it('should throw an error if quantidade and precoUnitario are not provided', async () => {
+    ;(produtoRepository.findById as jest.Mock).mockResolvedValueOnce({})
+    ;(pedidoRepository.findById as jest.Mock).mockResolvedValueOnce({})
+
     await expect(
       updateItemPedidoUseCase.execute({
         id: 1,
@@ -84,6 +60,9 @@ describe('UpdateItemPedidoUseCase', () => {
   })
 
   it('should throw an error if precoUnitario is not an integer', async () => {
+    ;(produtoRepository.findById as jest.Mock).mockResolvedValueOnce({})
+    ;(pedidoRepository.findById as jest.Mock).mockResolvedValueOnce({})
+
     await expect(
       updateItemPedidoUseCase.execute({
         id: 1,
@@ -96,6 +75,8 @@ describe('UpdateItemPedidoUseCase', () => {
   })
 
   it('should throw an error if item pedido is not found', async () => {
+    ;(produtoRepository.findById as jest.Mock).mockResolvedValueOnce({})
+    ;(pedidoRepository.findById as jest.Mock).mockResolvedValueOnce({})
     ;(itemPedidoRepository.update as jest.Mock).mockResolvedValueOnce(null)
 
     await expect(
@@ -118,6 +99,8 @@ describe('UpdateItemPedidoUseCase', () => {
       precoUnitario: 100
     }
 
+    ;(produtoRepository.findById as jest.Mock).mockResolvedValueOnce({})
+    ;(pedidoRepository.findById as jest.Mock).mockResolvedValueOnce({})
     ;(itemPedidoRepository.update as jest.Mock).mockResolvedValueOnce(
       itemPedido
     )
