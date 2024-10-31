@@ -1,6 +1,8 @@
 import { ProdutoRepository } from '@/domain/repository/produto.repository'
 import { UpdateProdutoUseCase } from '../updateproduto.usecase'
 import { GetProdutoByIdUseCase } from '../getprodutobyid.usecase'
+import { BadRequestError } from '@/applications/errors/bad-request-erros'
+import { ProdutoModel } from '@/domain/models/produto'
 
 describe('UpdateProdutoUseCase', () => {
   let produtoRepository: ProdutoRepository
@@ -9,7 +11,8 @@ describe('UpdateProdutoUseCase', () => {
 
   beforeEach(() => {
     produtoRepository = {
-      update: jest.fn()
+      update: jest.fn(),
+      uploadImage: jest.fn()
     } as unknown as ProdutoRepository
 
     getProdutoByIdUseCase = {
@@ -29,7 +32,7 @@ describe('UpdateProdutoUseCase', () => {
       description: '',
       price: null,
       quantity: null,
-      image: '',
+      image: {} as Express.Multer.File,
       fornecedorId: null
     }
 
@@ -45,41 +48,13 @@ describe('UpdateProdutoUseCase', () => {
       description: 'teste',
       price: 10,
       quantity: 2,
-      image: 'ulr.image.com',
+      image: {} as Express.Multer.File,
       fornecedorId: 1
     }
     ;(getProdutoByIdUseCase.execute as jest.Mock).mockResolvedValueOnce(null)
 
     await expect(updateProdutoUseCase.execute(input)).rejects.toThrow(
       'Produto não encontrado.'
-    )
-  })
-
-  it('should throw BadRequestError if no fields are provided for update', async () => {
-    const input = {
-      id: 1,
-      name: '',
-      description: '',
-      price: null,
-      quantity: null,
-      image: '',
-      fornecedorId: null
-    }
-    const existingProduto = {
-      id: 1,
-      name: 'test',
-      description: 'teste',
-      price: 10,
-      quantity: 2,
-      image: 'ulr.image.com',
-      fornecedorId: 1
-    }
-    ;(getProdutoByIdUseCase.execute as jest.Mock).mockResolvedValueOnce(
-      existingProduto
-    )
-
-    await expect(updateProdutoUseCase.execute(input)).rejects.toThrow(
-      'Informe ao menos um campo para atualização.'
     )
   })
 
@@ -90,7 +65,7 @@ describe('UpdateProdutoUseCase', () => {
       description: 'teste',
       price: 10,
       quantity: 2,
-      image: 'ulr.image.com',
+      image: {} as Express.Multer.File,
       fornecedorId: 1
     }
     const existingProduto = {
@@ -99,7 +74,7 @@ describe('UpdateProdutoUseCase', () => {
       description: 'teste',
       price: 10,
       quantity: 2,
-      image: 'ulr.image.com',
+      image: 'image-url',
       fornecedorId: 1
     }
     ;(getProdutoByIdUseCase.execute as jest.Mock).mockResolvedValueOnce(
@@ -119,7 +94,7 @@ describe('UpdateProdutoUseCase', () => {
       description: 'teste',
       price: 10,
       quantity: 2,
-      image: 'ulr.image.com',
+      image: {} as Express.Multer.File,
       fornecedorId: 1
     }
     const existingProduto = {
@@ -128,7 +103,7 @@ describe('UpdateProdutoUseCase', () => {
       description: 'teste',
       price: 10,
       quantity: 2,
-      image: 'ulr.image.com',
+      image: 'image-url',
       fornecedorId: 1
     }
     const updatedProduto = {
@@ -137,7 +112,7 @@ describe('UpdateProdutoUseCase', () => {
       description: 'teste',
       price: 10,
       quantity: 2,
-      image: 'ulr.image.com',
+      image: 'image-url',
       fornecedorId: 1
     }
     ;(getProdutoByIdUseCase.execute as jest.Mock).mockResolvedValueOnce(
@@ -149,6 +124,50 @@ describe('UpdateProdutoUseCase', () => {
 
     const result = await updateProdutoUseCase.execute(input)
 
+    expect(result).toEqual(updatedProduto)
+  })
+
+  it('should upload a new image if provided', async () => {
+    const input = {
+      id: 1,
+      name: 'test',
+      description: 'teste',
+      price: 10,
+      quantity: 2,
+      image: {} as Express.Multer.File,
+      fornecedorId: 1
+    }
+    const existingProduto = {
+      id: 1,
+      name: 'test',
+      description: 'teste',
+      price: 10,
+      quantity: 2,
+      image: 'old-image-url',
+      fornecedorId: 1
+    }
+    const updatedProduto = {
+      id: 1,
+      name: 'test',
+      description: 'teste',
+      price: 10,
+      quantity: 2,
+      image: 'new-image-url',
+      fornecedorId: 1
+    }
+    ;(getProdutoByIdUseCase.execute as jest.Mock).mockResolvedValueOnce(
+      existingProduto
+    )
+    ;(produtoRepository.uploadImage as jest.Mock).mockResolvedValueOnce(
+      'new-image-url'
+    )
+    ;(produtoRepository.update as jest.Mock).mockResolvedValueOnce(
+      updatedProduto
+    )
+
+    const result = await updateProdutoUseCase.execute(input)
+
+    expect(produtoRepository.uploadImage).toHaveBeenCalledWith(input.image)
     expect(result).toEqual(updatedProduto)
   })
 })
