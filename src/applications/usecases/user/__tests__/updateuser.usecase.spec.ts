@@ -3,6 +3,7 @@ import { UserRepository } from '@/domain/repository/user.repository'
 import { UserModel } from '@/domain/models/user'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
 import { GetUserByIdUseCase } from '../getuserbyid.usecase'
+import { UsuarioEnum } from '@/applications/enum/user.enum'
 
 describe('UpdateUserUseCase', () => {
   let userRepository: UserRepository
@@ -25,7 +26,13 @@ describe('UpdateUserUseCase', () => {
   })
 
   it('should throw an error if id is not provided', async () => {
-    const input = { id: 0, email: '', name: '', password: '' }
+    const input = {
+      id: 0,
+      email: '',
+      name: '',
+      password: '',
+      tipo: UsuarioEnum.Admin
+    }
 
     await expect(updateUserUseCase.execute(input)).rejects.toThrow(
       'Id é obrigatório.'
@@ -33,7 +40,13 @@ describe('UpdateUserUseCase', () => {
   })
 
   it('should throw an error if user is not found', async () => {
-    const input = { id: 1, email: '', name: '', password: '' }
+    const input = {
+      id: 1,
+      email: '',
+      name: '',
+      password: '',
+      tipo: UsuarioEnum.Admin
+    }
     // Simule que o usuário não foi encontrado
     ;(getUserByIdUseCase.execute as jest.Mock).mockResolvedValue(null)
 
@@ -43,7 +56,13 @@ describe('UpdateUserUseCase', () => {
   })
 
   it('should throw an error if no fields are provided for update', async () => {
-    const input = { id: 1, email: '', name: '', password: '' }
+    const input = {
+      id: 1,
+      email: '',
+      name: '',
+      password: '',
+      tipo: UsuarioEnum.Admin
+    }
     const existingUser = new UserModel()
     existingUser.id = 1
     ;(getUserByIdUseCase.execute as jest.Mock).mockResolvedValue(existingUser)
@@ -58,16 +77,16 @@ describe('UpdateUserUseCase', () => {
       id: 1,
       email: 'test@example.com',
       name: 'Test User',
-      password: 'password'
+      password: 'password',
+      tipo: UsuarioEnum.Admin
     }
     const existingUser = new UserModel()
     existingUser.id = 1
     ;(getUserByIdUseCase.execute as jest.Mock).mockResolvedValue(existingUser)
-
     ;(userRepository.update as jest.Mock).mockResolvedValue(null)
 
     await expect(updateUserUseCase.execute(input)).rejects.toThrow(
-      BadRequestError
+      new BadRequestError('Falha ao atualizar o usuário.')
     )
   })
 
@@ -76,7 +95,8 @@ describe('UpdateUserUseCase', () => {
       id: 1,
       email: 'test@example.com',
       name: 'Test User',
-      password: 'password'
+      password: 'password',
+      tipo: UsuarioEnum.Admin
     }
     const existingUser = new UserModel()
     existingUser.id = 1
@@ -87,6 +107,7 @@ describe('UpdateUserUseCase', () => {
     updatedUser.email = 'test@example.com'
     updatedUser.name = 'Test User'
     updatedUser.password = 'password'
+    updatedUser.tipo = UsuarioEnum.Admin
     ;(userRepository.update as jest.Mock).mockResolvedValue(updatedUser)
 
     const result = await updateUserUseCase.execute(input)
