@@ -9,7 +9,8 @@ const mockUserRepository: UserRepository = {
   findById: jest.fn(),
   save: jest.fn(),
   update: jest.fn(),
-  delete: jest.fn()
+  delete: jest.fn(),
+  login: jest.fn()
 }
 
 describe('CreateUserUseCase', () => {
@@ -30,7 +31,8 @@ describe('CreateUserUseCase', () => {
     const input = {
       email: 'allysomted12@gmail.com',
       name: 'Test',
-      password: 'password123'
+      password: 'password123',
+      tipo: 'Admin' as UsuarioEnum
     }
     const user = new UserModel()
     user.email = input.email

@@ -2,13 +2,15 @@ import { GetUserByIdUseCase } from '@/applications/usecases/user/getuserbyid.use
 import { UserRepository } from '@/domain/repository/user.repository'
 import { UserModel } from '@/domain/models/user'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
+import { UsuarioEnum } from '@/applications/enum/user.enum'
 
 const mockUserRepository: UserRepository = {
   findAll: jest.fn(),
   findById: jest.fn(),
   save: jest.fn(),
   update: jest.fn(),
-  delete: jest.fn()
+  delete: jest.fn(),
+  login: jest.fn()
 }
 
 describe('GetUserByIdUseCase', () => {
@@ -23,7 +25,8 @@ describe('GetUserByIdUseCase', () => {
       id: 1,
       email: 'user@example.com',
       name: 'User One',
-      password: 'password123'
+      password: 'password123',
+      tipo: 'Admin' as UsuarioEnum
     }
 
     ;(mockUserRepository.findById as jest.Mock).mockResolvedValueOnce(user)

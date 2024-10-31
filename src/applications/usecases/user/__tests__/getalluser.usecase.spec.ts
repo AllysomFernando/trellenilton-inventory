@@ -2,13 +2,15 @@ import { GetAllUserUseCase } from '@/applications/usecases/user/getalluser.useca
 import { UserRepository } from '@/domain/repository/user.repository'
 import { UserModel } from '@/domain/models/user'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
+import { UsuarioEnum } from '@/applications/enum/user.enum'
 
 const mockUserRepository: UserRepository = {
   findAll: jest.fn(),
   findById: jest.fn(),
   save: jest.fn(),
   update: jest.fn(),
-  delete: jest.fn()
+  delete: jest.fn(),
+  login: jest.fn()
 }
 
 describe('GetAllUserUseCase', () => {
@@ -24,13 +26,15 @@ describe('GetAllUserUseCase', () => {
         id: 1,
         email: 'user1@example.com',
         name: 'User One',
-        password: 'password123'
+        password: 'password123',
+        tipo: 'Admin' as UsuarioEnum
       },
       {
         id: 2,
         email: 'user2@example.com',
         name: 'User Two',
-        password: 'password456'
+        password: 'password456',
+        tipo: 'User' as UsuarioEnum
       }
     ]
 

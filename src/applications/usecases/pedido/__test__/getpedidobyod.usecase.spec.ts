@@ -1,7 +1,7 @@
 import { PedidoRepository } from '@/domain/repository/pedido.repository'
 import { GetPedidoByIdUseCase } from '../getpedidobyid.usecase'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
-import { PedidoStatus } from '@/domain/models/pedido'
+import { PedidoEnum } from '@/applications/enum/pedido.enum'
 
 const mockPedidoRepository: PedidoRepository = {
   findAll: jest.fn(),
@@ -9,7 +9,7 @@ const mockPedidoRepository: PedidoRepository = {
   save: jest.fn(),
   update: jest.fn(),
   delete: jest.fn(),
-  findByClienteId: jest.fn(),
+  findByClienteId: jest.fn()
 }
 
 describe('GetPedidoByIdUseCase', () => {
@@ -26,7 +26,7 @@ describe('GetPedidoByIdUseCase', () => {
       id: 1,
       data: '2023-10-01',
       clienteId: 1,
-      status: PedidoStatus.Concluido,
+      status: PedidoEnum.Concluido,
       total: 100
     }
 
