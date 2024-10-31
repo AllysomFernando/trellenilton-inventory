@@ -8,6 +8,7 @@ describe('DeletePedidoUseCase', () => {
 
   beforeEach(() => {
     pedidoRepository = {
+      findById: jest.fn(),
       delete: jest.fn()
     } as unknown as PedidoRepository
 
@@ -21,32 +22,38 @@ describe('DeletePedidoUseCase', () => {
   })
 
   it('should throw BadRequestError if pedido was not found', async () => {
+    ;(pedidoRepository.findById as jest.Mock).mockResolvedValue(null)
+
     await expect(deletePedidoUseCase.execute({ id: 1 })).rejects.toThrow(
       new BadRequestError('Pedido não encontrado.')
     )
   })
 
   it('should throw BadRequestError if pedido deletion fails', async () => {
+    ;(pedidoRepository.findById as jest.Mock).mockResolvedValue({})
     ;(pedidoRepository.delete as jest.Mock).mockResolvedValue(false)
+
     await expect(deletePedidoUseCase.execute({ id: 1 })).rejects.toThrow(
       new BadRequestError('Erro ao deletar pedido.')
     )
   })
 
   it('should delete pedido successfully', async () => {
+    ;(pedidoRepository.findById as jest.Mock).mockResolvedValue({})
     ;(pedidoRepository.delete as jest.Mock).mockResolvedValue(true)
-    await expect(
-      deletePedidoUseCase.execute({ id: 1 })
-    ).resolves.toBeUndefined()
+
+    await expect(deletePedidoUseCase.execute({ id: 1 })).resolves.toBe(true)
     expect(pedidoRepository.delete).toHaveBeenCalledWith(1)
   })
 
   it('should throw BadRequestError if an exception occurs during deletion', async () => {
+    ;(pedidoRepository.findById as jest.Mock).mockResolvedValue({})
     ;(pedidoRepository.delete as jest.Mock).mockRejectedValue(
       new BadRequestError('Some error')
     )
+
     await expect(deletePedidoUseCase.execute({ id: 1 })).rejects.toThrow(
-      BadRequestError
+      new BadRequestError('Erro ao deletar pedido.')
     )
   })
 })
