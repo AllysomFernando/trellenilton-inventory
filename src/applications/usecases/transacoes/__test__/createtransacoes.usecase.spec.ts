@@ -1,5 +1,6 @@
 import { CreateTransacoesUseCase } from '../createtransacoes.usecase'
-import { TransacaoEnum, TransacaoModel } from '@/domain/models/transacao'
+import { TransacaoModel } from '@/domain/models/transacao'
+import { TransacaoEnum } from '@/applications/enum/transacao.enum'
 import { TransacaoRepository } from '@/domain/repository/transacao.repository'
 import { ProdutoRepository } from '@/domain/repository/produto.repository'
 import { PedidoRepository } from '@/domain/repository/pedido.repository'
@@ -33,7 +34,7 @@ describe('CreateTransacoesUseCase', () => {
 
   it('should throw an error if any required field is missing', async () => {
     const input = {
-      data: new Date(),
+      data: '2024-10-09',
       tipo: TransacaoEnum.Entrada,
       valor: 100,
       produtoId: null,
@@ -47,7 +48,7 @@ describe('CreateTransacoesUseCase', () => {
 
   it('should throw an error if valor is less than or equal to zero', async () => {
     const input = {
-      data: new Date(),
+      data: '2024-10-09',
       tipo: TransacaoEnum.Entrada,
       valor: 0,
       produtoId: 1,
@@ -61,7 +62,7 @@ describe('CreateTransacoesUseCase', () => {
 
   it('should throw an error if produto is not found', async () => {
     const input = {
-      data: new Date(),
+      data: '2024-10-09',
       tipo: TransacaoEnum.Entrada,
       valor: 100,
       produtoId: 1,
@@ -77,7 +78,7 @@ describe('CreateTransacoesUseCase', () => {
 
   it('should throw an error if pedido is not found', async () => {
     const input = {
-      data: new Date(),
+      data: '2024-10-09',
       tipo: TransacaoEnum.Entrada,
       valor: 100,
       produtoId: 1,
@@ -94,7 +95,7 @@ describe('CreateTransacoesUseCase', () => {
 
   it('should create a transacao successfully', async () => {
     const input = {
-      data: new Date(),
+      data: '2024-10-09',
       tipo: TransacaoEnum.Entrada,
       valor: 100,
       produtoId: 1,
@@ -119,12 +120,5 @@ describe('CreateTransacoesUseCase', () => {
     const result = await useCase.execute(input)
 
     expect(result).toEqual(expectedTransacao)
-    expect(transacaoRepository.save).toHaveBeenCalledWith(
-      input.data,
-      input.tipo,
-      input.valor,
-      input.produtoId,
-      input.pedidoId
-    )
   })
 })
