@@ -25,20 +25,14 @@ export namespace CreateTransacoesUseCase {
     ) {}
 
     async execute(input: Input): Promise<Output> {
-      if (
-        !input.data ||
-        !input.tipo ||
-        !input.valor ||
-        !input.produtoId ||
-        !input.pedidoId
-      ) {
-        throw new BadRequestError(
-          'Data, tipo, valor, id do produto e id do pedido são obrigatórios.'
-        )
-      }
       if (input.valor <= 0) {
         throw new BadRequestError(
           'O valor da transação deve ser maior que zero.'
+        )
+      }
+      if (!input.data || !input.tipo || !input.produtoId || !input.pedidoId) {
+        throw new BadRequestError(
+          'Data, tipo, valor, id do produto e id do pedido são obrigatórios.'
         )
       }
 
