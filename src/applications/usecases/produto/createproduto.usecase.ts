@@ -23,11 +23,17 @@ export namespace CreateProdutoUseCase {
     ) {}
 
     async execute(input: Input): Promise<Output> {
+      if (input.price <= 0) {
+        throw new BadRequestError('O preço do produto deve ser maior que zero.')
+      }
+      if (input.quantity <= 0 || !Number.isInteger(input.quantity)) {
+        throw new BadRequestError(
+          'A quantidade do produto deve ser maior que zero.'
+        )
+      }
       if (
         !input.description ||
         !input.name ||
-        !input.price ||
-        !input.quantity ||
         !input.image ||
         !input.fornecedorId
       ) {
@@ -35,14 +41,7 @@ export namespace CreateProdutoUseCase {
           'Nome, descrição, preço, quantidade, imagem e id do fornecedor são obrigatórios.'
         )
       }
-      if (input.price <= 0) {
-        throw new BadRequestError('O preço do produto deve ser maior que zero.')
-      }
-      if (input.quantity > 0 && Number.isInteger(input.quantity) === false) {
-        throw new BadRequestError(
-          'A quantidade do produto deve ser maior que zero.'
-        )
-      }
+
       let imageUrl = ''
       if (input.image) {
         imageUrl = await this.produtoRepository.uploadImage(input.image)
