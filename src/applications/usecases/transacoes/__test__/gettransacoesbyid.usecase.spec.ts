@@ -1,6 +1,7 @@
 import { TransacaoRepository } from '@/domain/repository/transacao.repository'
 import { GetTransacaoByIdUseCase } from '../gettransacoesbyid.usecase'
-import { PedidoStatus } from '@/domain/models/pedido'
+import { PedidoEnum } from '@/applications/enum/pedido.enum'
+import { BadRequestError } from '@/applications/errors/bad-request-erros'
 
 describe('GetTransacaoByIdUseCase', () => {
   let getTransacaoByIdUseCase: GetTransacaoByIdUseCase.UseCase
@@ -18,7 +19,7 @@ describe('GetTransacaoByIdUseCase', () => {
 
   it('should throw BadRequestError if id is not provided', async () => {
     await expect(getTransacaoByIdUseCase.execute({ id: null })).rejects.toThrow(
-      'Id is required'
+      new BadRequestError('Id is required')
     )
   })
 
@@ -26,7 +27,7 @@ describe('GetTransacaoByIdUseCase', () => {
     ;(transacaoRepository.findById as jest.Mock).mockResolvedValue(null)
 
     await expect(getTransacaoByIdUseCase.execute({ id: 1 })).rejects.toThrow(
-      'Transacao nao encontrada'
+      new BadRequestError('Transacao nao encontrada')
     )
   })
 
@@ -35,14 +36,14 @@ describe('GetTransacaoByIdUseCase', () => {
       id: 1,
       data: '2023-10-01',
       clienteId: 1,
-      status: PedidoStatus.Concluido,
+      status: PedidoEnum.Concluido,
       total: 100
     }
 
     ;(transacaoRepository.findById as jest.Mock).mockResolvedValueOnce(
       transacao
     )
-
+  
     const result = await getTransacaoByIdUseCase.execute({ id: 1 })
 
     expect(result).toEqual(transacao)
