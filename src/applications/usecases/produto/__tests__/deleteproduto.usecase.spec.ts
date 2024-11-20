@@ -8,7 +8,8 @@ describe('DeleteProdutoUseCase', () => {
 
   beforeEach(() => {
     produtoRepository = {
-      delete: jest.fn()
+      delete: jest.fn(),
+      findById: jest.fn()
     } as unknown as ProdutoRepository
 
     deleteProdutoUseCase = new DeleteProdutoUseCase.UseCase(produtoRepository)
@@ -16,31 +17,43 @@ describe('DeleteProdutoUseCase', () => {
 
   it('should throw an error if id is not provided', async () => {
     await expect(deleteProdutoUseCase.execute({ id: null })).rejects.toThrow(
-      'ID eh obrigatório.'
+      'Id é obrigatório.'
+    )
+  })
+
+  it('should throw BadRequestError if produto was not found', async () => {
+    ;(produtoRepository.findById as jest.Mock).mockResolvedValue(null)
+
+    await expect(deleteProdutoUseCase.execute({ id: 1 })).rejects.toThrow(
+      'Produto não encontrado.'
     )
   })
 
   it('should throw BadRequestError if produto deletion fails', async () => {
-    ;(produtoRepository.delete as jest.Mock).mockResolvedValue(null)
+    ;(produtoRepository.findById as jest.Mock).mockResolvedValue({ id: 1 })
+    ;(produtoRepository.delete as jest.Mock).mockResolvedValue(false)
+
     await expect(deleteProdutoUseCase.execute({ id: 1 })).rejects.toThrow(
-      BadRequestError
+      'Erro ao deletar produto.'
     )
   })
 
   it('should delete produto successfully', async () => {
+    ;(produtoRepository.findById as jest.Mock).mockResolvedValue({ id: 1 })
     ;(produtoRepository.delete as jest.Mock).mockResolvedValue(true)
-    await expect(
-      deleteProdutoUseCase.execute({ id: 1 })
-    ).resolves.toBeUndefined()
+
+    await expect(deleteProdutoUseCase.execute({ id: 1 })).resolves.toBe(true)
     expect(produtoRepository.delete).toHaveBeenCalledWith(1)
   })
 
   it('should throw BadRequestError if an exception occurs during deletion', async () => {
+    ;(produtoRepository.findById as jest.Mock).mockResolvedValue({ id: 1 })
     ;(produtoRepository.delete as jest.Mock).mockRejectedValue(
-      new Error('Some error')
+      new BadRequestError('Some error')
     )
+
     await expect(deleteProdutoUseCase.execute({ id: 1 })).rejects.toThrow(
-      BadRequestError
+      new BadRequestError('Erro ao deletar produto.')
     )
   })
 })
