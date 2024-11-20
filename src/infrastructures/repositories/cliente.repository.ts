@@ -92,14 +92,15 @@ export class ClienteRepositoryOrm implements ClienteRepository {
       clienteEntity.pedidos?.map((pedido) => ({
         id: pedido.id,
         data: pedido.data,
-        clienteId: pedido.cliente.id,
+        clienteId: clienteEntity.id,
         status: pedido.status,
         total: pedido.total,
-        itens: pedido.itens.map((item) => ({
-          produtoId: item.produto.id,
-          quantidade: item.quantidade,
-          preco: item.precoUnitario
-        }))
+        itens:
+          pedido.itens?.map((item) => ({
+            produtoId: item.produto?.id,
+            quantidade: item.quantidade,
+            preco: item.precoUnitario
+          })) || []
       })) || []
 
     return cliente
