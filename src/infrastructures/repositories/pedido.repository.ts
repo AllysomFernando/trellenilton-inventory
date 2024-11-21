@@ -5,6 +5,7 @@ import { Pedido } from '../entities/pedido.entity'
 import { Repository } from 'typeorm'
 import { PedidoModel } from '@/domain/models/pedido'
 import { PedidoEnum } from '@/applications/enum/pedido.enum'
+import { exit } from 'process'
 
 @Injectable()
 export class PedidoRepositoryOrm implements PedidoRepository {
@@ -47,18 +48,29 @@ export class PedidoRepositoryOrm implements PedidoRepository {
   }
 
   async update(pedido: PedidoModel): Promise<PedidoModel> {
-    const entity = await this.pedidoRepository.findOneBy({ id: pedido.id })
-    if (!entity) return null
+    const existingPedido = await this.pedidoRepository.findOne({
+      where: { id: pedido.id },
+      relations: ['cliente', 'itens', 'itens.produto']
+    })
 
-    entity.cliente = { id: pedido.clienteId } as any
-    entity.data = pedido.data
-    entity.status = pedido.status
-    entity.total = pedido.total
-  
-    await this.pedidoRepository.save(entity)
-    return this.toPedido(entity)
+    if (!existingPedido) {
+      throw new Error('Pedido não encontrado')
+    }
+
+    existingPedido.data = pedido.data
+    existingPedido.status = pedido.status
+    existingPedido.total = pedido.total
+    existingPedido.cliente = { id: pedido.clienteId } as any
+
+    const updatedEntity = await this.pedidoRepository.save(existingPedido)
+
+    const refreshedPedido = await this.pedidoRepository.findOne({
+      where: { id: updatedEntity.id },
+      relations: ['cliente', 'itens', 'itens.produto']
+    })
+
+    return this.toPedido(refreshedPedido)
   }
-
   async delete(id: number): Promise<boolean> {
     const entity = await this.pedidoRepository.findOneBy({ id })
     if (!entity) return false

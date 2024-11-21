@@ -5,6 +5,7 @@ import { GetPedidoByIdUseCase } from './getpedidobyid.usecase'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
 import { ClienteRepository } from '@/domain/repository/cliente.repository'
 import { PedidoEnum } from '@/applications/enum/pedido.enum'
+import { exit } from 'process'
 
 export namespace UpdatePedidoUseCase {
   export type Input = {
@@ -57,8 +58,9 @@ export namespace UpdatePedidoUseCase {
         quantidade: item.quantidade,
         preco: item.preco
       }))
+
       const entity = await this.pedidoRepository.update(pedido)
-      console.debug(entity)
+
       if (!entity) {
         throw new BadRequestError('Falha ao atualizar o pedido.')
       }
