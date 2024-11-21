@@ -2,7 +2,7 @@ import { ProdutoRepository } from '@/domain/repository/produto.repository'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Produto } from '../entities/produto.entity'
-import { Repository } from 'typeorm'
+import { MoreThan, Repository } from 'typeorm'
 import { ProdutoModel } from '@/domain/models/produto'
 import { Fornecedor } from '../entities/fornecedor.entity'
 import * as path from 'path'
@@ -16,13 +16,6 @@ export class ProdutoRepositoryOrm implements ProdutoRepository {
     private readonly produtoRepository: Repository<Produto>
   ) {
     this.uploadDir = path.join(__dirname, '..', '..', '..', 'uploads')
-  }
-
-  async findAll(): Promise<ProdutoModel[]> {
-    const produtos = await this.produtoRepository.find({
-      relations: ['fornecedor', 'itens']
-    })
-    return produtos.map((produto) => this.toProduto(produto))
   }
 
   async findById(id: number): Promise<ProdutoModel> {
@@ -74,6 +67,16 @@ export class ProdutoRepositoryOrm implements ProdutoRepository {
 
     await this.produtoRepository.delete(entity)
     return true
+  }
+
+  async findAllWithStock(): Promise<ProdutoModel[]> {
+    const produtos = await this.produtoRepository.find({
+      where: {
+        quantity: MoreThan(0)
+      },
+      relations: ['fornecedor', 'itens']
+    })
+    return produtos.map((produto) => this.toProduto(produto))
   }
 
   async findByFornecedorId(fornecedorId: number): Promise<ProdutoModel[]> {

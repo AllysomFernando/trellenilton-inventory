@@ -10,7 +10,7 @@ export namespace GetAllProdutoUseCase {
 
     async execute(): Promise<Output> {
       try {
-        const entity = await this.produtoRepository.findAll()
+        const entity = await this.produtoRepository.findAllWithStock()
         if (!entity) {
           throw new BadRequestError('Produtos não encontrados.')
         }

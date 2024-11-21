@@ -35,6 +35,7 @@ export class ProdutoUsecaseProxyModule {
               new GetAllProdutoUseCase.UseCase(produtoRepository)
             )
         },
+
         {
           inject: [ProdutoRepositoryOrm],
           provide: ProdutoUsecaseProxyModule.GET_PRODUTO_BY_ID_USE_CASE,
