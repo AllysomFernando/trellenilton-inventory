@@ -59,30 +59,33 @@ export namespace CreateItemPedidoUseCase {
       itemPedido.quantidade = input.quantidade
       itemPedido.precoUnitario = input.precoUnitario
 
-      const entity = await this.itemPedidoRepository.save(itemPedido)
-      if (!entity) {
-        throw new BadRequestError('Erro ao criar item pedido.')
+      try {
+        const entity = await this.itemPedidoRepository.save(itemPedido)
+        if (!entity) {
+          throw new BadRequestError('Erro ao criar item pedido.')
+        }
+
+        produto.quantity -= input.quantidade
+        await this.produtoRepository.update(produto)
+
+        const transacao = new TransacaoModel()
+        transacao.data = new Date().toISOString()
+        transacao.tipo = TransacaoEnum.Saida
+        transacao.valor = input.quantidade * input.precoUnitario
+        transacao.produtoId = produto.id
+        transacao.pedidoId = input.pedidoId
+
+
+        await this.transacaoRepository.save(transacao)
+
+        if (!transacao) {
+          throw new BadRequestError('Erro ao criar transação')
+        }
+
+        return entity
+      } catch (e) {
+        throw new BadRequestError('Erro ao criar item pedido')
       }
-
-      produto.quantity -= input.quantidade
-      await this.produtoRepository.update(produto)
-
-      const transacao = new TransacaoModel()
-      transacao.data = new Date().toISOString()
-      transacao.tipo = TransacaoEnum.Saida
-      transacao.valor = input.quantidade * input.precoUnitario
-      transacao.produtoId = produto.id
-      transacao.pedidoId = input.pedidoId
-
-      console.log('transacao', transacao)
-
-      await this.transacaoRepository.save(transacao)
-
-      if (!transacao) {
-        throw new BadRequestError('Erro ao criar transação')
-      }
-
-      return entity
     }
   }
 }
