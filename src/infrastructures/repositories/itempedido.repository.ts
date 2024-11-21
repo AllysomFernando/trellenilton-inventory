@@ -18,7 +18,10 @@ export class ItemPedidoRepositoryOrm implements ItemPedidoRepository {
     const itemPedidos = await this.itemPedidoRepository.find({
       relations: ['pedido', 'produto']
     })
-    return itemPedidos.map(this.toItemPedido)
+    
+    return itemPedidos
+      .filter(item => item !== null)
+      .map(item => this.toItemPedido(item))
   }
 
   async findById(id: number): Promise<ItemPedidoModel | null> {
@@ -83,13 +86,18 @@ export class ItemPedidoRepositoryOrm implements ItemPedidoRepository {
     return true
   }
 
-  private toItemPedido(entity: ItemPedido): ItemPedidoModel {
-    return {
-      id: entity.id,
-      pedidoId: entity.pedido.id,
-      produtoId: entity.produto.id,
-      quantidade: entity.quantidade,
-      precoUnitario: entity.precoUnitario
+  private toItemPedido(itemPedidoEntity: ItemPedido): ItemPedidoModel {
+    if (!itemPedidoEntity) {
+      return null
     }
+
+    const itemPedido = new ItemPedidoModel()
+    itemPedido.id = itemPedidoEntity.id
+    itemPedido.pedidoId = itemPedidoEntity.pedido?.id
+    itemPedido.produtoId = itemPedidoEntity.produto?.id
+    itemPedido.quantidade = itemPedidoEntity.quantidade
+    itemPedido.precoUnitario = itemPedidoEntity.precoUnitario
+
+    return itemPedido
   }
 }

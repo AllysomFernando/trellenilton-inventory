@@ -11,22 +11,21 @@ export namespace GetAllItensPedidoUseCase {
     constructor(private itemPedidoRepository: ItemPedidoRepositoryOrm) {}
 
     async execute(): Promise<Output> {
-      try {
-        const entities = await this.itemPedidoRepository.findAll()
-        if (!entities || entities.length === 0) {
-          throw new BadRequestError('Itens do pedido não encontrados.')
-        }
-
-        return entities.map((item) => ({
-          id: item.id,
-          pedidoId: item.pedidoId,
-          produtoId: item.produtoId,
-          quantidade: item.quantidade,
-          precoUnitario: item.precoUnitario
-        }))
-      } catch (error) {
-        throw new BadRequestError('Falha ao buscar os itens do pedido.')
+      const entities = await this.itemPedidoRepository.findAll()
+      
+      const validEntities = entities.filter(item => item !== null);
+      
+      if (!validEntities || validEntities.length === 0) {
+        throw new BadRequestError('Itens do pedido não encontrados.')
       }
+
+      return validEntities.map((item) => ({
+        id: item.id,
+        pedidoId: item.pedidoId,
+        produtoId: item.produtoId,
+        quantidade: item.quantidade,
+        precoUnitario: item.precoUnitario
+      }))
     }
   }
 }
