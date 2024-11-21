@@ -5,9 +5,9 @@ import { Transacao } from '../entities/transacao'
 import { Repository } from 'typeorm'
 import { TransacaoModel } from '@/domain/models/transacao'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
+import { TransacaoEnum } from '@/applications/enum/transacao.enum'
 import { Produto } from '../entities/produto.entity'
 import { Pedido } from '../entities/pedido.entity'
-import { TransacaoEnum } from '@/applications/enum/transacao.enum'
 
 @Injectable()
 export class TransacaoRepositoryOrm implements TransacaoRepository {
@@ -18,7 +18,7 @@ export class TransacaoRepositoryOrm implements TransacaoRepository {
 
   async findAll(): Promise<TransacaoModel[]> {
     const transacoes = await this.transacaoRepository.find({
-      relations: ['produto', 'pedido']
+      relations: ['produto', 'pedido'] 
     })
     return transacoes.map((transacao) => this.toTransacao(transacao))
   }
@@ -26,7 +26,7 @@ export class TransacaoRepositoryOrm implements TransacaoRepository {
   async findById(id: number): Promise<TransacaoModel> {
     const transacao = await this.transacaoRepository.findOne({
       where: { id },
-      relations: ['produto', 'pedido']
+      relations: ['produto', 'pedido'] 
     })
     return transacao ? this.toTransacao(transacao) : null
   }
@@ -35,30 +35,44 @@ export class TransacaoRepositoryOrm implements TransacaoRepository {
     const produto = await this.transacaoRepository.manager.findOne(Produto, {
       where: { id: transacao.produtoId }
     })
+
     if (!produto) {
       throw new BadRequestError(
         `Produto com id ${transacao.produtoId} não encontrado.`
       )
     }
+
     const pedido = await this.transacaoRepository.manager.findOne(Pedido, {
       where: { id: transacao.pedidoId }
     })
+
     if (!pedido) {
       throw new BadRequestError(
         `Pedido com id ${transacao.pedidoId} não encontrado.`
       )
     }
+
     const entity = this.transacaoRepository.create({
       ...transacao,
       produto,
       pedido
     })
-    await this.transacaoRepository.save(entity)
-    return this.toTransacao(entity)
+
+    const savedEntity = await this.transacaoRepository.save(entity)
+
+    return this.toTransacao(
+      await this.transacaoRepository.findOne({
+        where: { id: savedEntity.id },
+        relations: ['produto', 'pedido']
+      })
+    )
   }
 
   async delete(id: number): Promise<boolean> {
-    const entity = await this.transacaoRepository.findOneBy({ id })
+    const entity = await this.transacaoRepository.findOne({
+      where: { id },
+      relations: ['produto', 'pedido']
+    })
     if (!entity) return false
 
     await this.transacaoRepository.remove(entity)
@@ -66,11 +80,16 @@ export class TransacaoRepositoryOrm implements TransacaoRepository {
   }
 
   private toTransacao(transacaoEntity: Transacao): TransacaoModel {
-    if (!transacaoEntity.produto || !transacaoEntity.pedido) {
+    if (
+      !transacaoEntity ||
+      !transacaoEntity.produto ||
+      !transacaoEntity.pedido
+    ) {
       throw new BadRequestError(
         'Produto ou Pedido não estão definidos na transação.'
       )
     }
+
     return {
       id: transacaoEntity.id,
       tipo: transacaoEntity.tipo as TransacaoEnum,
