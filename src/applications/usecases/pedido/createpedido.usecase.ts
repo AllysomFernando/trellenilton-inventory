@@ -25,6 +25,13 @@ export namespace CreatePedidoUseCase {
         !Array.isArray(input.itens) ||
         input.itens.length === 0
       ) {
+
+        if (!input.data) console.log('Missing: data')
+        if (!input.clienteId) console.log('Missing: clienteId')
+        if (!input.status) console.log('Missing: status')
+        if (!Array.isArray(input.itens)) console.log('itens is not an array')
+        if (input.itens?.length === 0) console.log('itens array is empty')
+
         throw new BadRequestError(
           'data, clienteId, status e itens são obrigatórios.'
         )
@@ -40,6 +47,11 @@ export namespace CreatePedidoUseCase {
       pedido.clienteId = input.clienteId
       pedido.status = input.status
       pedido.total = total
+      pedido.itens = input.itens.map((item) => ({
+        produtoId: item.produtoId,
+        quantidade: item.quantidade,
+        preco: item.preco
+      }))
       try {
         const entity = await this.pedidoRepository.save(pedido)
         if (!entity) {

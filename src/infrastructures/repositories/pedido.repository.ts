@@ -32,13 +32,11 @@ export class PedidoRepositoryOrm implements PedidoRepository {
     const entity = this.pedidoRepository.create({
       ...pedido,
       cliente: { id: pedido.clienteId } as any,
-      itens: Array.isArray(pedido.itens)
-        ? pedido.itens.map((item) => ({
-            produto: { id: item.produtoId } as any,
-            quantidade: item.quantidade,
-            precoUnitario: item.preco
-          }))
-        : []
+      itens: pedido.itens.map((item) => ({
+        produto: { id: item.produtoId } as any,
+        quantidade: item.quantidade,
+        preco: item.preco
+      }))
     })
     const savedEntity = await this.pedidoRepository.save(entity)
     const savedPedido = await this.pedidoRepository.findOne({
@@ -56,7 +54,7 @@ export class PedidoRepositoryOrm implements PedidoRepository {
     entity.data = pedido.data
     entity.status = pedido.status
     entity.total = pedido.total
-
+  
     await this.pedidoRepository.save(entity)
     return this.toPedido(entity)
   }
@@ -85,13 +83,11 @@ export class PedidoRepositoryOrm implements PedidoRepository {
     pedido.data = pedidoEntity.data
     pedido.status = pedidoEntity.status as PedidoEnum
     pedido.total = pedidoEntity.total
-    pedido.itens = Array.isArray(pedidoEntity.itens)
-      ? pedidoEntity.itens.map((item) => ({
-          produtoId: item.produto.id,
-          quantidade: item.quantidade,
-          preco: item.precoUnitario
-        }))
-      : []
+    pedido.itens = pedidoEntity.itens.map((item) => ({
+      produtoId: item.produto.id,
+      quantidade: item.quantidade,
+      preco: item.precoUnitario
+    }))
 
     return pedido
   }

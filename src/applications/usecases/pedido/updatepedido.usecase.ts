@@ -13,6 +13,7 @@ export namespace UpdatePedidoUseCase {
     clienteId: number
     status: string
     total: number
+    itens: { produtoId: number; quantidade: number; preco: number }[]
   }
 
   export type Output = PedidoModel
@@ -39,25 +40,29 @@ export namespace UpdatePedidoUseCase {
       if (!input.data && !input.clienteId && !input.status && !input.total) {
         throw new BadRequestError('Informe ao menos um campo para atualização.')
       }
+
       const cliente = await this.clienteRepository.findById(input.clienteId)
       if (!cliente) {
         throw new BadRequestError('Cliente não encontrado.')
       }
+
       const pedido = new PedidoModel()
       pedido.id = input.id
       pedido.data = input.data
       pedido.clienteId = input.clienteId
       pedido.status = input.status as PedidoEnum
       pedido.total = input.total
-      try {
-        const entity = await this.pedidoRepository.update(pedido)
-        if (!entity) {
-          throw new BadRequestError('Falha ao atualizar o pedido.')
-        }
-        return entity
-      } catch (error) {
+      pedido.itens = input.itens.map((item) => ({
+        produtoId: item.produtoId,
+        quantidade: item.quantidade,
+        preco: item.preco
+      }))
+      const entity = await this.pedidoRepository.update(pedido)
+      console.debug(entity)
+      if (!entity) {
         throw new BadRequestError('Falha ao atualizar o pedido.')
       }
+      return entity
     }
   }
 }

@@ -44,7 +44,7 @@ export class PedidoUsecaseProxyModule {
             new UseCaseProxy(new CreatePedidoUseCase.UseCase(pedidoRepository))
         },
         {
-          inject: [PedidoRepositoryOrm],
+          inject: [PedidoRepositoryOrm, ClienteRepositoryOrm],
           provide: PedidoUsecaseProxyModule.UPDATE_PEDIDO_USE_CASE,
           useFactory: async (
             pedidoRepository: PedidoRepositoryOrm,

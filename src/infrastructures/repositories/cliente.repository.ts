@@ -14,7 +14,7 @@ export class ClienteRepositoryOrm implements ClienteRepository {
 
   async findAll(): Promise<ClienteModel[]> {
     const clientes = await this.clienteRepository.find({
-      relations: ['pedidos']
+      relations: ['pedidos', 'pedidos.itens', 'pedidos.itens.produto']
     })
     if (!clientes || clientes.length === 0) {
       return []
@@ -25,7 +25,7 @@ export class ClienteRepositoryOrm implements ClienteRepository {
   async findById(id: number): Promise<ClienteModel> {
     const cliente = await this.clienteRepository.findOne({
       where: { id },
-      relations: ['pedidos']
+      relations: ['pedidos', 'pedidos.itens', 'pedidos.itens.produto']
     })
     if (!cliente) {
       return null
