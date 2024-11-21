@@ -4,6 +4,9 @@ import { ItemPedidoRepository } from '@/domain/repository/itempedido.repository'
 import { PedidoRepository } from '@/domain/repository/pedido.repository'
 import { ProdutoRepository } from '@/domain/repository/produto.repository'
 import { BadRequestError } from '@/applications/errors/bad-request-erros'
+import { TransacaoModel } from '@/domain/models/transacao'
+import { TransacaoEnum } from '@/applications/enum/transacao.enum'
+import { TransacaoRepository } from '@/domain/repository/transacao.repository'
 
 export namespace CreateItemPedidoUseCase {
   export type Input = {
@@ -19,7 +22,8 @@ export namespace CreateItemPedidoUseCase {
     constructor(
       private itemPedidoRepository: ItemPedidoRepository,
       private pedidoRepository: PedidoRepository,
-      private produtoRepository: ProdutoRepository
+      private produtoRepository: ProdutoRepository,
+      private transacaoRepository: TransacaoRepository
     ) {}
 
     async execute(input: Input): Promise<Output> {
@@ -54,19 +58,31 @@ export namespace CreateItemPedidoUseCase {
       itemPedido.produtoId = input.produtoId
       itemPedido.quantidade = input.quantidade
       itemPedido.precoUnitario = input.precoUnitario
-      try {
-        const entity = await this.itemPedidoRepository.save(itemPedido)
-        if (!entity) {
-          throw new BadRequestError('Erro ao criar item pedido.')
-        }
 
-        produto.quantity -= input.quantidade
-        await this.produtoRepository.update(produto)
-
-        return entity
-      } catch (e) {
-        throw new BadRequestError('Erro ao criar item pedido')
+      const entity = await this.itemPedidoRepository.save(itemPedido)
+      if (!entity) {
+        throw new BadRequestError('Erro ao criar item pedido.')
       }
+
+      produto.quantity -= input.quantidade
+      await this.produtoRepository.update(produto)
+
+      const transacao = new TransacaoModel()
+      transacao.data = new Date().toISOString()
+      transacao.tipo = TransacaoEnum.Saida
+      transacao.valor = input.quantidade * input.precoUnitario
+      transacao.produtoId = produto.id
+      transacao.pedidoId = input.pedidoId
+
+      console.log('transacao', transacao)
+
+      await this.transacaoRepository.save(transacao)
+
+      if (!transacao) {
+        throw new BadRequestError('Erro ao criar transação')
+      }
+
+      return entity
     }
   }
 }
