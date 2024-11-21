@@ -10,6 +10,7 @@ import { PedidoRepositoryOrm } from '@/infrastructures/repositories/pedido.repos
 import { UpdateItemPedidoUseCase } from '@/applications/usecases/itenspedido/updateitempedido.usecase'
 import { DeleteItemPedidoUseCase } from '@/applications/usecases/itenspedido/deleteitempedido.usecase'
 import { ProdutoRepositoryOrm } from '@/infrastructures/repositories/produto.repository'
+import { TransacaoRepositoryOrm } from '@/infrastructures/repositories/transcacao.repository'
 
 @Module({
   imports: [EnvironmentConfigModule, RepositoriesModule]
@@ -46,19 +47,22 @@ export class ItensPedidoUsecaseProxyModule {
           inject: [
             ItemPedidoRepositoryOrm,
             PedidoRepositoryOrm,
-            ProdutoRepositoryOrm
+            ProdutoRepositoryOrm,
+            TransacaoRepositoryOrm
           ],
           provide: ItensPedidoUsecaseProxyModule.CREATE_ITENS_PEDIDO_USE_CASE,
           useFactory: (
             itensPedidoRepository: ItemPedidoRepositoryOrm,
             pedidoRepository: PedidoRepositoryOrm,
-            produtoRepository: ProdutoRepositoryOrm
+            produtoRepository: ProdutoRepositoryOrm,
+            transacaoRepository: TransacaoRepositoryOrm
           ) =>
             new UseCaseProxy(
               new CreateItemPedidoUseCase.UseCase(
                 itensPedidoRepository,
                 pedidoRepository,
-                produtoRepository
+                produtoRepository,
+                transacaoRepository
               )
             )
         },
