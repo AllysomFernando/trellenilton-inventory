@@ -75,7 +75,6 @@ export namespace CreateItemPedidoUseCase {
         transacao.produtoId = produto.id
         transacao.pedidoId = input.pedidoId
 
-
         await this.transacaoRepository.save(transacao)
 
         if (!transacao) {
